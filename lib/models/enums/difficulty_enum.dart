@@ -25,23 +25,4 @@ class Difficulty {
 
     return seconds * level;
   }
-
-  int getShuffles(int level) {
-    int shuffles = 0;
-
-    switch (difficultyEnum) {
-      case DifficultyEnum.hard:
-        shuffles = 15;
-        break;
-      case DifficultyEnum.medium:
-        shuffles = 10;
-        break;
-      case DifficultyEnum.easy:
-      default:
-        shuffles = 5;
-        break;
-    }
-
-    return shuffles * level;
-  }
 }

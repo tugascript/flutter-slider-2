@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:redux/redux.dart';
 
 import '../../../models/enums/game_status_enum.dart';
@@ -86,6 +87,7 @@ class _Button extends StatelessWidget {
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(
               icon,
@@ -93,7 +95,7 @@ class _Button extends StatelessWidget {
             ),
             Text(
               text,
-              style: TextStyle(
+              style: GoogleFonts.roboto(
                 fontSize: fontSize,
               ),
             )

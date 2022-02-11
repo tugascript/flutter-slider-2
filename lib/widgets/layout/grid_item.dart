@@ -26,7 +26,7 @@ class GridItem extends StatelessWidget {
       alignment: Alignment.center,
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          maxWidth: width - spacing,
+          maxWidth: width - spacing * 2,
         ),
         child: child,
       ),

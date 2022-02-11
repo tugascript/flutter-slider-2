@@ -5,18 +5,18 @@ class CurrentBreakPoint {
 
   CurrentBreakPoint(this.width);
 
-  bool get xs => width < kSM;
-  bool get sm => width >= kSM && width < kMD;
-  bool get md => width >= kMD && width < kLG;
-  bool get lg => width >= kLG && width < kXL;
-  bool get xl => width >= kXL;
+  bool get xs => width < ScreenSizes.sm;
+  bool get sm => width >= ScreenSizes.sm && width < ScreenSizes.md;
+  bool get md => width >= ScreenSizes.md && width < ScreenSizes.lg;
+  bool get lg => width >= ScreenSizes.lg && width < ScreenSizes.xl;
+  bool get xl => width >= ScreenSizes.xl;
 
-  bool get greatSM => width >= kSM;
-  bool get greatMD => width >= kMD;
-  bool get greatLG => width >= kLG;
+  bool get greatSM => width >= ScreenSizes.sm;
+  bool get greatMD => width >= ScreenSizes.md;
+  bool get greatLG => width >= ScreenSizes.lg;
 
-  bool get lessSM => width <= kSM;
-  bool get lessMD => width <= kMD;
-  bool get lessLG => width <= kLG;
-  bool get lessXL => width <= kXL;
+  bool get lessSM => width <= ScreenSizes.sm;
+  bool get lessMD => width <= ScreenSizes.md;
+  bool get lessLG => width <= ScreenSizes.lg;
+  bool get lessXL => width <= ScreenSizes.xl;
 }

@@ -1,7 +1,7 @@
 import '../../constants/screen_sizes.dart';
 
 class TimerWidth {
-  static const _scale = 12.5;
+  static const _scale = 13.5;
 
   static double get xs => _scale * 0.75;
   static double get sm => _scale * 0.825;

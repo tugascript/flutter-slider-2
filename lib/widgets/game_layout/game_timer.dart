@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:redux/redux.dart';
 import 'package:v1/models/enums/theme_enum.dart';
 import 'package:v1/models/extra_colors.dart';
@@ -68,9 +69,9 @@ class GameTimer extends StatelessWidget {
                   children: [
                     Text(
                       timer,
-                      style: TextStyle(
+                      style: GoogleFonts.roboto(
                         fontSize: fontSize,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w700,
                         color: color,
                       ),
                     ),

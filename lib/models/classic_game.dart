@@ -1,31 +1,35 @@
 import 'dart:math';
 
-import './normal_piece.dart';
-import './position.dart';
 import '../models/enums/game_status_enum.dart';
 import '../utilities/helpers/image_divider.dart';
+import 'classic_piece.dart';
+import 'base/game.dart';
+import 'position.dart';
 
-class NormalGame {
-  final List<List<NormalPiece>> puzzle;
-  final Position next;
+class ClassicGame implements Game {
+  @override
+  final List<List<ClassicPiece>> puzzle;
+  @override
   final GameStatusEnum status;
+  @override
+  final Position next;
 
-  NormalGame({
-    required this.puzzle,
+  ClassicGame({
     required this.next,
     required this.status,
+    required this.puzzle,
   });
 
-  factory NormalGame.newGame(int level) {
+  factory ClassicGame.newGame(int level) {
     final len = level + 2;
-    final puzzle = <List<NormalPiece>>[];
+    final puzzle = <List<ClassicPiece>>[];
 
     for (int i = 0; i < len; i++) {
-      final row = <NormalPiece>[];
+      final row = <ClassicPiece>[];
 
       for (int j = 0; j < len; j++) {
         final pos = Position(i, j);
-        row.add(NormalPiece(pos));
+        row.add(ClassicPiece(pos));
       }
 
       puzzle.add(row);
@@ -34,14 +38,15 @@ class NormalGame {
     final index = len - 1;
     puzzle[index][index].empty = true;
 
-    return NormalGame(
+    return ClassicGame(
       puzzle: puzzle,
       status: GameStatusEnum.starting,
       next: Position(index, index),
     );
   }
 
-  NormalGame handleMove(Position pos) {
+  @override
+  ClassicGame handleMove(Position pos) {
     /**
      * Handle Tap
      * 
@@ -64,7 +69,7 @@ class NormalGame {
       final nextColumn = next.column;
 
       if (row == nextRow && column != nextColumn) {
-        _changeCollumn(puzzle, row, column, nextColumn);
+        _changeColumn(puzzle, row, column, nextColumn);
       } else if (row != nextRow && column == nextColumn) {
         _changeRow(puzzle, row, column, nextRow);
       }
@@ -73,32 +78,34 @@ class NormalGame {
       status = _checkIfCompleted(len, puzzle);
     }
 
-    return NormalGame(
+    return ClassicGame(
       puzzle: puzzle,
       next: next,
       status: status,
     );
   }
 
-  NormalGame addImageToGame(List<List<DividerPainter>> paints) {
+  @override
+  ClassicGame addImageToGame(List<List<DividerPainter>> painters) {
     final puzzle = this.puzzle;
     final len = puzzle.length;
 
     for (int i = 0; i < len; i++) {
       for (int j = 0; j < len; j++) {
         final position = puzzle[i][j].position;
-        puzzle[i][j].painter = paints[position.row][position.column];
+        puzzle[i][j].painter = painters[position.row][position.column];
       }
     }
 
-    return NormalGame(
+    return ClassicGame(
       puzzle: puzzle,
       next: next,
       status: status,
     );
   }
 
-  NormalGame shuffleGame(int shuffles) {
+  @override
+  ClassicGame shuffleGame(int shuffles) {
     final puzzle = this.puzzle;
     final len = puzzle.length;
     Position next = this.next;
@@ -123,20 +130,21 @@ class NormalGame {
           column = _generateRandomIndex(len);
         }
 
-        _changeCollumn(puzzle, nextRow, column, nextColumn);
+        _changeColumn(puzzle, nextRow, column, nextColumn);
         next = Position(nextRow, column);
       }
     }
 
-    return NormalGame(
+    return ClassicGame(
       puzzle: puzzle,
       status: GameStatusEnum.ongoing,
       next: next,
     );
   }
 
-  NormalGame updateStatus(GameStatusEnum st) {
-    return NormalGame(
+  @override
+  ClassicGame updateStatus(GameStatusEnum st) {
+    return ClassicGame(
       puzzle: puzzle,
       next: next,
       status: st,
@@ -146,7 +154,7 @@ class NormalGame {
   //____________________ Private Methods ____________________
 
   // This have a big O of n2 and should be optimized
-  GameStatusEnum _checkIfCompleted(int len, List<List<NormalPiece>> game) {
+  GameStatusEnum _checkIfCompleted(int len, List<List<ClassicPiece>> game) {
     for (int i = 0; i < len; i++) {
       for (int j = 0; j < len; j++) {
         final pos = game[i][j].position;
@@ -158,8 +166,8 @@ class NormalGame {
     return GameStatusEnum.completed;
   }
 
-  void _changeCollumn(
-    List<List<NormalPiece>> puzzle,
+  void _changeColumn(
+    List<List<ClassicPiece>> puzzle,
     int row,
     int column,
     int nextColumn,
@@ -182,7 +190,7 @@ class NormalGame {
   }
 
   void _changeRow(
-    List<List<NormalPiece>> puzzle,
+    List<List<ClassicPiece>> puzzle,
     int row,
     int column,
     int nextRow,

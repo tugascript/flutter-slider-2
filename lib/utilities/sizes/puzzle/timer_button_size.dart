@@ -2,7 +2,7 @@ import '../../constants/screen_sizes.dart';
 
 class TimerButtonSize {
   static const _wScale = 150.0;
-  static const _hScale = 58.0;
+  static const _hScale = 55.0;
 
   static ButtonSizes get xs => ButtonSizes(
         _wScale * 0.8,
@@ -15,11 +15,11 @@ class TimerButtonSize {
   static ButtonSizes get md => ButtonSizes(_wScale, _hScale);
   static ButtonSizes get lg => ButtonSizes(
         _wScale * 1.25,
-        _hScale * 1.2,
+        _hScale * 1.15,
       );
   static ButtonSizes get xl => ButtonSizes(
         _wScale * 1.5,
-        _hScale * 1.4,
+        _hScale * 1.35,
       );
 
   static ButtonSizes getTimerButtonSize(double maxWidth) {

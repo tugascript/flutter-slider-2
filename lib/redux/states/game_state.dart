@@ -1,13 +1,14 @@
-import 'package:v1/utilities/helpers/image_divider.dart';
+import 'package:v1/models/base/game.dart';
 
+import '../../models/classic_game.dart';
 import '../../models/enums/difficulty_enum.dart';
 import '../../models/enums/game_status_enum.dart';
 import '../../models/game_record.dart';
-import '../../models/normal_game.dart';
 import '../../models/position.dart';
+import '../../utilities/helpers/image_divider.dart';
 
 class GameState {
-  final NormalGame game;
+  final Game game;
   final Difficulty difficulty;
   final int level;
   final int time;
@@ -33,7 +34,7 @@ class GameState {
       difficultyEnum: difficultyEnum,
     );
     return GameState(
-      game: NormalGame.newGame(level),
+      game: ClassicGame.newGame(level),
       difficulty: difficulty,
       level: level,
       time: difficulty.getTime(level),
@@ -57,7 +58,7 @@ class GameState {
     };
 
     return GameState(
-      game: NormalGame.newGame(newLevel),
+      game: ClassicGame.newGame(newLevel),
       difficulty: difficulty,
       records: newRecords,
       level: newLevel,
@@ -92,10 +93,10 @@ class GameState {
   }
 
   GameState shuffleNormalGame() {
+    final len = level + 2;
+
     return GameState(
-      game: game.shuffleGame(
-        difficulty.getShuffles(level),
-      ),
+      game: game.shuffleGame(len * len),
       difficulty: difficulty,
       level: level,
       moves: moves,

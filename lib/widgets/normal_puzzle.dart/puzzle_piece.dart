@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:v1/models/base/piece.dart';
 
 import '../../models/enums/game_status_enum.dart';
-import '../../models/normal_piece.dart';
 import '../../models/position.dart';
 import '../../redux/actions/normal_game_actions.dart';
 import '../../redux/app_selectors.dart';
 import '../../redux/app_state.dart';
 
 class PuzzlePiece extends StatefulWidget {
-  final NormalPiece piece;
+  final Piece piece;
   final Position position;
   final double size;
   final double radius;
@@ -143,7 +143,7 @@ class _PuzzlePieceState extends State<PuzzlePiece> {
 class _PuzzlePieceViewModel {
   final GameStatusEnum status;
   final int length;
-  final NormalPiece piece;
+  final Piece piece;
   final Position next;
   final bool loading;
   final Function(Position pos) handleTap;
@@ -159,7 +159,7 @@ class _PuzzlePieceViewModel {
 
   factory _PuzzlePieceViewModel.fromStore({
     required Store<AppState> store,
-    required NormalPiece piece,
+    required Piece piece,
   }) {
     final gameState = selectGameState(store);
     final game = gameState.game;

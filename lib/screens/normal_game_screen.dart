@@ -15,11 +15,13 @@ import '../widgets/normal_puzzle.dart/puzzle.dart';
 class NormalGameScreen extends StatelessWidget {
   static const routeName = '/game';
 
+  final bool newGame;
   final int level;
   final DifficultyEnum difficulty;
 
   const NormalGameScreen({
     Key? key,
+    required this.newGame,
     required this.level,
     required this.difficulty,
   }) : super(key: key);
@@ -31,10 +33,7 @@ class NormalGameScreen extends StatelessWidget {
       child: StoreConnector<AppState, _NormalGameScreenViewModel>(
           converter: (store) => _NormalGameScreenViewModel.fromStore(store),
           onInitialBuild: (viewModel) {
-            if (viewModel.difficulty != difficulty ||
-                viewModel.level != level) {
-              viewModel.newGame(level, difficulty);
-            }
+            if (newGame) viewModel.newGame(level, difficulty);
           },
           builder: (_, viewModel) {
             return GridContainer(inputs: [
@@ -49,11 +48,12 @@ class NormalGameScreen extends StatelessWidget {
                 ),
               ),
               GridItemInput(
-                  breakPoints: BreakPoints(xl: 2, lg: 2, md: 1),
-                  child: IconButton(
-                    icon: const Icon(Icons.ac_unit),
-                    onPressed: viewModel.testPainting,
-                  )),
+                breakPoints: BreakPoints(xl: 2, lg: 2, md: 1),
+                child: IconButton(
+                  icon: const Icon(Icons.ac_unit),
+                  onPressed: viewModel.testPainting,
+                ),
+              ),
             ]);
           }),
     );

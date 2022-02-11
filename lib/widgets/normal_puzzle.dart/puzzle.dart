@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:v1/models/base/piece.dart';
 
 import './puzzle_piece.dart';
 import '../../models/enums/game_status_enum.dart';
-import '../../models/normal_piece.dart';
 import '../../models/position.dart';
 import '../../redux/app_selectors.dart';
 import '../../redux/app_state.dart';
@@ -61,7 +61,7 @@ class Puzzle extends StatelessWidget {
 }
 
 class _PuzzleViewModel {
-  final List<List<NormalPiece>> puzzle;
+  final List<List<Piece>> puzzle;
   final Position next;
   final GameStatusEnum status;
 
