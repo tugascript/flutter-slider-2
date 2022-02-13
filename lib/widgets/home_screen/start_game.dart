@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:v1/models/enums/difficulty_enum.dart';
-import 'package:v1/models/enums/game_type_enum.dart';
-import 'package:v1/screens/normal_game_screen.dart';
-import 'package:v1/utilities/arguments/normal_game_screen.dart';
 
+import '../../models/enums/difficulty_enum.dart';
+import '../../models/enums/game_type_enum.dart';
+import '../../screens/game_screen.dart';
+import '../../utilities/arguments/game_screen_arguments.dart';
 import '../../utilities/sizes/home_screen_sizes.dart';
 
 class StartGame extends StatelessWidget {
@@ -27,8 +27,8 @@ class StartGame extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () => Navigator.pushNamed(
           context,
-          NormalGameScreen.routeName,
-          arguments: NormalGameScreenArguments(
+          GameScreen.routeName,
+          arguments: GameScreenArguments(
             true,
             1,
             difficulty,

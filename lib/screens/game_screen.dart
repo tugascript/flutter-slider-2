@@ -12,14 +12,14 @@ import '../widgets/layout/grid_container.dart';
 import '../widgets/layout/responsive_scaffold.dart';
 import '../widgets/normal_puzzle.dart/puzzle.dart';
 
-class NormalGameScreen extends StatelessWidget {
+class GameScreen extends StatelessWidget {
   static const routeName = '/game';
 
   final bool newGame;
   final int level;
   final DifficultyEnum difficulty;
 
-  const NormalGameScreen({
+  const GameScreen({
     Key? key,
     required this.newGame,
     required this.level,
@@ -30,8 +30,8 @@ class NormalGameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ResponsiveScaffold(
       title: 'Level $level',
-      child: StoreConnector<AppState, _NormalGameScreenViewModel>(
-          converter: (store) => _NormalGameScreenViewModel.fromStore(store),
+      child: StoreConnector<AppState, _GameScreenViewModel>(
+          converter: (store) => _GameScreenViewModel.fromStore(store),
           onInitialBuild: (viewModel) {
             if (newGame) viewModel.newGame(level, difficulty);
           },
@@ -60,23 +60,23 @@ class NormalGameScreen extends StatelessWidget {
   }
 }
 
-class _NormalGameScreenViewModel {
+class _GameScreenViewModel {
   final int level;
   final DifficultyEnum difficulty;
   final Function(int level, DifficultyEnum difficulty) newGame;
   final VoidCallback testPainting;
 
-  _NormalGameScreenViewModel({
+  _GameScreenViewModel({
     required this.level,
     required this.difficulty,
     required this.newGame,
     required this.testPainting,
   });
 
-  factory _NormalGameScreenViewModel.fromStore(Store<AppState> store) {
+  factory _GameScreenViewModel.fromStore(Store<AppState> store) {
     final gameState = selectGameState(store);
 
-    return _NormalGameScreenViewModel(
+    return _GameScreenViewModel(
       level: gameState.level,
       difficulty: gameState.difficulty.difficultyEnum,
       newGame: (int level, DifficultyEnum difficulty) {

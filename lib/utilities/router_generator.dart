@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../screens/home_screen.dart';
-import '../screens/normal_game_screen.dart';
+import '../screens/game_screen.dart';
 import '../screens/not_found_screen.dart';
-import 'arguments/normal_game_screen.dart';
+import 'arguments/game_screen_arguments.dart';
 
 class RouterGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -11,10 +11,10 @@ class RouterGenerator {
     switch (settings.name) {
       case HomeScreen.routeName:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
-      case NormalGameScreen.routeName:
-        if (args is NormalGameScreenArguments) {
+      case GameScreen.routeName:
+        if (args is GameScreenArguments) {
           return MaterialPageRoute(
-            builder: (_) => NormalGameScreen(
+            builder: (_) => GameScreen(
               newGame: args.newGame,
               level: args.level,
               difficulty: args.difficulty,
