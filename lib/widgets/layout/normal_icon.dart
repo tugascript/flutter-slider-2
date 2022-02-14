@@ -16,7 +16,7 @@ class NormalIcon extends StatelessWidget {
     final icon = isLightTheme ? 'light' : 'dark';
 
     return SvgPicture.asset(
-      'images/icon-$icon.svg',
+      'images/icon_$icon.svg',
       height: size,
       width: size,
     );

@@ -66,9 +66,14 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     # Images
-    - assets/images/dark_theme_level_1.jpg
-    - assets/images/icon-dark.svg
-    - assets/images/icon-light.svg
+    - assets/images/dark_theme_flutter.jpg
+    - assets/images/light_theme_flutter.jpg
+    - assets/images/dark_theme_dart.jpg
+    - assets/images/light_theme_dart.jpg
+    - assets/images/dark_theme_icon.jpg
+    - assets/images/light_theme_icon.jpg
+    - assets/images/icon_dark.svg
+    - assets/images/icon_light.svg
     # Animations
     - assets/animations/light_theme_animation.riv
     - assets/animations/dark_theme_animation.riv
