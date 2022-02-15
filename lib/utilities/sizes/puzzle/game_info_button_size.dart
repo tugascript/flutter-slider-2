@@ -1,4 +1,4 @@
-import '../../constants/screen_sizes.dart';
+import '../screen_sizes.dart';
 
 class GameInfoButtonSize {
   static const _wScale = 140.0;
@@ -23,13 +23,13 @@ class GameInfoButtonSize {
       );
 
   static ButtonSizes getGameInfoButtonSize(double maxWidth) {
-    if (maxWidth >= kXL) {
+    if (maxWidth >= ScreenSizes.xl) {
       return GameInfoButtonSize.xl;
-    } else if (maxWidth >= kLG) {
+    } else if (maxWidth >= ScreenSizes.lg) {
       return GameInfoButtonSize.lg;
-    } else if (maxWidth >= kMD) {
+    } else if (maxWidth >= ScreenSizes.md) {
       return GameInfoButtonSize.md;
-    } else if (maxWidth >= kSM) {
+    } else if (maxWidth >= ScreenSizes.sm) {
       return GameInfoButtonSize.sm;
     } else {
       return GameInfoButtonSize.xs;

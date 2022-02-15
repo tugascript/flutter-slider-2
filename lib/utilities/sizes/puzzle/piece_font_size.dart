@@ -1,4 +1,4 @@
-import '../../constants/screen_sizes.dart';
+import '../screen_sizes.dart';
 
 class PieceFontSize {
   static const _scale = 25.0;
@@ -10,13 +10,13 @@ class PieceFontSize {
   static double get xl => _scale * 1.50;
 
   static double getPieceFontSize(double maxWidth) {
-    if (maxWidth >= kXL) {
+    if (maxWidth >= ScreenSizes.xl) {
       return PieceFontSize.xl;
-    } else if (maxWidth >= kLG) {
+    } else if (maxWidth >= ScreenSizes.lg) {
       return PieceFontSize.lg;
-    } else if (maxWidth >= kMD) {
+    } else if (maxWidth >= ScreenSizes.md) {
       return PieceFontSize.md;
-    } else if (maxWidth >= kSM) {
+    } else if (maxWidth >= ScreenSizes.sm) {
       return PieceFontSize.sm;
     } else {
       return PieceFontSize.xs;

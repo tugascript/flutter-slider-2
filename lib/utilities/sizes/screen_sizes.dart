@@ -1,7 +1,10 @@
-const kXL = 1536;
-const kLG = 1200;
-const kMD = 900;
-const kSM = 600;
+enum ScreenSizesEnum {
+  xl,
+  lg,
+  md,
+  sm,
+  xs,
+}
 
 class ScreenSizes {
   static const xl = 1536;

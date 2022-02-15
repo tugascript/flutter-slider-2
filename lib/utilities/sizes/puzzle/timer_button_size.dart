@@ -1,4 +1,4 @@
-import '../../constants/screen_sizes.dart';
+import '../screen_sizes.dart';
 
 class TimerButtonSize {
   static const _wScale = 150.0;
@@ -23,13 +23,13 @@ class TimerButtonSize {
       );
 
   static ButtonSizes getTimerButtonSize(double maxWidth) {
-    if (maxWidth >= kXL) {
+    if (maxWidth >= ScreenSizes.xl) {
       return TimerButtonSize.xl;
-    } else if (maxWidth >= kLG) {
+    } else if (maxWidth >= ScreenSizes.lg) {
       return TimerButtonSize.lg;
-    } else if (maxWidth >= kMD) {
+    } else if (maxWidth >= ScreenSizes.md) {
       return TimerButtonSize.md;
-    } else if (maxWidth >= kSM) {
+    } else if (maxWidth >= ScreenSizes.sm) {
       return TimerButtonSize.sm;
     } else {
       return TimerButtonSize.xs;

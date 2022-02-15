@@ -39,7 +39,7 @@ class ImageSlider extends StatelessWidget {
                       autoPlay: false,
                       enableInfiniteScroll: false,
                       enlargeCenterPage: true,
-                      viewportFraction: 0.9,
+                      viewportFraction: 0.65,
                       scrollDirection: scrollDirection,
                       aspectRatio: 1.0,
                       initialPage: 1,

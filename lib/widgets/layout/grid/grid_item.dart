@@ -1,29 +1,25 @@
 import 'package:flutter/material.dart';
 
-import '../../utilities/sizes/break_points.dart';
-import '../../utilities/sizes/spacing.dart';
-
 class GridItem extends StatelessWidget {
-  final BreakPoints breakPoints;
-  final double maxWidth;
+  final Alignment alignment;
+  final double spacing;
+  final double width;
   final Widget child;
 
   const GridItem({
     Key? key,
-    required this.breakPoints,
-    required this.maxWidth,
+    required this.alignment,
+    required this.spacing,
+    required this.width,
     required this.child,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final spacing = LocalSpacing.getSpacing(maxWidth);
-    final width = breakPoints.getWidth(maxWidth);
-
     return Container(
       width: width,
-      padding: EdgeInsets.all(spacing),
-      alignment: Alignment.center,
+      padding: EdgeInsets.symmetric(horizontal: spacing),
+      alignment: alignment,
       child: ConstrainedBox(
         constraints: BoxConstraints(
           maxWidth: width - spacing * 2,

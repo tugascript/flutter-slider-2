@@ -1,4 +1,4 @@
-import 'package:v1/utilities/constants/screen_sizes.dart';
+import '../screen_sizes.dart';
 
 class PuzzleSize {
   static const _scale = 415.0;
@@ -10,18 +10,16 @@ class PuzzleSize {
   static double get xl => _scale * 1.50;
 
   static double getPuzzleSize(double maxWidth) {
-    if (maxWidth >= kXL) {
+    if (maxWidth >= ScreenSizes.xl) {
       return PuzzleSize.xl;
-    } else if (maxWidth >= kLG) {
+    } else if (maxWidth >= ScreenSizes.lg) {
       return PuzzleSize.lg;
-    } else if (maxWidth >= kMD) {
+    } else if (maxWidth >= ScreenSizes.md) {
       return PuzzleSize.md;
-    } else if (maxWidth >= kSM) {
+    } else if (maxWidth >= ScreenSizes.sm) {
       return PuzzleSize.sm;
-    } else if (maxWidth >= PuzzleSize.xs) {
+    } else {
       return PuzzleSize.xs;
     }
-
-    return maxWidth * 0.9;
   }
 }

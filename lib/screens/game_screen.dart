@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-import 'package:v1/utilities/sizes/current_break_point.dart';
+import 'package:v1/utilities/sizes/break_point.dart';
 import 'package:v1/widgets/game_layout/game_images/image_slider.dart';
 
 import '../models/enums/difficulty_enum.dart';
@@ -29,7 +29,7 @@ class GameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final breakPoints = CurrentBreakPoint(width);
+    final breakPoints = BreakPoint(width);
     final widthPart = width / 12;
 
     return ResponsiveScaffold(
@@ -45,16 +45,16 @@ class GameScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    width: widthPart * 3,
+                  Container(
+                    constraints: BoxConstraints(maxWidth: widthPart * 3),
                     child: const GameTimer(),
                   ),
-                  SizedBox(
-                    width: widthPart * 5,
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: widthPart * 5),
                     child: Puzzle(level: viewModel.level),
                   ),
-                  SizedBox(
-                    width: widthPart * 3,
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: widthPart * 3),
                     child: const ImageSlider(
                       scrollDirection: Axis.vertical,
                     ),
@@ -110,25 +110,6 @@ class GameScreen extends StatelessWidget {
                 ],
               );
             }
-            // return GridContainer(inputs: [
-            //   GridItemInput(
-            //     breakPoints: BreakPoints(xl: 3, lg: 3, md: 4, sm: 12, xs: 12),
-            //     child: const GameTimer(),
-            //   ),
-            //   GridItemInput(
-            //     breakPoints: BreakPoints(xl: 6, lg: 6, md: 6, sm: 12, xs: 12),
-            //     child: Puzzle(
-            //       level: viewModel.level,
-            //     ),
-            //   ),
-            //   GridItemInput(
-            //     breakPoints: BreakPoints(xl: 2, lg: 2, md: 1),
-            //     child: IconButton(
-            //       icon: const Icon(Icons.ac_unit),
-            //       onPressed: viewModel.testPainting,
-            //     ),
-            //   ),
-            // ]);
           }),
     );
   }

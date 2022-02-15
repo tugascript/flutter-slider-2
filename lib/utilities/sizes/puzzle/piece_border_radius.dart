@@ -1,4 +1,4 @@
-import '../../constants/screen_sizes.dart';
+import '../screen_sizes.dart';
 
 class PieceBorderRadius {
   static const _scale = 10.0;
@@ -10,13 +10,13 @@ class PieceBorderRadius {
   static double get xl => _scale * 1.5;
 
   static double getPieceBorderRadius(double maxWidth) {
-    if (maxWidth >= kXL) {
+    if (maxWidth >= ScreenSizes.xl) {
       return PieceBorderRadius.xl;
-    } else if (maxWidth >= kLG) {
+    } else if (maxWidth >= ScreenSizes.lg) {
       return PieceBorderRadius.lg;
-    } else if (maxWidth >= kMD) {
+    } else if (maxWidth >= ScreenSizes.md) {
       return PieceBorderRadius.md;
-    } else if (maxWidth >= kSM) {
+    } else if (maxWidth >= ScreenSizes.sm) {
       return PieceBorderRadius.sm;
     } else {
       return PieceBorderRadius.xs;

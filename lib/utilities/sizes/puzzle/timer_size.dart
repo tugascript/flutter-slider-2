@@ -1,4 +1,4 @@
-import '../../constants/screen_sizes.dart';
+import '../screen_sizes.dart';
 
 class TimerSize {
   static const _scale = 275.0;
@@ -10,13 +10,13 @@ class TimerSize {
   static double get xl => _scale * 1.50;
 
   static double getTimerSize(double maxWidth) {
-    if (maxWidth >= kXL) {
+    if (maxWidth >= ScreenSizes.xl) {
       return TimerSize.xl;
-    } else if (maxWidth >= kLG) {
+    } else if (maxWidth >= ScreenSizes.lg) {
       return TimerSize.lg;
-    } else if (maxWidth >= kMD) {
+    } else if (maxWidth >= ScreenSizes.md) {
       return TimerSize.md;
-    } else if (maxWidth >= kSM) {
+    } else if (maxWidth >= ScreenSizes.sm) {
       return TimerSize.sm;
     } else {
       return TimerSize.xs;

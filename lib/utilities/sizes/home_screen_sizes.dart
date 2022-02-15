@@ -1,4 +1,4 @@
-import '../constants/screen_sizes.dart';
+import 'screen_sizes.dart';
 
 class HomeScreenSizes {
   static _Sizes get xs => _Sizes.multiply(0.75);

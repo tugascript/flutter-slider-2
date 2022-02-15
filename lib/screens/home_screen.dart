@@ -4,7 +4,7 @@ import 'package:v1/widgets/home_screen/start_game.dart';
 
 import '../models/enums/difficulty_enum.dart';
 import '../utilities/sizes/app_bar_sizes.dart';
-import '../utilities/sizes/current_break_point.dart';
+import '../utilities/sizes/break_point.dart';
 import '../utilities/sizes/home_screen_sizes.dart';
 import '../widgets/home_screen/animated_icon.dart';
 import '../widgets/home_screen/difficulty_input/difficulty_input.dart';
@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final width = MediaQuery.of(context).size.width;
     final appbarSizes = AppBarSizes.getAppBarSizes(width);
     final sizes = HomeScreenSizes.getHomeScreenSizes(width);
-    final breakPoint = CurrentBreakPoint(width);
+    final breakPoint = BreakPoint(width);
     final theme = Theme.of(context);
     final isLightTheme = theme.colorScheme.primary.value == 0xFF02569B;
 

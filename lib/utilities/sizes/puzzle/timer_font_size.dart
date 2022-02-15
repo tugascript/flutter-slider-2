@@ -1,4 +1,4 @@
-import '../../constants/screen_sizes.dart';
+import '../screen_sizes.dart';
 
 class TimerFontSize {
   static const _scale = 55.0;
@@ -10,13 +10,13 @@ class TimerFontSize {
   static double get xl => _scale * 1.50;
 
   static double getTimerFontSize(double maxWidth) {
-    if (maxWidth >= kXL) {
+    if (maxWidth >= ScreenSizes.xl) {
       return TimerFontSize.xl;
-    } else if (maxWidth >= kLG) {
+    } else if (maxWidth >= ScreenSizes.lg) {
       return TimerFontSize.lg;
-    } else if (maxWidth >= kMD) {
+    } else if (maxWidth >= ScreenSizes.md) {
       return TimerFontSize.md;
-    } else if (maxWidth >= kSM) {
+    } else if (maxWidth >= ScreenSizes.sm) {
       return TimerFontSize.sm;
     } else {
       return TimerFontSize.xs;

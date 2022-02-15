@@ -1,4 +1,4 @@
-import '../../constants/screen_sizes.dart';
+import '../screen_sizes.dart';
 
 class PieceMargin {
   static const _scale = 2.5;
@@ -10,13 +10,13 @@ class PieceMargin {
   static double get xl => _scale * 1.4;
 
   static double getPieceMargin(double maxWidth) {
-    if (maxWidth >= kXL) {
+    if (maxWidth >= ScreenSizes.xl) {
       return PieceMargin.xl;
-    } else if (maxWidth >= kLG) {
+    } else if (maxWidth >= ScreenSizes.lg) {
       return PieceMargin.lg;
-    } else if (maxWidth >= kMD) {
+    } else if (maxWidth >= ScreenSizes.md) {
       return PieceMargin.md;
-    } else if (maxWidth >= kSM) {
+    } else if (maxWidth >= ScreenSizes.sm) {
       return PieceMargin.sm;
     } else {
       return PieceMargin.xs;
