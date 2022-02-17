@@ -1,11 +1,10 @@
-import 'package:v1/models/base/piece.dart';
-
-import '../position.dart';
 import '../../utilities/helpers/image_divider.dart';
 import '../enums/game_status_enum.dart';
+import 'piece.dart';
+import 'position.dart';
 
 abstract class Game {
-  final Position next;
+  final dynamic next;
   final GameStatusEnum status;
   final List<List<Piece>> puzzle;
 
@@ -15,8 +14,25 @@ abstract class Game {
     required this.puzzle,
   });
 
+  factory Game.newGame(int level) => _Game(
+        next: Position(0, 0),
+        status: GameStatusEnum.starting,
+        puzzle: [[]],
+      );
   Game handleMove(Position pos) => this;
   Game addImageToGame(List<List<DividerPainter>> painters) => this;
   Game shuffleGame(int shuffles) => this;
   Game updateStatus(GameStatusEnum st) => this;
+}
+
+class _Game extends Game {
+  _Game({
+    required Position next,
+    required GameStatusEnum status,
+    required List<List<Piece>> puzzle,
+  }) : super(
+          next: next,
+          status: status,
+          puzzle: puzzle,
+        );
 }

@@ -133,7 +133,7 @@ class _TimerButtonViewModel {
         store.dispatch(TimerActions.stopTimer());
       },
       resumeTimer: () {
-        store.dispatch(UpdateGameStatus(GameStatusEnum.ongoing));
+        store.dispatch(const UpdateGameStatus(GameStatusEnum.ongoing));
         store.dispatch(TimerActions.startTimer());
       },
     );

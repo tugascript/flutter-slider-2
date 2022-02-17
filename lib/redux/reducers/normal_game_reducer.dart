@@ -6,7 +6,11 @@ GameState normalGameReducer(
   dynamic action,
 ) {
   if (action is NewGame) {
-    return GameState.initialState(action.level, action.difficultyEnum);
+    return GameState.initialState(
+      action.gameTypeEnum,
+      action.level,
+      action.difficultyEnum,
+    );
   } else if (action is NextLevel) {
     return state.nextLevel();
   } else if (action is MovePiece) {
@@ -20,7 +24,7 @@ GameState normalGameReducer(
   } else if (action is ToogleLoading) {
     return state.toogleLoading();
   } else if (action is AddPainters) {
-    return state.addPainters(action.painters);
+    return state.addPainters(action.paint, action.painters);
   }
 
   return state;

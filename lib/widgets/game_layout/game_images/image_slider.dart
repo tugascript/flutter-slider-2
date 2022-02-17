@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:v1/redux/actions/normal_game_actions.dart';
 
 import '../../../models/enums/theme_enum.dart';
 import '../../../redux/app_selectors.dart';
@@ -29,12 +30,17 @@ class ImageSlider extends StatelessWidget {
                       viewModel.theme == ThemeEnum.dark ? 'dark' : 'light';
 
                   return CarouselSlider(
-                    items: ['_theme_dart', '_theme_flutter', '_theme_icon']
-                        .map(
-                          (picture) =>
-                              Image.asset('images/' + theme + picture + '.jpg'),
-                        )
-                        .toList(),
+                    items: ['_theme_dart', '_theme_flutter', '_theme_icon'].map(
+                      (picture) {
+                        final image = 'images/' + theme + picture + '.jpg';
+                        return GestureDetector(
+                          onTap: () {
+                            viewModel.changePaint(image);
+                          },
+                          child: Image.asset(image),
+                        );
+                      },
+                    ).toList(),
                     options: CarouselOptions(
                       autoPlay: false,
                       enableInfiniteScroll: false,
@@ -55,11 +61,20 @@ class ImageSlider extends StatelessWidget {
 
 class _ImageSliderViewModel {
   final ThemeEnum theme;
+  final Function(String) changePaint;
 
-  _ImageSliderViewModel(this.theme);
+  _ImageSliderViewModel(
+    this.theme,
+    this.changePaint,
+  );
 
   factory _ImageSliderViewModel.fromStore(Store<AppState> store) {
-    return _ImageSliderViewModel(selectThemeState(store));
+    return _ImageSliderViewModel(
+      selectThemeState(store),
+      (String name) {
+        store.dispatch(addPaintersToPieces(name));
+      },
+    );
   }
 
   @override

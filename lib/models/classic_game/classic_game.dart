@@ -1,10 +1,10 @@
 import 'dart:math';
 
-import '../models/enums/game_status_enum.dart';
-import '../utilities/helpers/image_divider.dart';
+import '../enums/game_status_enum.dart';
+import '../../utilities/helpers/image_divider.dart';
 import 'classic_piece.dart';
-import 'base/game.dart';
-import 'position.dart';
+import '../base/game.dart';
+import '../base/position.dart';
 
 class ClassicGame implements Game {
   @override
@@ -14,12 +14,13 @@ class ClassicGame implements Game {
   @override
   final Position next;
 
-  ClassicGame({
+  const ClassicGame({
     required this.next,
     required this.status,
     required this.puzzle,
   });
 
+  @override
   factory ClassicGame.newGame(int level) {
     final len = level + 2;
     final puzzle = <List<ClassicPiece>>[];

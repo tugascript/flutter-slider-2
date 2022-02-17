@@ -2,19 +2,25 @@ import 'dart:async';
 
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:v1/models/enums/game_type_enum.dart';
 import 'package:v1/utilities/helpers/image_divider.dart';
 
 import '../../models/enums/difficulty_enum.dart';
 import '../../models/enums/game_status_enum.dart';
-import '../../models/position.dart';
+import '../../models/base/position.dart';
 import '../../redux/app_selectors.dart';
 import '../app_state.dart';
 
 class NewGame {
+  final GameTypeEnum gameTypeEnum;
   final int level;
   final DifficultyEnum difficultyEnum;
 
-  NewGame(this.level, this.difficultyEnum);
+  const NewGame(
+    this.gameTypeEnum,
+    this.level,
+    this.difficultyEnum,
+  );
 }
 
 class NextLevel {}
@@ -34,15 +40,16 @@ class ReduceTimer {}
 class ToogleLoading {}
 
 class UpdateGameStatus {
-  GameStatusEnum status;
+  final GameStatusEnum status;
 
-  UpdateGameStatus(this.status);
+  const UpdateGameStatus(this.status);
 }
 
 class AddPainters {
-  List<List<DividerPainter>> painters;
+  final String paint;
+  final List<List<DividerPainter>> painters;
 
-  AddPainters(this.painters);
+  const AddPainters(this.paint, this.painters);
 }
 
 class TimerActions {
@@ -69,7 +76,7 @@ class TimerActions {
 
       if (gameState.time > 0) {
         _timer?.cancel();
-        store.dispatch(UpdateGameStatus(GameStatusEnum.paused));
+        store.dispatch(const UpdateGameStatus(GameStatusEnum.paused));
       }
     };
   }
@@ -85,7 +92,7 @@ ThunkAction<AppState> addPaintersToPieces(String name) {
       name,
       gameState.game.puzzle.length,
     );
-    store.dispatch(AddPainters(painters));
+    store.dispatch(AddPainters(name, painters));
     store.dispatch(ToogleLoading());
   };
 }

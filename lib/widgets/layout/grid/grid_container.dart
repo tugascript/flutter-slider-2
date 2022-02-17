@@ -25,7 +25,7 @@ class GridContainer extends StatelessWidget {
     final parents = <List<Widget>>[];
 
     for (int i = 0; i < items.length; i++) {
-      if (total > 12) {
+      if (total >= 12) {
         parents.add(children);
         children = [];
         total = 0;

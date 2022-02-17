@@ -35,7 +35,7 @@ class ImageDivider {
   }
 
   static Future<ui.Image> _loadImage(String name) async {
-    final data = await rootBundle.load('assets/images/$name.jpg');
+    final data = await rootBundle.load(name);
     final image = await decodeImageFromList(data.buffer.asUint8List());
     return image;
   }
@@ -45,7 +45,7 @@ class DividerPainter extends CustomPainter {
   final ui.Image image;
   final Rect crop;
 
-  DividerPainter(this.image, this.crop);
+  const DividerPainter(this.image, this.crop);
 
   @override
   void paint(Canvas canvas, Size size) {

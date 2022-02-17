@@ -1,0 +1,4 @@
+enum TringularPosition {
+  regular,
+  inverted,
+}

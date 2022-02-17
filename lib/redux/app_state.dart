@@ -1,3 +1,5 @@
+import 'package:v1/models/enums/game_type_enum.dart';
+
 import '../models/enums/difficulty_enum.dart';
 import '../models/enums/theme_enum.dart';
 import './states/game_state.dart';
@@ -12,7 +14,11 @@ class AppState {
   });
 
   factory AppState.getInitialState() {
-    final game = GameState.initialState(1, DifficultyEnum.easy);
+    final game = GameState.initialState(
+      GameTypeEnum.classic,
+      1,
+      DifficultyEnum.easy,
+    );
     return AppState(
       gameState: game,
       themeState: ThemeEnum.light,

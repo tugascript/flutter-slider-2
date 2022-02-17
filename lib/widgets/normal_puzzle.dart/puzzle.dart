@@ -5,7 +5,7 @@ import 'package:v1/models/base/piece.dart';
 
 import './puzzle_piece.dart';
 import '../../models/enums/game_status_enum.dart';
-import '../../models/position.dart';
+import '../../models/base/position.dart';
 import '../../redux/app_selectors.dart';
 import '../../redux/app_state.dart';
 import '../../utilities/sizes/puzzle/piece_border_radius.dart';

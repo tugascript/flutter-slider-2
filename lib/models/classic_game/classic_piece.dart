@@ -1,7 +1,7 @@
 import 'package:flutter/rendering.dart';
 
-import 'base/piece.dart';
-import 'position.dart';
+import '../base/piece.dart';
+import '../base/position.dart';
 
 class ClassicPiece implements Piece {
   // Variables

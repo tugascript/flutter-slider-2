@@ -30,6 +30,7 @@ class StartGame extends StatelessWidget {
           GameScreen.routeName,
           arguments: GameScreenArguments(
             true,
+            gameType,
             1,
             difficulty,
           ),

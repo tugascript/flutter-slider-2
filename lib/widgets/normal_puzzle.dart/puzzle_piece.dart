@@ -4,7 +4,7 @@ import 'package:redux/redux.dart';
 import 'package:v1/models/base/piece.dart';
 
 import '../../models/enums/game_status_enum.dart';
-import '../../models/position.dart';
+import '../../models/base/position.dart';
 import '../../redux/actions/normal_game_actions.dart';
 import '../../redux/app_selectors.dart';
 import '../../redux/app_state.dart';
