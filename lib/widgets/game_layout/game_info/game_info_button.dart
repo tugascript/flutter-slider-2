@@ -77,7 +77,7 @@ class _GameInfoButtonScreenView {
     return _GameInfoButtonScreenView(
       status: game.status,
       theme: theme,
-      success: ThemeGenerator(theme).getExtraColors().success,
+      success: ThemeGenerator(theme).getExtraColors.success,
       startGame: () {
         store.dispatch(ShufflePuzzle());
         store.dispatch(TimerActions.startTimer());

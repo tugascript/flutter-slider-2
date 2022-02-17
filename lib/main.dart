@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
         converter: (store) => _ThemeDataViewModel.fromStore(store),
         builder: (_, viewModel) => MaterialApp(
           title: 'Flutter Shuffle',
-          theme: ThemeGenerator(viewModel.theme).getTheme(),
+          theme: ThemeGenerator(viewModel.theme).getTheme,
           initialRoute: '/',
           onGenerateRoute: RouterGenerator.generateRoute,
         ),

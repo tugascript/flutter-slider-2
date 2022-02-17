@@ -149,7 +149,7 @@ class _StarsViewModel {
     final theme = selectThemeState(store);
     return _StarsViewModel(
       theme,
-      ThemeGenerator(theme).getExtraColors(),
+      ThemeGenerator(theme).getExtraColors,
     );
   }
 

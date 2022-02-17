@@ -111,7 +111,7 @@ class _GameTimerViewModel {
       time: gameState.time,
       maxTime: gameState.difficulty.getTime(gameState.level),
       theme: theme,
-      colors: ThemeGenerator(theme).getExtraColors(),
+      colors: ThemeGenerator(theme).getExtraColors,
     );
   }
 

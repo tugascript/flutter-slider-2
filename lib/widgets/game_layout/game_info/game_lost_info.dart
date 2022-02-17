@@ -54,7 +54,7 @@ class _TextViewModel {
 
     return _TextViewModel(
       theme,
-      ThemeGenerator(theme).getExtraColors().danger,
+      ThemeGenerator(theme).getExtraColors.danger,
     );
   }
 

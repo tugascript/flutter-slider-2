@@ -128,7 +128,7 @@ class _TimerButtonViewModel {
     return _TimerButtonViewModel(
       isPaused: isPaused,
       theme: theme,
-      colors: ThemeGenerator(theme).getExtraColors(),
+      colors: ThemeGenerator(theme).getExtraColors,
       stopTimer: () {
         store.dispatch(TimerActions.stopTimer());
       },

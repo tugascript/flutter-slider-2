@@ -1,3 +1,5 @@
+import 'package:flutter/rendering.dart';
+
 import '../base/game.dart';
 import '../base/position.dart';
 import '../enums/game_status_enum.dart';
@@ -56,5 +58,31 @@ class HexagonGame implements Game {
       status: GameStatusEnum.starting,
       puzzle: puzzle,
     );
+  }
+
+  @override
+  HexagonGame handleMove(Position pos) {
+    final puzzle = this.puzzle;
+    final len = puzzle.length;
+    // variables
+    HexagonNext next = this.next;
+    GameStatusEnum status = this.status;
+
+    return this;
+  }
+
+  @override
+  HexagonGame addImageToGame(List<List<CustomPainter>> painters) {
+    return this;
+  }
+
+  @override
+  HexagonGame shuffleGame(int shuffles) {
+    return this;
+  }
+
+  @override
+  HexagonGame updateStatus(GameStatusEnum st) {
+    return this;
   }
 }

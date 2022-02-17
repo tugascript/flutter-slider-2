@@ -79,7 +79,7 @@ class _GameMovesViewModel {
       moves: gameState.moves,
       shuffles: len * len,
       theme: theme,
-      colors: ThemeGenerator(theme).getExtraColors(),
+      colors: ThemeGenerator(theme).getExtraColors,
     );
   }
 

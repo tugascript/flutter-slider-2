@@ -65,11 +65,11 @@ class ThemeGenerator {
     success: Colors.green.shade600,
   );
 
-  ThemeData getTheme() {
+  ThemeData get getTheme {
     return theme == ThemeEnum.dark ? _darkTheme : _lightTheme;
   }
 
-  ExtraColors getExtraColors() {
+  ExtraColors get getExtraColors {
     return theme == ThemeEnum.dark ? _darkExtra : _lightExtra;
   }
 }
