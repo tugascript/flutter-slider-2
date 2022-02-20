@@ -27,10 +27,10 @@ class HexagonGame implements Game {
     final len = halfLen * 2;
     final puzzle = <List<TriangularPiece>>[];
 
+    bool inverted = true;
+    int innerLen = edgeLen;
     for (int i = 0; i < len; i++) {
       final row = <TriangularPiece>[];
-      bool inverted = true;
-      int innerLen = edgeLen;
 
       for (int j = 0; j < innerLen; j++) {
         row.add(
@@ -50,11 +50,15 @@ class HexagonGame implements Game {
       }
     }
 
+    final next = HexagonNext(
+      normal: Position(len - 1, level),
+      inverted: Position(len - 2, edgeLen),
+    );
+    puzzle[next.normal.row][next.normal.column].empty = true;
+    puzzle[next.inverted.row][next.inverted.column].empty = true;
+
     return HexagonGame(
-      next: HexagonNext(
-        normal: Position(edgeLen - 1, len - 1),
-        inverted: Position(edgeLen, len - 2),
-      ),
+      next: next,
       status: GameStatusEnum.starting,
       puzzle: puzzle,
     );
@@ -64,9 +68,19 @@ class HexagonGame implements Game {
   HexagonGame handleMove(Position pos) {
     final puzzle = this.puzzle;
     final len = puzzle.length;
+    final halfLen = len / 2;
+    final edgeLen = halfLen / 2;
     // variables
-    HexagonNext next = this.next;
     GameStatusEnum status = this.status;
+
+    if (pos.row < len) {
+      final currentRow = puzzle[pos.row];
+
+      if (pos.column < currentRow.length) {
+        final currentPiece = currentRow[pos.column];
+        final nextPos = currentPiece.inverted ? next.inverted : next.normal;
+      }
+    }
 
     return this;
   }

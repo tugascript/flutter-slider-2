@@ -1,10 +1,11 @@
 import '../../models/base/game.dart';
+import '../../models/base/position.dart';
 import '../../models/classic_game/classic_game.dart';
 import '../../models/enums/difficulty_enum.dart';
 import '../../models/enums/game_status_enum.dart';
 import '../../models/enums/game_type_enum.dart';
 import '../../models/game_record.dart';
-import '../../models/base/position.dart';
+import '../../models/hexagon_game/hexagon_game.dart';
 import '../../utilities/helpers/image_divider.dart';
 
 class GameState {
@@ -42,7 +43,9 @@ class GameState {
     );
     return GameState(
       gameType: gameTypeEnum,
-      game: ClassicGame.newGame(level),
+      game: gameTypeEnum == GameTypeEnum.classic
+          ? ClassicGame.newGame(level)
+          : HexagonGame.newGame(level),
       difficulty: difficulty,
       level: level,
       time: difficulty.getTime(level),

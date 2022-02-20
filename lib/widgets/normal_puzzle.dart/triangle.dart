@@ -8,9 +8,9 @@ class Triangle extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(5.0),
-      child: CustomPaint(
-        painter: const DrawTriangle(Colors.black),
-        child: Container(
+      child: const CustomPaint(
+        painter: DrawTriangle(Colors.black, true),
+        child: SizedBox(
           width: 600,
           height: 600,
         ),

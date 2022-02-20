@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:v1/models/enums/game_type_enum.dart';
+import 'package:v1/widgets/hexagon_puzzle.dart/he_puzzle.dart';
 import 'package:v1/widgets/normal_puzzle.dart/triangle.dart';
 
 import '../models/enums/difficulty_enum.dart';
@@ -61,8 +62,8 @@ class GameScreen extends StatelessWidget {
                 },
                 alignment: Alignment.center,
                 child: viewModel.gameType == GameTypeEnum.classic
-                    ? Puzzle(level: viewModel.level)
-                    : const Triangle(),
+                    ? const Puzzle()
+                    : const HePuzzle(),
               ),
               GridItemInput(
                 breakPoints: {

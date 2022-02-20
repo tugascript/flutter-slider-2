@@ -1,40 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-import 'package:v1/models/base/piece.dart';
 
-import './puzzle_piece.dart';
-import '../../models/enums/game_status_enum.dart';
+import '../../models/base/piece.dart';
 import '../../models/base/position.dart';
+import '../../models/classic_game/classic_piece.dart';
+import '../../models/enums/game_status_enum.dart';
 import '../../redux/app_selectors.dart';
 import '../../redux/app_state.dart';
-import '../../utilities/sizes/puzzle/piece_border_radius.dart';
-import '../../utilities/sizes/puzzle/piece_font_size.dart';
-import '../../utilities/sizes/puzzle/piece_margin.dart';
-import '../../utilities/sizes/puzzle/puzzle_size.dart';
+import '../../utilities/sizes/puzzle_sizes.dart';
+import 'puzzle_piece.dart';
 
 class Puzzle extends StatelessWidget {
-  final int level;
-
   const Puzzle({
     Key? key,
-    required this.level,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final puzzleSize = PuzzleSize.getPuzzleSize(width);
-    final pieceRadius = PieceBorderRadius.getPieceBorderRadius(width);
-    final pieceMargin = PieceMargin.getPieceMargin(width);
-    final pieceFontSize = PieceFontSize.getPieceFontSize(width);
+    final puzzleSizes = PuzzleSizes.getPuzzleSizes(width);
 
     return StoreConnector<AppState, _PuzzleViewModel>(
       distinct: true,
       converter: (store) => _PuzzleViewModel.fromStore(store),
       builder: (_, viewModel) {
         final len = viewModel.puzzle.length;
-        final pieceSize = puzzleSize / len;
+        final pieceSize = puzzleSizes.puzzleSize / len;
 
         return Column(
           children: [
@@ -44,12 +36,12 @@ class Puzzle extends StatelessWidget {
                 children: [
                   for (int j = 0; j < len; j++)
                     PuzzlePiece(
-                      piece: viewModel.puzzle[i][j],
+                      piece: viewModel.puzzle[i][j] as ClassicPiece,
                       position: Position(i, j),
                       size: pieceSize,
-                      radius: pieceRadius,
-                      margin: pieceMargin,
-                      fontSize: pieceFontSize,
+                      radius: puzzleSizes.pieceRadius,
+                      margin: puzzleSizes.pieceMargin,
+                      fontSize: puzzleSizes.pieceFontSize,
                     ),
                 ],
               )

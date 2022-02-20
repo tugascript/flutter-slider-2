@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:v1/models/base/piece.dart';
+import 'package:v1/models/classic_game/classic_piece.dart';
 
 import '../../models/enums/game_status_enum.dart';
 import '../../models/base/position.dart';
@@ -10,7 +11,7 @@ import '../../redux/app_selectors.dart';
 import '../../redux/app_state.dart';
 
 class PuzzlePiece extends StatefulWidget {
-  final Piece piece;
+  final ClassicPiece piece;
   final Position position;
   final double size;
   final double radius;

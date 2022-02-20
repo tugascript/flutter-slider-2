@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class DrawTriangle extends CustomPainter {
   final Color color;
+  final bool inverted;
 
-  const DrawTriangle(this.color);
+  const DrawTriangle(this.color, this.inverted);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -12,9 +13,16 @@ class DrawTriangle extends CustomPainter {
       ..color = color
       ..style = PaintingStyle.fill;
 
-    path.moveTo(size.width / 2, 0);
-    path.lineTo(0, size.height);
-    path.lineTo(size.height, size.width);
+    if (inverted) {
+      path.moveTo(size.width / 2, size.height);
+      path.lineTo(size.width, 0);
+      path.lineTo(0, 0);
+    } else {
+      path.moveTo(size.width / 2, 0);
+      path.lineTo(0, size.height);
+      path.lineTo(size.height, size.width);
+    }
+
     path.close();
 
     canvas.drawPath(path, painter);
