@@ -63,33 +63,33 @@ class _HePuzzlePieceState extends State<HePuzzlePiece> {
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 275),
               child: !viewModel.piece.empty
-                  ? MouseRegion(
-                      cursor: viewModel.status == GameStatusEnum.ongoing ||
-                              viewModel.loading
-                          ? SystemMouseCursors.click
-                          : SystemMouseCursors.forbidden,
-                      onEnter: (_) {
-                        setState(() {
-                          _entered = true;
-                        });
-                      },
-                      onExit: (_) {
-                        setState(() {
-                          _entered = false;
-                        });
-                      },
-                      child: GestureDetector(
-                        onTap: () {
-                          if (!viewModel.piece.empty &&
-                              viewModel.status == GameStatusEnum.ongoing) {
-                            setState(() {
-                              _entered = false;
-                            });
-                            viewModel.handleTap(widget.position);
-                          }
+                  ? AnimatedContainer(
+                      duration: const Duration(milliseconds: 225),
+                      child: MouseRegion(
+                        cursor: viewModel.status == GameStatusEnum.ongoing ||
+                                viewModel.loading
+                            ? SystemMouseCursors.click
+                            : SystemMouseCursors.forbidden,
+                        onEnter: (_) {
+                          setState(() {
+                            _entered = true;
+                          });
                         },
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 225),
+                        onExit: (_) {
+                          setState(() {
+                            _entered = false;
+                          });
+                        },
+                        child: GestureDetector(
+                          onTap: () {
+                            if (!viewModel.piece.empty &&
+                                viewModel.status == GameStatusEnum.ongoing) {
+                              setState(() {
+                                _entered = false;
+                              });
+                              viewModel.handleTap(widget.position);
+                            }
+                          },
                           child: CustomPaint(
                             painter: DrawTriangle(
                               bgColor,
@@ -98,6 +98,16 @@ class _HePuzzlePieceState extends State<HePuzzlePiece> {
                             child: SizedBox(
                               height: widget.size - margin,
                               width: widget.size - margin,
+                              child: Center(
+                                child: Text(
+                                  viewModel.hashCode.toString(),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: widget.fontSize,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -145,7 +155,8 @@ class _PuzzlePieceViewModel {
   }
 
   @override
-  int get hashCode => piece.position.column + 1 + length * piece.position.row;
+  int get hashCode =>
+      piece.position.column + 1 + (length / 4).floor() * piece.position.row;
 
   @override
   bool operator ==(Object other) {

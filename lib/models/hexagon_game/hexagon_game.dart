@@ -68,8 +68,8 @@ class HexagonGame implements Game {
   HexagonGame handleMove(Position pos) {
     final puzzle = this.puzzle;
     final len = puzzle.length;
-    final halfLen = len / 2;
-    final edgeLen = halfLen / 2;
+    final halfLen = (len / 2).floor();
+    final edgeLen = (halfLen / 2).floor();
     // variables
     GameStatusEnum status = this.status;
 
@@ -77,8 +77,19 @@ class HexagonGame implements Game {
       final currentRow = puzzle[pos.row];
 
       if (pos.column < currentRow.length) {
-        final currentPiece = currentRow[pos.column];
-        final nextPos = currentPiece.inverted ? next.inverted : next.normal;
+        final piece = currentRow[pos.column];
+        final halfIndex = halfLen + 1;
+        final nNext = next.normal;
+        final iNext = next.inverted;
+
+        if (nNext.row > iNext.row) {
+          // Pieces move diagonally
+          if (nNext.column < halfLen &&
+              pos.column < halfIndex &&
+              pos.column == nNext.column) {
+            _changeDiagonalRow(puzzle, pos.row, pos.column, nNext.row);
+          } else {}
+        } else {}
       }
     }
 
@@ -98,5 +109,29 @@ class HexagonGame implements Game {
   @override
   HexagonGame updateStatus(GameStatusEnum st) {
     return this;
+  }
+
+  void _changeDiagonalRow(
+    List<List<TriangularPiece>> puzzle,
+    int row,
+    int column,
+    int nextRow,
+  ) {
+    if (row < nextRow) {
+      // ISTO TEM DE ANDAR 2 E NÃO 1
+      for (int i = nextRow; i > row; i--) {
+        final currentOne = puzzle[i][column];
+        final prevOne = puzzle[i - 1][column];
+        puzzle[i][column] = prevOne;
+        puzzle[i - 1][column] = currentOne;
+      }
+    } else {
+      for (int i = nextRow; i < row; i++) {
+        final currentOne = puzzle[i][column];
+        final nextOne = puzzle[i + 1][column];
+        puzzle[i][column] = nextOne;
+        puzzle[i + 1][column] = currentOne;
+      }
+    }
   }
 }

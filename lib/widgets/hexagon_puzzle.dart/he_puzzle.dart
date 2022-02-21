@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-import 'package:v1/models/hexagon_game/hexagon_next.dart';
 
 import '../../models/base/piece.dart';
 import '../../models/base/position.dart';
 import '../../models/enums/game_status_enum.dart';
+import '../../models/hexagon_game/hexagon_next.dart';
 import '../../models/hexagon_game/triangular_piece.dart';
 import '../../redux/app_selectors.dart';
 import '../../redux/app_state.dart';
 import '../../utilities/sizes/puzzle_sizes.dart';
-import '../../widgets/hexagon_puzzle.dart/he_puzzle_piece.dart';
+import 'he_puzzle_piece.dart';
 
 class HePuzzle extends StatelessWidget {
   const HePuzzle({
@@ -44,7 +44,7 @@ class HePuzzle extends StatelessWidget {
                 size: pieceSize,
                 radius: puzzleSizes.pieceRadius,
                 margin: puzzleSizes.pieceMargin,
-                fontSize: puzzleSizes.pieceMargin,
+                fontSize: puzzleSizes.pieceFontSize * 0.85,
               ),
             );
           }
