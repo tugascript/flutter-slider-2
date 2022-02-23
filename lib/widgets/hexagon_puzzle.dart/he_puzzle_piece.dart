@@ -100,10 +100,10 @@ class _HePuzzlePieceState extends State<HePuzzlePiece> {
                               width: widget.size - margin,
                               child: Center(
                                 child: Text(
-                                  viewModel.hashCode.toString(),
+                                  "${widget.piece.position.row}/${widget.piece.position.column}",
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: widget.fontSize,
+                                    fontSize: widget.fontSize * 0.8,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),

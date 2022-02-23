@@ -1,8 +1,8 @@
 import 'package:v1/models/base/position.dart';
 
 class HexagonNext {
-  final Position normal;
-  final Position inverted;
+  Position normal;
+  Position inverted;
 
   HexagonNext({
     required this.normal,

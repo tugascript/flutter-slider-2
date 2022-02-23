@@ -69,31 +69,55 @@ class HexagonGame implements Game {
     final puzzle = this.puzzle;
     final len = puzzle.length;
     final halfLen = (len / 2).floor();
-    final edgeLen = (halfLen / 2).floor();
     // variables
-    GameStatusEnum status = this.status;
+    HexagonNext next = this.next;
 
     if (pos.row < len) {
       final currentRow = puzzle[pos.row];
 
       if (pos.column < currentRow.length) {
         final piece = currentRow[pos.column];
-        final halfIndex = halfLen + 1;
         final nNext = next.normal;
         final iNext = next.inverted;
+        final nextPos = piece.inverted ? iNext : nNext;
+        print('CurrentPos: ${pos.row}, ${pos.column}');
+        print('NextPos: ${nextPos.row}, ${nextPos.column}');
 
         if (nNext.row > iNext.row) {
-          // Pieces move diagonally
-          if (nNext.column < halfLen &&
-              pos.column < halfIndex &&
-              pos.column == nNext.column) {
-            _changeDiagonalRow(puzzle, pos.row, pos.column, nNext.row);
+          if (pos.row == nextPos.row) {
+            _moveHorizontally(puzzle, pos, next, piece);
           } else {}
-        } else {}
+        } else {
+          // pieces move diagonally
+          if (pos.column == nextPos.column) {
+            _moveRowDiagonally(
+              puzzle,
+              pos.row,
+              pos.column,
+              nextPos.row,
+            );
+          } else if (pos.column < nextPos.column) {
+            bool diagonal = _isDiagonal(pos, nextPos);
+
+            if (diagonal) {
+              _moveAllDiagonally(
+                puzzle,
+                pos.row,
+                pos.column,
+                nextPos.column,
+              );
+            }
+          }
+        }
       }
     }
 
-    return this;
+    print(next.inverted.column);
+    return HexagonGame(
+      next: next,
+      status: status,
+      puzzle: puzzle,
+    );
   }
 
   @override
@@ -103,7 +127,11 @@ class HexagonGame implements Game {
 
   @override
   HexagonGame shuffleGame(int shuffles) {
-    return this;
+    return HexagonGame(
+      next: next,
+      status: GameStatusEnum.ongoing,
+      puzzle: puzzle,
+    );
   }
 
   @override
@@ -111,26 +139,147 @@ class HexagonGame implements Game {
     return this;
   }
 
-  void _changeDiagonalRow(
+  bool _isDiagonal(Position pos, Position nextPos) {
+    for (int i = nextPos.column; i > pos.column; i--) {
+      if ((nextPos.column - i == pos.column &&
+              nextPos.row - i - 1 == pos.row) ||
+          (nextPos.column + i == pos.column &&
+              nextPos.row + i + 1 == pos.row)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  void _moveRowDiagonally(
     List<List<TriangularPiece>> puzzle,
     int row,
     int column,
     int nextRow,
   ) {
     if (row < nextRow) {
-      // ISTO TEM DE ANDAR 2 E NÃO 1
       for (int i = nextRow; i > row; i--) {
-        final currentOne = puzzle[i][column];
-        final prevOne = puzzle[i - 1][column];
+        final curOne = puzzle[i][column];
+        final prevOne = puzzle[i - 2][column];
         puzzle[i][column] = prevOne;
-        puzzle[i - 1][column] = currentOne;
+        puzzle[i - 2][column] = curOne;
       }
     } else {
       for (int i = nextRow; i < row; i++) {
-        final currentOne = puzzle[i][column];
-        final nextOne = puzzle[i + 1][column];
+        final curOne = puzzle[i][column];
+        final nextOne = puzzle[i + 2][column];
         puzzle[i][column] = nextOne;
-        puzzle[i + 1][column] = currentOne;
+        puzzle[i + 2][column] = curOne;
+      }
+    }
+  }
+
+  void _moveAllDiagonally(
+    List<List<TriangularPiece>> puzzle,
+    int row,
+    int column,
+    int nextColumn,
+  ) {
+    if (column < nextColumn) {
+      for (int i = nextColumn; i > column; i--) {
+        final curOne = puzzle[i][i];
+        final prevOne = puzzle[i - 2][i - 1];
+        puzzle[i][i] = prevOne;
+        puzzle[i - 2][i - 1] = curOne;
+      }
+    } else {
+      for (int i = nextColumn; i < column; i++) {
+        final curOne = puzzle[i][i];
+        final prevOne = puzzle[i + 2][i + 1];
+        puzzle[i][i] = prevOne;
+        puzzle[i + 2][i + 1] = curOne;
+      }
+    }
+  }
+
+  void _moveHorizontally(
+    List<List<TriangularPiece>> puzzle,
+    Position pos,
+    HexagonNext next,
+    TriangularPiece piece,
+  ) {
+    final row1 = pos.row;
+    late final int nextColumn1;
+    late final int nextColumn2;
+    late final int row2;
+
+    if (piece.inverted) {
+      nextColumn1 = next.inverted.column;
+      nextColumn2 = next.normal.column;
+      row2 = next.normal.row;
+      next.inverted = pos;
+      next.normal = Position(
+        row2,
+        nextColumn1 == nextColumn2 ? pos.column : pos.column - 1,
+      );
+    } else {
+      nextColumn1 = next.normal.column;
+      nextColumn2 = next.inverted.column;
+      row2 = next.inverted.row;
+      next.normal = pos;
+      next.inverted = Position(
+        row2,
+        nextColumn1 == nextColumn2 ? pos.column : pos.column - 1,
+      );
+    }
+
+    if (pos.column < nextColumn1) {
+      for (int i = nextColumn1; i > pos.column; i--) {
+        final prev = i - 1;
+
+        final curOne = puzzle[row1][i];
+        final prevOne = puzzle[row1][prev];
+        puzzle[row1][i] = prevOne;
+        puzzle[row1][prev] = curOne;
+
+        if (nextColumn1 == nextColumn2) {
+          final curTwo = puzzle[row2][i];
+          final prevTwo = puzzle[row2][prev];
+          puzzle[row2][i] = prevTwo;
+          puzzle[row2][prev] = curTwo;
+        } else {
+          final j = i - 1;
+          final jPrev = j - 1;
+
+          if (jPrev > -1) {
+            final curTwo = puzzle[row2][j];
+            final prevTwo = puzzle[row2][jPrev];
+            puzzle[row2][j] = prevTwo;
+            puzzle[row2][jPrev] = curTwo;
+          }
+        }
+      }
+    } else {
+      for (int i = nextColumn1; i < pos.column; i++) {
+        final next = i + 1;
+
+        final curOne = puzzle[row1][i];
+        final nextOne = puzzle[row1][next];
+        puzzle[row1][i] = nextOne;
+        puzzle[row1][next] = curOne;
+
+        if (nextColumn1 == nextColumn2) {
+          final curTwo = puzzle[row2][i];
+          final nextTwo = puzzle[row2][next];
+          puzzle[row2][i] = nextTwo;
+          puzzle[row2][next] = curTwo;
+        } else {
+          final j = i - 1;
+          final jNext = i;
+
+          if (jNext < pos.column - 1) {
+            final curTwo = puzzle[row2][j];
+            final nextTwo = puzzle[row2][jNext];
+            puzzle[row2][j] = nextTwo;
+            puzzle[row2][jNext] = curTwo;
+          }
+        }
       }
     }
   }
