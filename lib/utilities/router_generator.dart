@@ -15,7 +15,6 @@ class RouterGenerator {
         if (args is GameScreenArguments) {
           return MaterialPageRoute(
             builder: (_) => GameScreen(
-              gameType: args.gameTypeEnum,
               newGame: args.newGame,
               level: args.level,
               difficulty: args.difficulty,

@@ -1,13 +1,12 @@
 import '../actions/normal_game_actions.dart';
 import '../states/game_state.dart';
 
-GameState normalGameReducer(
+GameState gameReducer(
   GameState state,
   dynamic action,
 ) {
   if (action is NewGame) {
     return GameState.initialState(
-      action.gameTypeEnum,
       action.level,
       action.difficultyEnum,
     );

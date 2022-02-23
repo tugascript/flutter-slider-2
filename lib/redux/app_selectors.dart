@@ -1,7 +1,7 @@
 import 'package:redux/redux.dart';
 
 import '../models/enums/theme_enum.dart';
-import '../models/base/game.dart';
+import '../models/game/game.dart';
 import 'app_state.dart';
 import 'states/game_state.dart';
 

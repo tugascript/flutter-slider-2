@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-import '../../models/base/piece.dart';
-import '../../models/base/position.dart';
-import '../../models/classic_game/classic_piece.dart';
 import '../../models/enums/game_status_enum.dart';
+import '../../models/game/piece.dart';
+import '../../models/game/position.dart';
 import '../../redux/app_selectors.dart';
 import '../../redux/app_state.dart';
 import '../../utilities/sizes/puzzle_sizes.dart';
@@ -36,7 +35,7 @@ class Puzzle extends StatelessWidget {
                 children: [
                   for (int j = 0; j < len; j++)
                     PuzzlePiece(
-                      piece: viewModel.puzzle[i][j] as ClassicPiece,
+                      piece: viewModel.puzzle[i][j],
                       position: Position(i, j),
                       size: pieceSize,
                       radius: puzzleSizes.pieceRadius,

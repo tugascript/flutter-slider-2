@@ -1,15 +1,11 @@
-import '../../models/base/game.dart';
-import '../../models/base/position.dart';
-import '../../models/classic_game/classic_game.dart';
+import '../../models/game/game.dart';
+import '../../models/game/position.dart';
 import '../../models/enums/difficulty_enum.dart';
 import '../../models/enums/game_status_enum.dart';
-import '../../models/enums/game_type_enum.dart';
 import '../../models/game_record.dart';
-import '../../models/hexagon_game/hexagon_game.dart';
 import '../../utilities/helpers/image_divider.dart';
 
 class GameState {
-  final GameTypeEnum gameType;
   final Game game;
   final Difficulty difficulty;
   final int level;
@@ -21,7 +17,6 @@ class GameState {
   final bool loading;
 
   GameState({
-    required this.gameType,
     required this.game,
     required this.difficulty,
     required this.level,
@@ -34,7 +29,6 @@ class GameState {
   });
 
   factory GameState.initialState(
-    GameTypeEnum gameTypeEnum,
     int level,
     DifficultyEnum difficultyEnum,
   ) {
@@ -42,10 +36,7 @@ class GameState {
       difficultyEnum: difficultyEnum,
     );
     return GameState(
-      gameType: gameTypeEnum,
-      game: gameTypeEnum == GameTypeEnum.classic
-          ? ClassicGame.newGame(level)
-          : HexagonGame.newGame(level),
+      game: Game.newGame(level),
       difficulty: difficulty,
       level: level,
       time: difficulty.getTime(level),
@@ -71,8 +62,7 @@ class GameState {
     };
 
     return GameState(
-      gameType: gameType,
-      game: ClassicGame.newGame(newLevel),
+      game: Game.newGame(newLevel),
       difficulty: difficulty,
       records: newRecords,
       level: newLevel,
@@ -86,7 +76,6 @@ class GameState {
 
   GameState toogleLoading() {
     return GameState(
-      gameType: gameType,
       game: game,
       difficulty: difficulty,
       level: level,
@@ -101,7 +90,6 @@ class GameState {
 
   GameState movePiece(Position pos) {
     return GameState(
-      gameType: gameType,
       game: game.handleMove(pos),
       moves: moves + 1,
       difficulty: difficulty,
@@ -118,7 +106,6 @@ class GameState {
     final len = level + 2;
 
     return GameState(
-      gameType: gameType,
       game: game.shuffleGame(len * len),
       difficulty: difficulty,
       level: level,
@@ -135,7 +122,6 @@ class GameState {
     final time = this.time - 1;
 
     return GameState(
-      gameType: gameType,
       game: time > 0
           ? game
           : game.updateStatus(
@@ -154,7 +140,6 @@ class GameState {
 
   GameState updateGameStatus(GameStatusEnum status) {
     return GameState(
-      gameType: gameType,
       game: game.updateStatus(status),
       difficulty: difficulty,
       level: level,
@@ -169,7 +154,6 @@ class GameState {
 
   GameState addPainters(String paint, List<List<DividerPainter>> painters) {
     return GameState(
-      gameType: gameType,
       game: game.addImageToGame(painters),
       difficulty: difficulty,
       level: level,

@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 
 import '../../models/enums/difficulty_enum.dart';
-import '../../models/enums/game_type_enum.dart';
 import '../../screens/game_screen.dart';
 import '../../utilities/arguments/game_screen_arguments.dart';
 import '../../utilities/sizes/home_screen_sizes.dart';
 
 class StartGame extends StatelessWidget {
   final DifficultyEnum difficulty;
-  final GameTypeEnum gameType;
 
   const StartGame({
     Key? key,
     required this.difficulty,
-    required this.gameType,
   }) : super(key: key);
 
   @override
@@ -30,7 +27,6 @@ class StartGame extends StatelessWidget {
           GameScreen.routeName,
           arguments: GameScreenArguments(
             true,
-            gameType,
             1,
             difficulty,
           ),

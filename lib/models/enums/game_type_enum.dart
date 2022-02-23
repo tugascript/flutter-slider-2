@@ -1,4 +1,0 @@
-enum GameTypeEnum {
-  classic,
-  hexagon,
-}

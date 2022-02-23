@@ -1,36 +1,31 @@
 import 'dart:math';
 
-import '../enums/game_status_enum.dart';
 import '../../utilities/helpers/image_divider.dart';
-import 'classic_piece.dart';
-import '../base/game.dart';
-import '../base/position.dart';
+import '../enums/game_status_enum.dart';
+import 'piece.dart';
+import 'position.dart';
 
-class ClassicGame implements Game {
-  @override
-  final List<List<ClassicPiece>> puzzle;
-  @override
+class Game {
+  final List<List<Piece>> puzzle;
   final GameStatusEnum status;
-  @override
   final Position next;
 
-  const ClassicGame({
+  const Game({
     required this.next,
     required this.status,
     required this.puzzle,
   });
 
-  @override
-  factory ClassicGame.newGame(int level) {
+  factory Game.newGame(int level) {
     final len = level + 2;
-    final puzzle = <List<ClassicPiece>>[];
+    final puzzle = <List<Piece>>[];
 
     for (int i = 0; i < len; i++) {
-      final row = <ClassicPiece>[];
+      final row = <Piece>[];
 
       for (int j = 0; j < len; j++) {
         final pos = Position(i, j);
-        row.add(ClassicPiece(pos));
+        row.add(Piece(pos));
       }
 
       puzzle.add(row);
@@ -39,15 +34,14 @@ class ClassicGame implements Game {
     final index = len - 1;
     puzzle[index][index].empty = true;
 
-    return ClassicGame(
+    return Game(
       puzzle: puzzle,
       status: GameStatusEnum.starting,
       next: Position(index, index),
     );
   }
 
-  @override
-  ClassicGame handleMove(Position pos) {
+  Game handleMove(Position pos) {
     /**
      * Handle Tap
      * 
@@ -79,15 +73,14 @@ class ClassicGame implements Game {
       status = _checkIfCompleted(len, puzzle);
     }
 
-    return ClassicGame(
+    return Game(
       puzzle: puzzle,
       next: next,
       status: status,
     );
   }
 
-  @override
-  ClassicGame addImageToGame(List<List<DividerPainter>> painters) {
+  Game addImageToGame(List<List<DividerPainter>> painters) {
     final puzzle = this.puzzle;
     final len = puzzle.length;
 
@@ -98,15 +91,14 @@ class ClassicGame implements Game {
       }
     }
 
-    return ClassicGame(
+    return Game(
       puzzle: puzzle,
       next: next,
       status: status,
     );
   }
 
-  @override
-  ClassicGame shuffleGame(int shuffles) {
+  Game shuffleGame(int shuffles) {
     final puzzle = this.puzzle;
     final len = puzzle.length;
     Position next = this.next;
@@ -136,16 +128,15 @@ class ClassicGame implements Game {
       }
     }
 
-    return ClassicGame(
+    return Game(
       puzzle: puzzle,
       status: GameStatusEnum.ongoing,
       next: next,
     );
   }
 
-  @override
-  ClassicGame updateStatus(GameStatusEnum st) {
-    return ClassicGame(
+  Game updateStatus(GameStatusEnum st) {
+    return Game(
       puzzle: puzzle,
       next: next,
       status: st,
@@ -155,7 +146,7 @@ class ClassicGame implements Game {
   //____________________ Private Methods ____________________
 
   // This have a big O of n2 and should be optimized
-  GameStatusEnum _checkIfCompleted(int len, List<List<ClassicPiece>> game) {
+  GameStatusEnum _checkIfCompleted(int len, List<List<Piece>> game) {
     for (int i = 0; i < len; i++) {
       for (int j = 0; j < len; j++) {
         final pos = game[i][j].position;
@@ -168,7 +159,7 @@ class ClassicGame implements Game {
   }
 
   void _changeColumn(
-    List<List<ClassicPiece>> puzzle,
+    List<List<Piece>> puzzle,
     int row,
     int column,
     int nextColumn,
@@ -191,7 +182,7 @@ class ClassicGame implements Game {
   }
 
   void _changeRow(
-    List<List<ClassicPiece>> puzzle,
+    List<List<Piece>> puzzle,
     int row,
     int column,
     int nextRow,

@@ -2,22 +2,19 @@ import 'dart:async';
 
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-import 'package:v1/models/enums/game_type_enum.dart';
-import 'package:v1/utilities/helpers/image_divider.dart';
 
 import '../../models/enums/difficulty_enum.dart';
 import '../../models/enums/game_status_enum.dart';
-import '../../models/base/position.dart';
+import '../../models/game/position.dart';
 import '../../redux/app_selectors.dart';
+import '../../utilities/helpers/image_divider.dart';
 import '../app_state.dart';
 
 class NewGame {
-  final GameTypeEnum gameTypeEnum;
   final int level;
   final DifficultyEnum difficultyEnum;
 
   const NewGame(
-    this.gameTypeEnum,
     this.level,
     this.difficultyEnum,
   );

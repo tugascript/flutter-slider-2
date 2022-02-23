@@ -1,12 +1,10 @@
 import 'package:flutter/rendering.dart';
-
 import 'position.dart';
 
-abstract class Piece {
-  // Single Assignment
+class Piece {
+  // Variables
   final Position position;
 
-  // Variables
   bool empty = false;
   CustomPainter? painter;
 
