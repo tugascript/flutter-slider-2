@@ -2,18 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:redux/redux.dart';
-import 'package:v1/models/enums/theme_enum.dart';
-import 'package:v1/models/extra_colors.dart';
-import 'package:v1/utilities/helpers/time_stringify.dart';
-import 'package:v1/utilities/sizes/spacing.dart';
-import 'package:v1/utilities/theme_generator.dart';
 
-import './game_info/game_info.dart';
+import '../../models/enums/theme_enum.dart';
+import '../../models/extra_colors.dart';
 import '../../redux/app_selectors.dart';
 import '../../redux/app_state.dart';
-import '../../utilities/sizes/puzzle/timer_font_size.dart';
-import '../../utilities/sizes/puzzle/timer_size.dart';
-import '../../utilities/sizes/puzzle/timer_width.dart';
+import '../../utilities/helpers/time_stringify.dart';
+import '../../utilities/sizes/timer_sizes.dart';
+import '../../utilities/theme_generator.dart';
+import 'game_info/game_info.dart';
 
 class GameTimer extends StatelessWidget {
   const GameTimer({Key? key}) : super(key: key);
@@ -21,10 +18,7 @@ class GameTimer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final timerSize = TimerSize.getTimerSize(width);
-    final fontSize = TimerFontSize.getTimerFontSize(width);
-    final timerWidth = TimerWidth.getTimerWidth(width);
-    final spacing = LocalSpacing.getSpacing(width);
+    final sizes = TimerSizes.getTimerSizes(width);
 
     return StoreConnector<AppState, _GameTimerViewModel>(
       distinct: true,
@@ -50,17 +44,17 @@ class GameTimer extends StatelessWidget {
         final timer = TimeStringify.getTimeString(viewModel.time);
 
         return Padding(
-          padding: EdgeInsets.all(spacing),
+          padding: EdgeInsets.all(sizes.spacing),
           child: SizedBox(
-            width: timerSize,
-            height: timerSize,
+            width: sizes.size,
+            height: sizes.size,
             child: Stack(
               fit: StackFit.expand,
               children: [
                 CircularProgressIndicator(
                   value: progress,
                   valueColor: AlwaysStoppedAnimation<Color>(color),
-                  strokeWidth: timerWidth,
+                  strokeWidth: sizes.strokeWidth,
                   backgroundColor: Theme.of(context).colorScheme.secondary,
                 ),
                 Column(
@@ -70,7 +64,7 @@ class GameTimer extends StatelessWidget {
                     Text(
                       timer,
                       style: GoogleFonts.roboto(
-                        fontSize: fontSize,
+                        fontSize: sizes.fontSize,
                         fontWeight: FontWeight.w700,
                         color: color,
                       ),

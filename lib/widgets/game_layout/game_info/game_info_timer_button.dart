@@ -10,7 +10,7 @@ import '../../../redux/actions/normal_game_actions.dart';
 import '../../../redux/app_selectors.dart';
 import '../../../redux/app_state.dart';
 import '../../../utilities/sizes/puzzle/game_info_button_size.dart';
-import '../../../utilities/sizes/puzzle/timer_font_size.dart';
+import '../../../utilities/sizes/timer_sizes.dart';
 import '../../../utilities/theme_generator.dart';
 
 class TimerButton extends StatelessWidget {
@@ -20,7 +20,7 @@ class TimerButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final sizes = GameInfoButtonSize.getGameInfoButtonSize(width);
-    final fontSize = TimerFontSize.getTimerFontSize(width) * 0.3;
+    final fontSize = TimerSizes.getTimerSizes(width).fontSize * 0.3;
 
     return StoreConnector<AppState, _TimerButtonViewModel>(
       distinct: true,

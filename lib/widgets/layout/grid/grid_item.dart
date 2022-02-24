@@ -18,7 +18,7 @@ class GridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      padding: EdgeInsets.symmetric(horizontal: spacing),
+      padding: EdgeInsets.all(spacing),
       alignment: alignment,
       child: ConstrainedBox(
         constraints: BoxConstraints(

@@ -6,7 +6,7 @@ import '../../../models/enums/theme_enum.dart';
 import '../../../models/extra_colors.dart';
 import '../../../redux/app_selectors.dart';
 import '../../../redux/app_state.dart';
-import '../../../utilities/sizes/puzzle/timer_font_size.dart';
+import '../../../utilities/sizes/timer_sizes.dart';
 import '../../../utilities/theme_generator.dart';
 
 class GameMoves extends StatelessWidget {
@@ -16,7 +16,7 @@ class GameMoves extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = Theme.of(context).textTheme.bodyText1!.color!;
     final width = MediaQuery.of(context).size.width;
-    final fontSize = TimerFontSize.getTimerFontSize(width) * 0.45;
+    final fontSize = TimerSizes.getTimerSizes(width).fontSize * 0.45;
 
     return StoreConnector<AppState, _GameMovesViewModel>(
       distinct: true,

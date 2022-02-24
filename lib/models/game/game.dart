@@ -9,11 +9,13 @@ class Game {
   final List<List<Piece>> puzzle;
   final GameStatusEnum status;
   final Position next;
+  final String? image;
 
   const Game({
     required this.next,
     required this.status,
     required this.puzzle,
+    required this.image,
   });
 
   factory Game.newGame(int level) {
@@ -38,6 +40,7 @@ class Game {
       puzzle: puzzle,
       status: GameStatusEnum.starting,
       next: Position(index, index),
+      image: null,
     );
   }
 
@@ -77,10 +80,11 @@ class Game {
       puzzle: puzzle,
       next: next,
       status: status,
+      image: image,
     );
   }
 
-  Game addImageToGame(List<List<DividerPainter>> painters) {
+  Game addImageToGame(List<List<DividerPainter>> painters, String image) {
     final puzzle = this.puzzle;
     final len = puzzle.length;
 
@@ -95,6 +99,7 @@ class Game {
       puzzle: puzzle,
       next: next,
       status: status,
+      image: image,
     );
   }
 
@@ -132,6 +137,7 @@ class Game {
       puzzle: puzzle,
       status: GameStatusEnum.ongoing,
       next: next,
+      image: image,
     );
   }
 
@@ -140,6 +146,7 @@ class Game {
       puzzle: puzzle,
       next: next,
       status: st,
+      image: image,
     );
   }
 

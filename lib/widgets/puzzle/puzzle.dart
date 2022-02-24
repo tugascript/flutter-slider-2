@@ -55,11 +55,13 @@ class _PuzzleViewModel {
   final List<List<Piece>> puzzle;
   final Position next;
   final GameStatusEnum status;
+  final int imageHash;
 
   _PuzzleViewModel({
     required this.puzzle,
     required this.next,
     required this.status,
+    required this.imageHash,
   });
 
   factory _PuzzleViewModel.fromStore(Store<AppState> store) {
@@ -69,11 +71,13 @@ class _PuzzleViewModel {
       puzzle: game.puzzle,
       next: game.next,
       status: game.status,
+      imageHash: game.image?.hashCode ?? 0,
     );
   }
 
   @override
-  int get hashCode => (next.column + next.row) * puzzle.length + status.index;
+  int get hashCode =>
+      (next.column + next.row) * puzzle.length + status.index + imageHash;
 
   @override
   bool operator ==(Object other) {

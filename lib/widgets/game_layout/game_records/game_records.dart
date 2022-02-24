@@ -6,7 +6,7 @@ import '../../../models/game_record.dart';
 import '../../../redux/app_selectors.dart';
 import '../../../redux/app_state.dart';
 import '../../../utilities/helpers/time_stringify.dart';
-import '../../../utilities/sizes/puzzle/timer_font_size.dart';
+import '../../../utilities/sizes/timer_sizes.dart';
 
 class GameRecords extends StatelessWidget {
   const GameRecords({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class GameRecords extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final fontSize = TimerFontSize.getTimerFontSize(width);
+    final fontSize = TimerSizes.getTimerSizes(width).fontSize;
 
     return StoreConnector<AppState, _GameRecordsScreenView>(
       distinct: true,

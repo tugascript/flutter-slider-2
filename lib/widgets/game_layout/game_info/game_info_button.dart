@@ -8,7 +8,7 @@ import '../../../redux/actions/normal_game_actions.dart';
 import '../../../redux/app_selectors.dart';
 import '../../../redux/app_state.dart';
 import '../../../utilities/sizes/puzzle/timer_button_size.dart';
-import '../../../utilities/sizes/puzzle/timer_font_size.dart';
+import '../../../utilities/sizes/timer_sizes.dart';
 import '../../../utilities/theme_generator.dart';
 
 class GameInfoButton extends StatelessWidget {
@@ -18,7 +18,7 @@ class GameInfoButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final sizes = TimerButtonSize.getTimerButtonSize(width);
-    final fontSize = TimerFontSize.getTimerFontSize(width);
+    final fontSize = TimerSizes.getTimerSizes(width).fontSize;
 
     return SizedBox(
       width: sizes.width,

@@ -154,7 +154,7 @@ class GameState {
 
   GameState addPainters(String paint, List<List<DividerPainter>> painters) {
     return GameState(
-      game: game.addImageToGame(painters),
+      game: game.addImageToGame(painters, paint),
       difficulty: difficulty,
       level: level,
       moves: moves,
