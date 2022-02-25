@@ -34,7 +34,7 @@ class _Sizes {
   factory _Sizes.multiply(double x) {
     return _Sizes(
       carouselSize: 425.0 * x,
-      iconSize: 40.0 * x,
+      iconSize: 20.0 * x,
     );
   }
 }

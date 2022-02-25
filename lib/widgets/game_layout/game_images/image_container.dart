@@ -68,7 +68,7 @@ class _ImageContainerState extends State<ImageContainer> {
               shape: const CircleBorder(),
             ),
             child: Icon(
-              Icons.arrow_downward,
+              Icons.done,
               size: sizes.fontSize * 0.5,
             ),
           ),

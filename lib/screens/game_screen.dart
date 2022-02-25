@@ -30,9 +30,6 @@ class GameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final breakPoints = BreakPoint(width);
-
     return ResponsiveScaffold(
       title: 'Level $level',
       child: StoreConnector<AppState, _GameScreenViewModel>(
@@ -60,10 +57,7 @@ class GameScreen extends StatelessWidget {
                   ScreenSizesEnum.lg: 3,
                 },
                 alignment: Alignment.center,
-                child: ImageSlider(
-                  scrollDirection:
-                      breakPoints.greatLG ? Axis.vertical : Axis.horizontal,
-                ),
+                child: const ImageSlider(),
               ),
             ]);
           }),
