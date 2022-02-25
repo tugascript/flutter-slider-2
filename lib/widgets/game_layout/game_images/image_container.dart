@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:v1/utilities/sizes/spacing.dart';
-import 'package:v1/utilities/sizes/timer_sizes.dart';
+import '../../../utilities/sizes/timer_sizes.dart';
 
 class ImageContainer extends StatefulWidget {
   final String? image;
