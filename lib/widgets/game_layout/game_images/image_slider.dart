@@ -1,18 +1,15 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:redux/redux.dart';
-import 'package:v1/widgets/game_layout/game_images/image_adder.dart';
 
-import '../../../models/enums/game_status_enum.dart';
 import '../../../models/enums/theme_enum.dart';
-import '../../../redux/actions/image_editor_actions.dart';
 import '../../../redux/actions/single_player_actions.dart';
 import '../../../redux/app_selectors.dart';
 import '../../../redux/app_state.dart';
 import '../../../utilities/sizes/break_point.dart';
 import '../../../utilities/sizes/carousel_size.dart';
+import '../../../widgets/game_layout/game_images/image_adder.dart';
 import '../../../widgets/game_layout/game_images/slider_button.dart';
 import 'image_container.dart';
 

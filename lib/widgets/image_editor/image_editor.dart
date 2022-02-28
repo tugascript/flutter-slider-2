@@ -4,8 +4,9 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-import 'package:v1/utilities/sizes/break_point.dart';
+import 'package:v1/utilities/sizes/image_editor_size.dart';
 
+import '../../redux/actions/image_editor_actions.dart';
 import '../../redux/app_selectors.dart';
 import '../../redux/app_state.dart';
 
@@ -23,7 +24,7 @@ class _ImageEditorState extends State<ImageEditor> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final breakPoints = BreakPoint(width);
+    final size = ImageEditorSize.getImageEditorSize(width);
     return StoreConnector<AppState, _ImageEditorViewModel>(
       distinct: true,
       converter: (store) => _ImageEditorViewModel.fromStore(store),
@@ -32,47 +33,25 @@ class _ImageEditorState extends State<ImageEditor> {
           return Container();
         }
 
-        final _editor = ExtendedImage.memory(
-          viewModel.image!,
-          fit: BoxFit.contain,
-          mode: ExtendedImageMode.editor,
-          key: _editorKey,
-          initEditorConfigHandler: (state) {
-            return EditorConfig(
-              maxScale: 8.0,
-              cropRectPadding: const EdgeInsets.all(20.0),
-              hitTestSize: 20.0,
-              cropAspectRatio: CropAspectRatios.ratio1_1,
-            );
-          },
+        return SizedBox(
+          height: size,
+          width: size,
+          child: ExtendedImage.memory(
+            viewModel.image!,
+            fit: BoxFit.contain,
+            mode: ExtendedImageMode.editor,
+            key: _editorKey,
+            initEditorConfigHandler: (state) {
+              viewModel.updateState(state);
+              return EditorConfig(
+                maxScale: 8.0,
+                cropRectPadding: const EdgeInsets.all(20.0),
+                hitTestSize: 20.0,
+                cropAspectRatio: CropAspectRatios.ratio1_1,
+              );
+            },
+          ),
         );
-
-        if (breakPoints.greatXL) {
-          return SizedBox(
-            width: 0.5 * width,
-            child: _editor,
-          );
-        } else if (breakPoints.greatLG) {
-          return SizedBox(
-            width: 0.6 * width,
-            child: _editor,
-          );
-        } else if (breakPoints.greatMD) {
-          return SizedBox(
-            width: 0.7 * width,
-            child: _editor,
-          );
-        } else if (breakPoints.greatSM) {
-          return SizedBox(
-            width: 0.8 * width,
-            child: _editor,
-          );
-        } else {
-          return SizedBox(
-            width: 0.9 * width,
-            child: _editor,
-          );
-        }
       },
     );
   }
@@ -81,10 +60,14 @@ class _ImageEditorState extends State<ImageEditor> {
 class _ImageEditorViewModel {
   final Uint8List? image;
   final bool open;
+  final ExtendedImageState? state;
+  final void Function(ExtendedImageState?) updateState;
 
   _ImageEditorViewModel({
     required this.image,
     required this.open,
+    required this.state,
+    required this.updateState,
   });
 
   factory _ImageEditorViewModel.fromStore(Store<AppState> store) {
@@ -93,11 +76,13 @@ class _ImageEditorViewModel {
     return _ImageEditorViewModel(
       image: imageEditorState.image,
       open: imageEditorState.open,
+      state: imageEditorState.state,
+      updateState: (state) => store.dispatch(ChangeEditorState(state)),
     );
   }
 
   @override
-  int get hashCode => (open ? 1 : 0) + image.hashCode;
+  int get hashCode => (open ? 1 : 0) + image.hashCode + state.hashCode;
 
   @override
   bool operator ==(Object other) {

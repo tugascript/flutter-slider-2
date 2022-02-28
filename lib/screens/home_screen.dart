@@ -4,10 +4,12 @@ import '../models/enums/difficulty_enum.dart';
 import '../utilities/sizes/app_bar_sizes.dart';
 import '../utilities/sizes/break_point.dart';
 import '../utilities/sizes/home_screen_sizes.dart';
+import '../widgets/auth/register_modal_form.dart';
 import '../widgets/home_screen/animated_icon.dart';
 import '../widgets/home_screen/difficulty_input/difficulty_input.dart';
 import '../widgets/home_screen/start_game.dart';
-import '../widgets/layout/auth_buttons/login_modal_form.dart';
+import '../widgets/auth/login_modal_form.dart';
+import '../widgets/layout/auth_buttons/login_button.dart';
 import '../widgets/layout/auth_buttons/register_button.dart';
 import '../widgets/layout/normal_icon.dart';
 import '../widgets/layout/theme_button.dart';
@@ -116,13 +118,19 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         actions: [
-          const LoginModalForm(),
+          LoginButton(
+            onPressed: () => showDialog<String>(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => LoginModalForm(ctx: context),
+            ),
+          ),
           RegisterButton(
-            fontSize: appbarSizes.btnFontSize,
-            padding: appbarSizes.btnPadding,
-            width: appbarSizes.btnWidth,
-            borderRadius: appbarSizes.btnRadius,
-            borderWidth: appbarSizes.btnBorder,
+            onPressed: () => showDialog<String>(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => RegisterModalForm(ctx: context),
+            ),
           ),
           SizedBox(
             width: appbarSizes.title * 0.5,

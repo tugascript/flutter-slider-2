@@ -19,7 +19,7 @@ class Auth {
     final response = await http.post(
       Uri.parse(_endPoint + 'register'),
       headers: _headers,
-      body: form.generateMap(),
+      body: jsonEncode(form.generateMap()),
     );
 
     if (response.statusCode == 201) {
@@ -49,7 +49,7 @@ class Auth {
       body: jsonEncode(form.generateMap()),
     );
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return AuthResponse.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Invalid or expired access code.');

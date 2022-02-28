@@ -3,7 +3,7 @@ class AuthResponse {
 
   const AuthResponse(this.accessToken);
 
-  factory AuthResponse.fromJson(Map<String, String> json) {
+  factory AuthResponse.fromJson(Map<String, dynamic> json) {
     return AuthResponse(json['accessToken']!);
   }
 }

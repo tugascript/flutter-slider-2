@@ -10,6 +10,7 @@ import '../../../redux/app_selectors.dart';
 import '../../../redux/app_state.dart';
 import '../../../screens/image_editor_screen.dart';
 import '../../../widgets/game_layout/game_images/image_container.dart';
+import '../../auth/login_modal_form.dart';
 
 class ImageAdder extends StatefulWidget {
   const ImageAdder({Key? key}) : super(key: key);
@@ -33,16 +34,23 @@ class _ImageAdderState extends State<ImageAdder> {
       },
       builder: (_, viewModel) => ImageContainer(
         image: 'images/add.jpg',
-        onPressed: () async {
-          viewModel.stopTimer();
-          final file = await _picker.pickImage(
-            source: ImageSource.gallery,
-          );
+        onPressed: viewModel.authenticated
+            ? () async {
+                viewModel.stopTimer();
+                final file = await _picker.pickImage(
+                  source: ImageSource.gallery,
+                );
 
-          if (file != null) {
-            viewModel.uploadImage(file);
-          }
-        },
+                if (file != null) {
+                  viewModel.uploadImage(file);
+                }
+              }
+            : () => showDialog<String>(
+                  context: context,
+                  builder: (context) => LoginModalForm(
+                    ctx: context,
+                  ),
+                ),
         icon: Icons.add_photo_alternate_rounded,
       ),
     );
@@ -51,12 +59,14 @@ class _ImageAdderState extends State<ImageAdder> {
 
 class _ImageAdderViewModel {
   final GameStatusEnum gameStatus;
+  final bool authenticated;
   final bool editorOpen;
   final VoidCallback stopTimer;
   final void Function(XFile) uploadImage;
 
   _ImageAdderViewModel({
     required this.gameStatus,
+    required this.authenticated,
     required this.editorOpen,
     required this.stopTimer,
     required this.uploadImage,
@@ -64,11 +74,11 @@ class _ImageAdderViewModel {
 
   factory _ImageAdderViewModel.fromStore(Store<AppState> store) {
     final gameStatus = selectSingleGameState(store).status;
-    final editorOpen = selectImageEditorState(store).loading;
 
     return _ImageAdderViewModel(
       gameStatus: gameStatus,
-      editorOpen: editorOpen,
+      authenticated: selectAuthState(store).authenticated,
+      editorOpen: selectImageEditorState(store).loading,
       stopTimer: () {
         if (gameStatus == GameStatusEnum.ongoing) {
           store.dispatch(TimerActions.stopTimer());
@@ -81,7 +91,8 @@ class _ImageAdderViewModel {
   }
 
   @override
-  int get hashCode => gameStatus.index + (editorOpen ? 1 : 0);
+  int get hashCode =>
+      gameStatus.index + (editorOpen ? 1 : 0) + (authenticated ? 1 : 0);
 
   @override
   bool operator ==(Object other) {

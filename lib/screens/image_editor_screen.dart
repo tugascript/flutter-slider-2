@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:v1/widgets/image_editor/image_editor_actions.dart';
 
 import '../widgets/image_editor/image_editor.dart';
 import '../widgets/layout/basic_scaffold.dart';
@@ -13,6 +14,7 @@ class ImageEditorScreen extends StatelessWidget {
     return const BasicScaffold(
       title: 'Image Editor',
       child: ImageEditor(),
+      bottomNavigation: ImageEditorActions(),
     );
   }
 }

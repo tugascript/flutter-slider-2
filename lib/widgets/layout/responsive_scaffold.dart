@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:v1/widgets/auth/register_modal_form.dart';
+import 'package:v1/widgets/layout/auth_buttons/login_button.dart';
 
 import '../../utilities/sizes/app_bar_sizes.dart';
-import 'auth_buttons/login_modal_form.dart';
+import '../auth/login_modal_form.dart';
 import 'auth_buttons/register_button.dart';
 import 'normal_icon.dart';
 import 'theme_button.dart';
@@ -40,13 +42,19 @@ class ResponsiveScaffold extends StatelessWidget {
           ],
         ),
         actions: [
-          const LoginModalForm(),
+          LoginButton(
+            onPressed: () => showDialog<String>(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => LoginModalForm(ctx: context),
+            ),
+          ),
           RegisterButton(
-            fontSize: sizes.btnFontSize,
-            padding: sizes.btnPadding,
-            width: sizes.btnWidth,
-            borderRadius: sizes.btnRadius,
-            borderWidth: sizes.btnBorder,
+            onPressed: () => showDialog<String>(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => RegisterModalForm(ctx: context),
+            ),
           ),
           ThemeButton(
             padding: sizes.btnPadding,
