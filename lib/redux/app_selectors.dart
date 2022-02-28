@@ -1,10 +1,14 @@
 import 'package:redux/redux.dart';
+import 'states/auth_state.dart';
 
 import '../models/enums/theme_enum.dart';
 import '../models/game/game.dart';
 import 'app_state.dart';
-import 'states/game_state.dart';
+import 'states/single_player_state.dart';
 
-GameState selectGameState(Store<AppState> store) => store.state.gameState;
-Game selectNormalGameState(Store<AppState> store) => store.state.gameState.game;
+SinglePlayerState selectSinglePlayerState(Store<AppState> store) =>
+    store.state.singlePlayerState;
+Game selectSingleGameState(Store<AppState> store) =>
+    store.state.singlePlayerState.game;
 ThemeEnum selectThemeState(Store<AppState> store) => store.state.themeState;
+AuthState selectAuthState(Store<AppState> store) => store.state.authState;

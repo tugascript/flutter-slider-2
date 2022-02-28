@@ -5,7 +5,7 @@ import 'package:redux/redux.dart';
 import '../../models/enums/game_status_enum.dart';
 import '../../models/game/piece.dart';
 import '../../models/game/position.dart';
-import '../../redux/actions/normal_game_actions.dart';
+import '../../redux/actions/single_player_actions.dart';
 import '../../redux/app_selectors.dart';
 import '../../redux/app_state.dart';
 
@@ -161,15 +161,15 @@ class _PuzzlePieceViewModel {
     required Store<AppState> store,
     required Piece piece,
   }) {
-    final gameState = selectGameState(store);
-    final game = gameState.game;
+    final singlePlayerState = selectSinglePlayerState(store);
+    final game = singlePlayerState.game;
 
     return _PuzzlePieceViewModel(
       status: game.status,
       next: game.next,
       length: game.puzzle.length,
       piece: piece,
-      loading: gameState.loading,
+      loading: singlePlayerState.loading,
       handleTap: (pos) => store.dispatch(MovePiece(pos)),
     );
   }

@@ -4,7 +4,7 @@ import 'package:redux/redux.dart';
 
 import '../../../models/enums/game_status_enum.dart';
 import '../../../models/enums/theme_enum.dart';
-import '../../../redux/actions/normal_game_actions.dart';
+import '../../../redux/actions/single_player_actions.dart';
 import '../../../redux/app_selectors.dart';
 import '../../../redux/app_state.dart';
 import '../../../utilities/sizes/puzzle/timer_button_size.dart';
@@ -71,7 +71,7 @@ class _GameInfoButtonScreenView {
   });
 
   factory _GameInfoButtonScreenView.fromStore(Store<AppState> store) {
-    final game = selectNormalGameState(store);
+    final game = selectSingleGameState(store);
     final theme = selectThemeState(store);
 
     return _GameInfoButtonScreenView(

@@ -3,10 +3,9 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 import '../models/enums/difficulty_enum.dart';
-import '../redux/actions/normal_game_actions.dart';
+import '../redux/actions/single_player_actions.dart';
 import '../redux/app_selectors.dart';
 import '../redux/app_state.dart';
-import '../utilities/sizes/break_point.dart';
 import '../utilities/sizes/screen_sizes.dart';
 import '../widgets/game_layout/game_images/image_slider.dart';
 import '../widgets/game_layout/game_timer.dart';
@@ -80,11 +79,11 @@ class _GameScreenViewModel {
   });
 
   factory _GameScreenViewModel.fromStore(Store<AppState> store) {
-    final gameState = selectGameState(store);
+    final singlePlayerState = selectSinglePlayerState(store);
 
     return _GameScreenViewModel(
-      level: gameState.level,
-      difficulty: gameState.difficulty.difficultyEnum,
+      level: singlePlayerState.level,
+      difficulty: singlePlayerState.difficulty.difficultyEnum,
       newGame: (int level, DifficultyEnum difficulty) {
         store.dispatch(
           NewGame(level, difficulty),

@@ -55,17 +55,17 @@ class Game {
     // variables
     Position next = this.next;
     GameStatusEnum status = this.status;
+    // column row
+    final row = pos.row;
+    final column = pos.column;
+    final nextRow = next.row;
+    final nextColumn = next.column;
 
     // Check if position is in boundaries
-    if (pos.column < len &&
-        pos.row < len &&
-        (next.row == pos.row || next.column == pos.column) &&
-        (next.row != pos.row || next.column != pos.column)) {
-      final row = pos.row;
-      final column = pos.column;
-      final nextRow = next.row;
-      final nextColumn = next.column;
-
+    if (column < len &&
+        row < len &&
+        (nextRow == row || nextColumn == column) &&
+        (nextRow != row || nextColumn != column)) {
       if (row == nextRow && column != nextColumn) {
         _changeColumn(puzzle, row, column, nextColumn);
       } else if (row != nextRow && column == nextColumn) {
@@ -147,6 +147,20 @@ class Game {
       next: next,
       status: st,
       image: image,
+    );
+  }
+
+  Game copyWith({
+    List<List<Piece>>? puzzle,
+    GameStatusEnum? status,
+    Position? next,
+    String? image,
+  }) {
+    return Game(
+      next: next ?? this.next,
+      status: status ?? this.status,
+      puzzle: puzzle ?? this.puzzle,
+      image: image ?? this.image,
     );
   }
 

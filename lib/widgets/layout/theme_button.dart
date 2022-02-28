@@ -8,19 +8,27 @@ import '../../redux/app_selectors.dart';
 import '../../redux/app_state.dart';
 
 class ThemeButton extends StatelessWidget {
-  const ThemeButton({Key? key}) : super(key: key);
+  final double padding;
+
+  const ThemeButton({Key? key, required this.padding}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _ThemeButtonViewModel>(
       distinct: true,
       converter: (store) => _ThemeButtonViewModel.fromStore(store),
-      builder: (_, viewModel) => IconButton(
-        onPressed: viewModel.changeTheme,
-        icon: Icon(
-          viewModel.theme == ThemeEnum.light
-              ? Icons.dark_mode
-              : Icons.light_mode,
+      builder: (_, viewModel) => Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: padding,
+          horizontal: padding / 2,
+        ),
+        child: IconButton(
+          onPressed: viewModel.changeTheme,
+          icon: Icon(
+            viewModel.theme == ThemeEnum.light
+                ? Icons.dark_mode
+                : Icons.light_mode,
+          ),
         ),
       ),
     );

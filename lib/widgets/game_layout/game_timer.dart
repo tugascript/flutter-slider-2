@@ -99,11 +99,11 @@ class _GameTimerViewModel {
   });
 
   factory _GameTimerViewModel.fromStore(Store<AppState> store) {
-    final gameState = selectGameState(store);
+    final singlePlayerState = selectSinglePlayerState(store);
     final theme = selectThemeState(store);
     return _GameTimerViewModel(
-      time: gameState.time,
-      maxTime: gameState.difficulty.getTime(gameState.level),
+      time: singlePlayerState.time,
+      maxTime: singlePlayerState.difficulty.getTime(singlePlayerState.level),
       theme: theme,
       colors: ThemeGenerator(theme).getExtraColors,
     );

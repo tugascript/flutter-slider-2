@@ -42,6 +42,9 @@ dependencies:
   rive: ^0.8.1
   carousel_slider: ^4.0.0
   extended_image: ^6.0.1
+  image_picker: ^0.8.4+9
+  graphql: ^5.0.1
+  http: ^0.13.4
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +76,7 @@ flutter:
     - assets/images/light_theme_dart.jpg
     - assets/images/dark_theme_icon.jpg
     - assets/images/light_theme_icon.jpg
+    - assets/images/add.jpg
     - assets/images/icon_dark.svg
     - assets/images/icon_light.svg
     # Animations

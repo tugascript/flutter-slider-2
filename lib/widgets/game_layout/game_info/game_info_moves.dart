@@ -71,12 +71,12 @@ class _GameMovesViewModel {
   });
 
   factory _GameMovesViewModel.fromStore(Store<AppState> store) {
-    final gameState = selectGameState(store);
+    final singlePlayerState = selectSinglePlayerState(store);
     final theme = selectThemeState(store);
-    final len = gameState.level + 2;
+    final len = singlePlayerState.level + 2;
 
     return _GameMovesViewModel(
-      moves: gameState.moves,
+      moves: singlePlayerState.moves,
       shuffles: len * len,
       theme: theme,
       colors: ThemeGenerator(theme).getExtraColors,

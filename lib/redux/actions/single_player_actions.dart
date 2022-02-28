@@ -55,10 +55,10 @@ class TimerActions {
   static ThunkAction<AppState> startTimer() {
     return (Store<AppState> store) async {
       _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-        final gameState = selectGameState(store);
+        final singlePlayerState = selectSinglePlayerState(store);
 
-        if (gameState.time > 0 &&
-            gameState.game.status == GameStatusEnum.ongoing) {
+        if (singlePlayerState.time > 0 &&
+            singlePlayerState.game.status == GameStatusEnum.ongoing) {
           store.dispatch(ReduceTimer());
         } else {
           _timer?.cancel();
@@ -69,9 +69,9 @@ class TimerActions {
 
   static ThunkAction<AppState> stopTimer() {
     return (Store<AppState> store) async {
-      final gameState = selectGameState(store);
+      final singlePlayerState = selectSinglePlayerState(store);
 
-      if (gameState.time > 0) {
+      if (singlePlayerState.time > 0) {
         _timer?.cancel();
         store.dispatch(const UpdateGameStatus(GameStatusEnum.paused));
       }
@@ -81,13 +81,13 @@ class TimerActions {
 
 ThunkAction<AppState> addPaintersToPieces(String name) {
   return (Store<AppState> store) async {
-    final gameState = selectGameState(store);
+    final singlePlayerState = selectSinglePlayerState(store);
 
-    if (!gameState.loading) store.dispatch(ToogleLoading());
+    if (!singlePlayerState.loading) store.dispatch(ToogleLoading());
 
     final painters = await ImageDivider.imagePuzzle(
       name,
-      gameState.game.puzzle.length,
+      singlePlayerState.game.puzzle.length,
     );
     store.dispatch(AddPainters(name, painters));
     store.dispatch(ToogleLoading());

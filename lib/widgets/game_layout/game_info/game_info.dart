@@ -57,7 +57,7 @@ class _GameInfoScreenView {
   _GameInfoScreenView(this.status);
 
   factory _GameInfoScreenView.fromStore(Store<AppState> store) {
-    final game = selectGameState(store).game;
+    final game = selectSingleGameState(store);
 
     return _GameInfoScreenView(game.status);
   }

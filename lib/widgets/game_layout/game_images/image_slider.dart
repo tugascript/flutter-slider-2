@@ -1,15 +1,16 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:redux/redux.dart';
-import 'package:v1/utilities/sizes/break_point.dart';
-import 'package:v1/widgets/game_layout/game_images/slider_button.dart';
 
 import '../../../models/enums/theme_enum.dart';
-import '../../../redux/actions/normal_game_actions.dart';
+import '../../../redux/actions/single_player_actions.dart';
 import '../../../redux/app_selectors.dart';
 import '../../../redux/app_state.dart';
+import '../../../utilities/sizes/break_point.dart';
 import '../../../utilities/sizes/carousel_size.dart';
+import '../../../widgets/game_layout/game_images/slider_button.dart';
 import 'image_container.dart';
 
 class ImageSlider extends StatefulWidget {
@@ -20,7 +21,8 @@ class ImageSlider extends StatefulWidget {
 }
 
 class _ImageSliderState extends State<ImageSlider> {
-  final CarouselController carouselController = CarouselController();
+  final CarouselController _carouselController = CarouselController();
+  final ImagePicker _picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -37,47 +39,57 @@ class _ImageSliderState extends State<ImageSlider> {
               final _theme =
                   viewModel.theme == ThemeEnum.dark ? 'dark' : 'light';
 
+              final _carouselSlider = CarouselSlider(
+                carouselController: _carouselController,
+                items: [
+                  ImageContainer(
+                    image: 'images/add.jpg',
+                    onPressed: () async {
+                      _picker.pickImage(
+                        source: ImageSource.gallery,
+                      );
+                    },
+                    icon: Icons.add_photo_alternate_rounded,
+                  ),
+                  ...['_theme_dart', '_theme_flutter', '_theme_icon'].map(
+                    (picture) {
+                      final image = 'images/' + _theme + picture + '.jpg';
+                      return ImageContainer(
+                        image: image,
+                        onPressed: () => viewModel.changePaint(image),
+                      );
+                    },
+                  ),
+                ],
+                options: CarouselOptions(
+                  autoPlay: false,
+                  enableInfiniteScroll: true,
+                  enlargeCenterPage: true,
+                  viewportFraction: 0.7,
+                  aspectRatio: 1.0,
+                  initialPage: 2,
+                  scrollDirection: breakPoint ? Axis.vertical : Axis.horizontal,
+                ),
+              );
               return SizedBox(
                 width: sizes.carouselSize,
                 child: Column(
                   children: [
                     SliderButton(
                       icon: Icons.arrow_upward,
-                      buttonSize: sizes.carouselSize * 0.35,
+                      buttonSize: sizes.carouselSize / 2,
                       iconSize: sizes.iconSize,
-                      onPressed: () => carouselController.previousPage(
+                      onPressed: () => _carouselController.previousPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.linear,
                       ),
                     ),
-                    CarouselSlider(
-                      carouselController: carouselController,
-                      items:
-                          ['_theme_dart', '_theme_flutter', '_theme_icon'].map(
-                        (picture) {
-                          final image = 'images/' + _theme + picture + '.jpg';
-                          return ImageContainer(
-                            image: image,
-                            onPressed: () => viewModel.changePaint(image),
-                          );
-                        },
-                      ).toList(),
-                      options: CarouselOptions(
-                        autoPlay: false,
-                        enableInfiniteScroll: true,
-                        enlargeCenterPage: true,
-                        viewportFraction: 0.6,
-                        aspectRatio: 1.0,
-                        initialPage: 0,
-                        scrollDirection:
-                            breakPoint ? Axis.vertical : Axis.horizontal,
-                      ),
-                    ),
+                    _carouselSlider,
                     SliderButton(
                       icon: Icons.arrow_downward,
                       iconSize: sizes.iconSize,
-                      buttonSize: sizes.carouselSize * 0.35,
-                      onPressed: () => carouselController.nextPage(
+                      buttonSize: sizes.carouselSize / 2,
+                      onPressed: () => _carouselController.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.linear,
                       ),

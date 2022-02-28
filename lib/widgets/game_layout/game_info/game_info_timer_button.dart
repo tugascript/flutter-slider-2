@@ -6,7 +6,7 @@ import 'package:redux/redux.dart';
 import '../../../models/enums/game_status_enum.dart';
 import '../../../models/enums/theme_enum.dart';
 import '../../../models/extra_colors.dart';
-import '../../../redux/actions/normal_game_actions.dart';
+import '../../../redux/actions/single_player_actions.dart';
 import '../../../redux/app_selectors.dart';
 import '../../../redux/app_state.dart';
 import '../../../utilities/sizes/puzzle/game_info_button_size.dart';
@@ -123,7 +123,7 @@ class _TimerButtonViewModel {
 
   factory _TimerButtonViewModel.fromStore(Store<AppState> store) {
     final isPaused =
-        selectNormalGameState(store).status == GameStatusEnum.paused;
+        selectSingleGameState(store).status == GameStatusEnum.paused;
     final theme = selectThemeState(store);
     return _TimerButtonViewModel(
       isPaused: isPaused,

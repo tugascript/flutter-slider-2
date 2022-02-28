@@ -1,34 +1,40 @@
 import '../models/enums/difficulty_enum.dart';
 import '../models/enums/theme_enum.dart';
-import 'states/game_state.dart';
+import 'states/auth_state.dart';
+import 'states/single_player_state.dart';
 
 class AppState {
-  final GameState gameState;
+  final SinglePlayerState singlePlayerState;
   final ThemeEnum themeState;
+  final AuthState authState;
 
   AppState({
-    required this.gameState,
+    required this.singlePlayerState,
     required this.themeState,
+    required this.authState,
   });
 
   factory AppState.getInitialState() {
-    final game = GameState.initialState(
+    final game = SinglePlayerState.initialState(
       1,
       DifficultyEnum.easy,
     );
     return AppState(
-      gameState: game,
+      singlePlayerState: game,
       themeState: ThemeEnum.light,
+      authState: AuthState.initialState(),
     );
   }
 
   AppState copyWith({
-    GameState? gameState,
+    SinglePlayerState? singlePlayerState,
     ThemeEnum? themeState,
+    AuthState? authState,
   }) {
     return AppState(
-      gameState: gameState ?? this.gameState,
+      singlePlayerState: singlePlayerState ?? this.singlePlayerState,
       themeState: themeState ?? this.themeState,
+      authState: authState ?? this.authState,
     );
   }
 }

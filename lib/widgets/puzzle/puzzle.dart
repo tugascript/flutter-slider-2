@@ -65,7 +65,7 @@ class _PuzzleViewModel {
   });
 
   factory _PuzzleViewModel.fromStore(Store<AppState> store) {
-    final game = selectNormalGameState(store);
+    final game = selectSingleGameState(store);
 
     return _PuzzleViewModel(
       puzzle: game.puzzle,

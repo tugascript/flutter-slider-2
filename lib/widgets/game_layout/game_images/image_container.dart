@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import '../../../utilities/sizes/timer_sizes.dart';
 
 class ImageContainer extends StatefulWidget {
-  final String? image;
+  final String image;
   final VoidCallback onPressed;
+  final IconData? icon;
 
   const ImageContainer({
     Key? key,
+    this.icon,
     required this.image,
     required this.onPressed,
   }) : super(key: key);
@@ -46,30 +48,35 @@ class _ImageContainerState extends State<ImageContainer> {
           _entered = false;
         });
       },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 275),
-        margin: EdgeInsets.all(spacing),
-        decoration: BoxDecoration(
-          image: widget.image != null
-              ? DecorationImage(
-                  image: AssetImage(widget.image!),
-                  fit: BoxFit.contain,
-                )
-              : null,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(5.0),
-          ),
-        ),
-        child: Center(
-          child: TextButton(
-            onPressed: widget.onPressed,
-            style: TextButton.styleFrom(
-              backgroundColor: color,
-              shape: const CircleBorder(),
+      child: SizedBox(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 275),
+          margin: EdgeInsets.all(spacing),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(widget.image),
+              fit: BoxFit.contain,
             ),
-            child: Icon(
-              Icons.done,
-              size: sizes.fontSize * 0.5,
+            borderRadius: const BorderRadius.all(
+              Radius.circular(5.0),
+            ),
+          ),
+          child: Center(
+            child: TextButton(
+              onPressed: widget.onPressed,
+              style: TextButton.styleFrom(
+                backgroundColor: color,
+                shape: const CircleBorder(),
+              ),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 275),
+                padding: EdgeInsets.all(spacing * 1.1),
+                child: Icon(
+                  widget.icon ?? Icons.done,
+                  size: sizes.fontSize * 0.5,
+                  color: Colors.black54,
+                ),
+              ),
             ),
           ),
         ),

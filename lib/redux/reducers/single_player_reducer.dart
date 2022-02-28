@@ -1,12 +1,12 @@
-import '../actions/normal_game_actions.dart';
-import '../states/game_state.dart';
+import '../actions/single_player_actions.dart';
+import '../states/single_player_state.dart';
 
-GameState gameReducer(
-  GameState state,
+SinglePlayerState singlePlayerReducer(
+  SinglePlayerState state,
   dynamic action,
 ) {
   if (action is NewGame) {
-    return GameState.initialState(
+    return SinglePlayerState.initialState(
       action.level,
       action.difficultyEnum,
     );

@@ -26,22 +26,42 @@ class _Sizes {
   final double height;
   final double title;
   final double icon;
+  final double btnWidth;
+  final double btnRadius;
+  final double btnPadding;
+  final double btnFontSize;
+  final double btnBorder;
 
   _Sizes({
     required this.height,
     required this.title,
     required this.icon,
+    required this.btnWidth,
+    required this.btnRadius,
+    required this.btnPadding,
+    required this.btnFontSize,
+    required this.btnBorder,
   });
 
   static const _height = 65.0;
   static const _title = 25.0;
   static const _icon = 50.0;
+  static const _btnWidth = 100.0;
+  static const _btnRadius = 7.5;
+  static const _btnPadding = 10.0;
+  static const _btnFontSize = 20.0;
+  static const _btnBorder = 1.0;
 
   factory _Sizes.multiply(double x) {
     return _Sizes(
       height: _height * x,
       title: _title * x,
       icon: _icon * x,
+      btnWidth: _btnWidth * x,
+      btnRadius: _btnRadius * x,
+      btnPadding: _btnPadding * x,
+      btnFontSize: _btnFontSize * x,
+      btnBorder: _btnBorder * x,
     );
   }
 }
