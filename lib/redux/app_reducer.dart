@@ -1,4 +1,5 @@
 import 'package:v1/redux/reducers/auth_reducer.dart';
+import 'package:v1/redux/reducers/image_editor_reducer.dart';
 
 import './app_state.dart';
 import 'reducers/single_player_reducer.dart';
@@ -9,5 +10,6 @@ AppState appReducer(AppState state, dynamic action) {
     singlePlayerState: singlePlayerReducer(state.singlePlayerState, action),
     themeState: themeReducer(state.themeState, action),
     authState: authReducer(state.authState, action),
+    imageEditorState: imageEditorReducer(state.imageEditorState, action),
   );
 }

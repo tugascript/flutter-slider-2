@@ -46,10 +46,14 @@ class GameScreen extends StatelessWidget {
                 alignment: Alignment.center,
                 child: const GameTimer(),
               ),
-              GridItemInput(breakPoints: {
-                ScreenSizesEnum.xl: 5,
-                ScreenSizesEnum.lg: 6,
-              }, alignment: Alignment.center, child: const Puzzle()),
+              GridItemInput(
+                breakPoints: {
+                  ScreenSizesEnum.xl: 5,
+                  ScreenSizesEnum.lg: 6,
+                },
+                alignment: Alignment.center,
+                child: const Puzzle(),
+              ),
               GridItemInput(
                 breakPoints: {
                   ScreenSizesEnum.xl: 3,

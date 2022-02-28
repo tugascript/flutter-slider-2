@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:redux/redux.dart';
+import 'package:v1/widgets/game_layout/game_images/image_adder.dart';
 
+import '../../../models/enums/game_status_enum.dart';
 import '../../../models/enums/theme_enum.dart';
+import '../../../redux/actions/image_editor_actions.dart';
 import '../../../redux/actions/single_player_actions.dart';
 import '../../../redux/app_selectors.dart';
 import '../../../redux/app_state.dart';
@@ -22,7 +25,6 @@ class ImageSlider extends StatefulWidget {
 
 class _ImageSliderState extends State<ImageSlider> {
   final CarouselController _carouselController = CarouselController();
-  final ImagePicker _picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -42,15 +44,7 @@ class _ImageSliderState extends State<ImageSlider> {
               final _carouselSlider = CarouselSlider(
                 carouselController: _carouselController,
                 items: [
-                  ImageContainer(
-                    image: 'images/add.jpg',
-                    onPressed: () async {
-                      _picker.pickImage(
-                        source: ImageSource.gallery,
-                      );
-                    },
-                    icon: Icons.add_photo_alternate_rounded,
-                  ),
+                  const ImageAdder(),
                   ...['_theme_dart', '_theme_flutter', '_theme_icon'].map(
                     (picture) {
                       final image = 'images/' + _theme + picture + '.jpg';
@@ -107,15 +101,15 @@ class _ImageSliderViewModel {
   final ThemeEnum theme;
   final void Function(String) changePaint;
 
-  _ImageSliderViewModel(
-    this.theme,
-    this.changePaint,
-  );
+  _ImageSliderViewModel({
+    required this.theme,
+    required this.changePaint,
+  });
 
   factory _ImageSliderViewModel.fromStore(Store<AppState> store) {
     return _ImageSliderViewModel(
-      selectThemeState(store),
-      (String name) {
+      theme: selectThemeState(store),
+      changePaint: (String name) {
         store.dispatch(addPaintersToPieces(name));
       },
     );

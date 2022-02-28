@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:v1/screens/image_editor_screen.dart';
 
 import '../screens/home_screen.dart';
 import '../screens/game_screen.dart';
@@ -22,6 +23,8 @@ class RouterGenerator {
           );
         }
         return MaterialPageRoute(builder: (_) => const NotFoundScreen());
+      case ImageEditorScreen.routeName:
+        return MaterialPageRoute(builder: (_) => const ImageEditorScreen());
       default:
         return MaterialPageRoute(builder: (_) => const NotFoundScreen());
     }

@@ -42,9 +42,9 @@ dependencies:
   rive: ^0.8.1
   carousel_slider: ^4.0.0
   extended_image: ^6.0.1
-  image_picker: ^0.8.4+9
   graphql: ^5.0.1
   http: ^0.13.4
+  image_picker: ^0.8.4+10
 
 dev_dependencies:
   flutter_test:

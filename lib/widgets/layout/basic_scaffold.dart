@@ -6,11 +6,11 @@ import 'auth_buttons/register_button.dart';
 import 'normal_icon.dart';
 import 'theme_button.dart';
 
-class ResponsiveScaffold extends StatelessWidget {
+class BasicScaffold extends StatelessWidget {
   final String title;
   final Widget child;
 
-  const ResponsiveScaffold({
+  const BasicScaffold({
     Key? key,
     required this.title,
     required this.child,
@@ -57,9 +57,7 @@ class ResponsiveScaffold extends StatelessWidget {
         ],
       ),
       body: Center(
-        child: SingleChildScrollView(
-          child: child,
-        ),
+        child: child,
       ),
     );
   }
