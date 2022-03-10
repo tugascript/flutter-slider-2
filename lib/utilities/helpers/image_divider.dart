@@ -1,13 +1,17 @@
+import 'dart:typed_data';
 import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' show get;
 
 class ImageDivider {
   static Future<List<List<DividerPainter>>> imagePuzzle(
     String name,
     int gameLength,
+    bool network,
   ) async {
-    final image = await _loadImage(name);
+    final image = await _loadImage(name, network);
     final squareSize = image.width / gameLength;
     final rows = <List<DividerPainter>>[];
 
@@ -34,9 +38,18 @@ class ImageDivider {
     return rows;
   }
 
-  static Future<ui.Image> _loadImage(String name) async {
-    final data = await rootBundle.load(name);
-    final image = await decodeImageFromList(data.buffer.asUint8List());
+  static Future<ui.Image> _loadImage(String name, bool network) async {
+    late final Uint8List imgData;
+
+    if (network) {
+      final file = await get(Uri.parse(name));
+      imgData = file.bodyBytes;
+    } else {
+      final data = await rootBundle.load(name);
+      imgData = data.buffer.asUint8List();
+    }
+
+    final image = await decodeImageFromList(imgData);
     return image;
   }
 }

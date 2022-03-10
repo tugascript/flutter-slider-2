@@ -36,7 +36,6 @@ class CloseEditorButton extends StatelessWidget {
           return OutlinedButton(
             onPressed: () {
               viewModel.closeEditor();
-              Navigator.pop(context);
             },
             style: OutlinedButton.styleFrom(
               shape: RoundedRectangleBorder(
@@ -75,7 +74,6 @@ class _CloseEditorButtonViewModel {
       open: selectImageEditorState(store).open,
       closeEditor: () {
         store.dispatch(CloseEditor());
-        store.dispatch(ChangeEditorState(null));
       },
     );
   }

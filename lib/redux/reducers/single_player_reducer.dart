@@ -20,10 +20,16 @@ SinglePlayerState singlePlayerReducer(
     return state.updateTime();
   } else if (action is UpdateGameStatus) {
     return state.updateGameStatus(action.status);
-  } else if (action is ToogleLoading) {
-    return state.toogleLoading();
+  } else if (action is SinglePlayerLoading) {
+    return state.changeLoading(true);
+  } else if (action is SinglePlayerStopLoading) {
+    return state.changeLoading(false);
   } else if (action is AddPainters) {
     return state.addPainters(action.paint, action.painters);
+  } else if (action is ShowPaint) {
+    return state.changePaint(true);
+  } else if (action is HidePaint) {
+    return state.changePaint(false);
   }
 
   return state;

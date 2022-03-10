@@ -9,6 +9,7 @@ import '../widgets/home_screen/difficulty_input/difficulty_input.dart';
 import '../widgets/home_screen/start_game.dart';
 import '../widgets/layout/auth_buttons/auth_buttons.dart';
 import '../widgets/layout/normal_icon.dart';
+import '../widgets/layout/notifications.dart';
 import '../widgets/layout/theme_button.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -61,6 +62,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ]);
       }
+
+      children.add(const ShowNotifications());
 
       final column = Column(
         mainAxisAlignment: MainAxisAlignment.center,

@@ -34,6 +34,7 @@ class _ImageAdderState extends State<ImageAdder> {
       },
       builder: (_, viewModel) => ImageContainer(
         image: 'images/add.jpg',
+        network: false,
         onPressed: viewModel.authenticated
             ? () async {
                 viewModel.stopTimer();
@@ -78,7 +79,7 @@ class _ImageAdderViewModel {
     return _ImageAdderViewModel(
       gameStatus: gameStatus,
       authenticated: selectAuthState(store).authenticated,
-      editorOpen: selectImageEditorState(store).loading,
+      editorOpen: selectImageEditorState(store).open,
       stopTimer: () {
         if (gameStatus == GameStatusEnum.ongoing) {
           store.dispatch(TimerActions.stopTimer());

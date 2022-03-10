@@ -1,5 +1,4 @@
 import 'package:graphql/client.dart';
-
 import '../constants.dart';
 
 class GqlClient {
@@ -23,6 +22,7 @@ class GqlClient {
         link: _link,
         cache: GraphQLCache(),
       );
+
   static void updateToken(String tk) {
     _token = tk;
   }

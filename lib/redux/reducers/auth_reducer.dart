@@ -15,19 +15,17 @@ AuthState authReducer(AuthState state, dynamic action) {
       loading: false,
       authenticated: false,
     );
-  } else if (action is SetAuthMessage) {
-    return state.copyWith(
-      message: action.message,
-      loading: false,
-    );
   } else if (action is SetAuthEmail) {
     return state.copyWith(
       email: action.email,
-      message: action.message,
       loading: false,
     );
   } else if (action is RemoveAuthEmail) {
     return state.copyWith(email: null);
+  } else if (action is AddAuthNotification) {
+    return state.copyWith(notification: action.notification);
+  } else if (action is DismissAuthNotification) {
+    return state.dismissNotification();
   }
 
   return state;

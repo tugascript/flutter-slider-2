@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:v1/widgets/auth/auth_snackbar.dart';
 
+import '../../models/app_notification.dart';
 import '../../models/auth/forms/confirm_login_form.dart';
 import '../../models/auth/forms/register_form.dart';
 import '../../redux/actions/auth_actions.dart';
 import '../../redux/app_selectors.dart';
 import '../../redux/app_state.dart';
-import '../../utilities/regexps.dart';
+import '../../utilities/regexes.dart';
 import '../../utilities/sizes/nav_form_sizes.dart';
 
 class RegisterModalForm extends StatefulWidget {
@@ -30,6 +32,7 @@ class _RegisterModalFormState extends State<RegisterModalForm> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(widget.ctx).size.width;
     final sizes = NavFormSizes.getNavFormSizes(width);
+    final height = sizes.fontSize * 8;
 
     return StoreConnector<AppState, _RegisterModalViewModel>(
         distinct: true,
@@ -58,7 +61,6 @@ class _RegisterModalFormState extends State<RegisterModalForm> {
                   labelText: 'Access Code',
                   helperText: 'An access code has been sent to your email.',
                 );
-          final height = sizes.fontSize * 7;
 
           return Form(
             key: _formKey,
@@ -74,6 +76,7 @@ class _RegisterModalFormState extends State<RegisterModalForm> {
                 height: nullEmail ? height : height / 2,
                 child: Column(
                   children: [
+                    if (viewModel.notification != null) const AuthSnackbar(),
                     TextFormField(
                       style: TextStyle(
                         fontSize: sizes.fontSize,
@@ -207,6 +210,7 @@ class _RegisterModalViewModel {
   final bool loading;
   final bool authenticated;
   final String? email;
+  final AppNotification? notification;
   final void Function(RegisterForm) signUp;
   final VoidCallback cancelSignUp;
   final void Function(ConfirmLoginForm) confirmSignUp;
@@ -215,6 +219,7 @@ class _RegisterModalViewModel {
     required this.loading,
     required this.authenticated,
     required this.email,
+    required this.notification,
     required this.signUp,
     required this.cancelSignUp,
     required this.confirmSignUp,
@@ -227,6 +232,7 @@ class _RegisterModalViewModel {
       loading: authState.loading,
       authenticated: authState.authenticated,
       email: authState.email,
+      notification: authState.notification,
       signUp: (form) => store.dispatch(registerUser(form)),
       cancelSignUp: () => store.dispatch(RemoveAuthEmail()),
       confirmSignUp: (form) => store.dispatch(confirmUserLogin(form)),

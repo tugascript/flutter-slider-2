@@ -36,14 +36,14 @@ dependencies:
   redux: ^5.0.0
   flutter_redux: ^0.8.2
   redux_thunk: ^0.4.0
-  shimmer: ^2.0.0
   flutter_svg: ^1.0.3
   google_fonts: ^2.3.1
   rive: ^0.8.1
   carousel_slider: ^4.0.0
   extended_image: ^6.0.1
   graphql: ^5.0.1
-  http: ^0.13.4
+  mime: ^1.0.1
+  image: ^3.1.3
   image_picker: ^0.8.4+10
 
 dev_dependencies:
@@ -76,6 +76,8 @@ flutter:
     - assets/images/light_theme_dart.jpg
     - assets/images/dark_theme_icon.jpg
     - assets/images/light_theme_icon.jpg
+    - assets/images/dark_theme_numbers.jpg
+    - assets/images/light_theme_numbers.jpg
     - assets/images/add.jpg
     - assets/images/icon_dark.svg
     - assets/images/icon_light.svg

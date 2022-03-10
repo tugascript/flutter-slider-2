@@ -83,7 +83,7 @@ class _GameInfoButtonScreenView {
         store.dispatch(TimerActions.startTimer());
       },
       goToNextLevel: () {
-        store.dispatch(NextLevel());
+        store.dispatch(nextLevelAction());
       },
     );
   }

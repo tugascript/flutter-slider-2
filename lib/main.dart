@@ -9,6 +9,7 @@ import '../redux/app_selectors.dart';
 import '../redux/app_state.dart';
 import '../utilities/router_generator.dart';
 import '../utilities/theme_generator.dart';
+import 'redux/actions/auth_actions.dart';
 
 void main() {
   final store = Store<AppState>(
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
       child: StoreConnector<AppState, _ThemeDataViewModel>(
         distinct: true,
         converter: (store) => _ThemeDataViewModel.fromStore(store),
+        onInit: (store) => store.dispatch(refreshSession()),
         builder: (_, viewModel) => MaterialApp(
           title: 'Flutter Shuffle',
           theme: ThemeGenerator(viewModel.theme).getTheme,

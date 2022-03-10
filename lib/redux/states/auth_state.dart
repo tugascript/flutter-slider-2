@@ -1,17 +1,18 @@
-import '../../models/local_message.dart';
+import 'package:v1/models/app_notification.dart';
+
 import '../../models/user.dart';
 
 class AuthState {
   final bool authenticated;
   final bool loading;
-  final LocalMessage? message;
   final String? email;
   final User? user;
+  final AppNotification? notification;
 
   AuthState({
     required this.authenticated,
     required this.loading,
-    this.message,
+    this.notification,
     this.user,
     this.email,
   });
@@ -28,14 +29,23 @@ class AuthState {
     bool? loading,
     User? user,
     String? email,
-    LocalMessage? message,
+    AppNotification? notification,
   }) {
     return AuthState(
       authenticated: authenticated ?? this.authenticated,
       loading: loading ?? this.loading,
       user: user ?? this.user,
       email: email ?? this.email,
-      message: message ?? this.message,
+      notification: notification ?? this.notification,
+    );
+  }
+
+  AuthState dismissNotification() {
+    return AuthState(
+      authenticated: authenticated,
+      loading: loading,
+      user: user,
+      email: email,
     );
   }
 }

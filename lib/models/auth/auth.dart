@@ -1,9 +1,10 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
+import 'package:http/browser_client.dart';
 
 import '../../utilities/constants.dart';
-import '../local_message.dart';
+import '../app_notification.dart';
+import '../enums/notification_type_enum.dart';
 import 'forms/confirm_login_form.dart';
 import 'forms/login_form.dart';
 import 'forms/register_form.dart';
@@ -12,41 +13,52 @@ import 'responses/auth_response.dart';
 class Auth {
   static const _endPoint = 'http://' + kHost + 'auth/';
   static const _headers = <String, String>{
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json; charset=UTF-8',
   };
+  static BrowserClient get _client {
+    return BrowserClient()..withCredentials = true;
+  }
 
-  static Future<LocalMessage> register(RegisterForm form) async {
-    final response = await http.post(
+  static Future<AppNotification> register(RegisterForm form) async {
+    final response = await _client.post(
       Uri.parse(_endPoint + 'register'),
-      headers: _headers,
       body: jsonEncode(form.generateMap()),
+      headers: _headers,
     );
 
     if (response.statusCode == 201) {
-      return LocalMessage.fromJson(jsonDecode(response.body));
+      final data = jsonDecode(response.body);
+      return AppNotification(
+        type: NotificationTypeEnum.success,
+        message: data['message'],
+      );
     } else {
       throw Exception('Email or username already in user.');
     }
   }
 
-  static Future<LocalMessage> login(LoginForm form) async {
-    final response = await http.post(
+  static Future<AppNotification> login(LoginForm form) async {
+    final response = await _client.post(
       Uri.parse(_endPoint + 'login'),
-      headers: _headers,
       body: jsonEncode(form.generateMap()),
+      headers: _headers,
     );
     if (response.statusCode == 201) {
-      return LocalMessage.fromJson(jsonDecode(response.body));
+      final data = jsonDecode(response.body);
+      return AppNotification(
+        type: NotificationTypeEnum.success,
+        message: data['message'],
+      );
     } else {
       throw Exception('Invalid credentials.');
     }
   }
 
   static Future<AuthResponse> confirmLogin(ConfirmLoginForm form) async {
-    final response = await http.post(
+    final response = await _client.post(
       Uri.parse(_endPoint + 'confirm-login'),
-      headers: _headers,
       body: jsonEncode(form.generateMap()),
+      headers: _headers,
     );
 
     if (response.statusCode == 200) {
@@ -56,18 +68,24 @@ class Auth {
     }
   }
 
-  static Future<LocalMessage> logout() async {
-    final response = await http.post(Uri.parse(_endPoint + 'logout'));
+  static Future<AppNotification> logout() async {
+    final response = await _client.post(Uri.parse(_endPoint + 'logout'));
 
     if (response.statusCode == 200) {
-      return LocalMessage.fromJson(jsonDecode(response.body));
+      final data = jsonDecode(response.body);
+      return AppNotification(
+        type: NotificationTypeEnum.success,
+        message: data['message'],
+      );
     } else {
       throw Exception('Something went wrong');
     }
   }
 
   static Future<AuthResponse> refreshAccess() async {
-    final response = await http.post(Uri.parse(_endPoint + 'refresh-access'));
+    final response = await _client.post(
+      Uri.parse(_endPoint + 'refresh-access'),
+    );
 
     if (response.statusCode == 200) {
       return AuthResponse.fromJson(jsonDecode(response.body));

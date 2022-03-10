@@ -34,7 +34,9 @@ class LoseGame {}
 
 class ReduceTimer {}
 
-class ToogleLoading {}
+class SinglePlayerLoading {}
+
+class SinglePlayerStopLoading {}
 
 class UpdateGameStatus {
   final GameStatusEnum status;
@@ -48,6 +50,10 @@ class AddPainters {
 
   const AddPainters(this.paint, this.painters);
 }
+
+class ShowPaint {}
+
+class HidePaint {}
 
 class TimerActions {
   static Timer? _timer;
@@ -79,17 +85,39 @@ class TimerActions {
   }
 }
 
-ThunkAction<AppState> addPaintersToPieces(String name) {
+ThunkAction<AppState> addPaintersToPieces(String name, bool network) {
   return (Store<AppState> store) async {
+    store.dispatch(SinglePlayerLoading());
     final singlePlayerState = selectSinglePlayerState(store);
-
-    if (!singlePlayerState.loading) store.dispatch(ToogleLoading());
 
     final painters = await ImageDivider.imagePuzzle(
       name,
       singlePlayerState.game.puzzle.length,
+      network,
     );
     store.dispatch(AddPainters(name, painters));
-    store.dispatch(ToogleLoading());
+    store.dispatch(SinglePlayerStopLoading());
+  };
+}
+
+ThunkAction<AppState> nextLevelAction() {
+  return (Store<AppState> store) async {
+    store.dispatch(SinglePlayerLoading());
+    final singlePlayerState = selectSinglePlayerState(store);
+
+    store.dispatch(NextLevel());
+    final game = singlePlayerState.game;
+
+    if (game.image != null) {
+      final name = game.image!;
+      final painters = await ImageDivider.imagePuzzle(
+        name,
+        singlePlayerState.level + 3,
+        name.startsWith('http'),
+      );
+      store.dispatch(AddPainters(name, painters));
+    }
+
+    store.dispatch(SinglePlayerStopLoading());
   };
 }

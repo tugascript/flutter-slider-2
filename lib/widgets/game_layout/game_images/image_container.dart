@@ -3,6 +3,7 @@ import '../../../utilities/sizes/timer_sizes.dart';
 
 class ImageContainer extends StatefulWidget {
   final String image;
+  final bool network;
   final VoidCallback onPressed;
   final IconData? icon;
 
@@ -10,6 +11,7 @@ class ImageContainer extends StatefulWidget {
     Key? key,
     this.icon,
     required this.image,
+    required this.network,
     required this.onPressed,
   }) : super(key: key);
 
@@ -53,10 +55,15 @@ class _ImageContainerState extends State<ImageContainer> {
           duration: const Duration(milliseconds: 275),
           margin: EdgeInsets.all(spacing),
           decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(widget.image),
-              fit: BoxFit.contain,
-            ),
+            image: widget.network
+                ? DecorationImage(
+                    image: NetworkImage(widget.image),
+                    fit: BoxFit.contain,
+                  )
+                : DecorationImage(
+                    image: AssetImage(widget.image),
+                    fit: BoxFit.contain,
+                  ),
             borderRadius: const BorderRadius.all(
               Radius.circular(5.0),
             ),

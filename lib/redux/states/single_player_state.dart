@@ -1,8 +1,7 @@
-import '../../models/game/game.dart';
-import '../../models/game/position.dart';
 import '../../models/enums/difficulty_enum.dart';
 import '../../models/enums/game_status_enum.dart';
-import '../../models/game_record.dart';
+import '../../models/game/game.dart';
+import '../../models/game/position.dart';
 import '../../utilities/helpers/image_divider.dart';
 
 class SinglePlayerState {
@@ -11,9 +10,7 @@ class SinglePlayerState {
   final int level;
   final int time;
   final int moves;
-  final String paint;
   final bool showPaint;
-  final List<GameRecord> records;
   final bool loading;
 
   const SinglePlayerState({
@@ -22,9 +19,7 @@ class SinglePlayerState {
     required this.level,
     required this.time,
     required this.moves,
-    required this.paint,
     required this.showPaint,
-    required this.records,
     required this.loading,
   });
 
@@ -41,9 +36,7 @@ class SinglePlayerState {
       level: level,
       time: difficulty.getTime(level),
       moves: 0,
-      records: const [],
       loading: false,
-      paint: '',
       showPaint: false,
     );
   }
@@ -52,38 +45,26 @@ class SinglePlayerState {
 
   SinglePlayerState nextLevel() {
     final newLevel = level + 1;
-    final newRecords = [
-      ...records,
-      GameRecord(
-        level: level,
-        moves: moves,
-        time: difficulty.getTime(level) - time,
-      ),
-    ];
 
     return SinglePlayerState(
       game: Game.newGame(newLevel),
       difficulty: difficulty,
-      records: newRecords,
       level: newLevel,
       moves: 0,
       time: difficulty.getTime(newLevel),
       loading: loading,
-      paint: paint,
       showPaint: showPaint,
     );
   }
 
-  SinglePlayerState toogleLoading() {
+  SinglePlayerState changeLoading(bool l) {
     return SinglePlayerState(
       game: game,
       difficulty: difficulty,
       level: level,
       time: time,
-      records: records,
       moves: moves,
-      loading: !loading,
-      paint: paint,
+      loading: l,
       showPaint: showPaint,
     );
   }
@@ -95,9 +76,7 @@ class SinglePlayerState {
       difficulty: difficulty,
       level: level,
       time: time,
-      records: records,
       loading: loading,
-      paint: paint,
       showPaint: showPaint,
     );
   }
@@ -110,10 +89,8 @@ class SinglePlayerState {
       difficulty: difficulty,
       level: level,
       moves: moves,
-      records: records,
       time: time,
       loading: loading,
-      paint: paint,
       showPaint: showPaint,
     );
   }
@@ -131,9 +108,7 @@ class SinglePlayerState {
       level: level,
       moves: moves,
       time: time,
-      records: records,
       loading: loading,
-      paint: paint,
       showPaint: showPaint,
     );
   }
@@ -145,9 +120,7 @@ class SinglePlayerState {
       level: level,
       moves: moves,
       time: time,
-      records: records,
       loading: loading,
-      paint: paint,
       showPaint: showPaint,
     );
   }
@@ -160,10 +133,20 @@ class SinglePlayerState {
       level: level,
       moves: moves,
       time: time,
-      records: records,
       loading: loading,
-      paint: paint,
       showPaint: true,
+    );
+  }
+
+  SinglePlayerState changePaint(bool p) {
+    return SinglePlayerState(
+      game: game,
+      difficulty: difficulty,
+      level: level,
+      time: time,
+      moves: moves,
+      showPaint: p,
+      loading: loading,
     );
   }
 }

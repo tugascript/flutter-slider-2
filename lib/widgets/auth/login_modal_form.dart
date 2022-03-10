@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:v1/models/app_notification.dart';
+import 'package:v1/widgets/auth/auth_snackbar.dart';
 
 import '../../models/auth/forms/confirm_login_form.dart';
 import '../../models/auth/forms/login_form.dart';
 import '../../redux/actions/auth_actions.dart';
 import '../../redux/app_selectors.dart';
 import '../../redux/app_state.dart';
-import '../../utilities/regexps.dart';
+import '../../utilities/regexes.dart';
 import '../../utilities/sizes/nav_form_sizes.dart';
 
 class LoginModalForm extends StatefulWidget {
@@ -58,6 +60,7 @@ class _LoginModalFormState extends State<LoginModalForm> {
                   labelText: 'Access Code',
                   helperText: 'An access code has been sent to your email.',
                 );
+          final height = sizes.fontSize * 4;
 
           return Form(
             key: _formKey,
@@ -70,45 +73,51 @@ class _LoginModalFormState extends State<LoginModalForm> {
               ),
               content: SizedBox(
                 width: sizes.width,
-                child: TextFormField(
-                  style: TextStyle(
-                    fontSize: sizes.fontSize,
-                  ),
-                  decoration: inputDecoration,
-                  validator: (String? val) {
-                    if (_formData is LoginForm) {
-                      if (val == null || val.isEmpty) {
-                        return 'Email is required.';
-                      }
+                height: viewModel.notification != null ? height * 2 : height,
+                child: Column(
+                  children: [
+                    if (viewModel.notification != null) const AuthSnackbar(),
+                    TextFormField(
+                      style: TextStyle(
+                        fontSize: sizes.fontSize,
+                      ),
+                      decoration: inputDecoration,
+                      validator: (String? val) {
+                        if (_formData is LoginForm) {
+                          if (val == null || val.isEmpty) {
+                            return 'Email is required.';
+                          }
 
-                      if (!regEmail.hasMatch(val)) {
-                        return 'Please enter a valid email';
-                      }
-                    } else if (_formData is ConfirmLoginForm) {
-                      if (val == null || val.isEmpty) {
-                        return 'Access Code is required.';
-                      }
+                          if (!regEmail.hasMatch(val)) {
+                            return 'Please enter a valid email';
+                          }
+                        } else if (_formData is ConfirmLoginForm) {
+                          if (val == null || val.isEmpty) {
+                            return 'Access Code is required.';
+                          }
 
-                      if (!regNumeric.hasMatch(val)) {
-                        return 'Please add a valid numeric string';
-                      }
+                          if (!regNumeric.hasMatch(val)) {
+                            return 'Please add a valid numeric string';
+                          }
 
-                      if (val.length != 6) {
-                        return 'Access Code needs to be 6 digits';
-                      }
-                    }
+                          if (val.length != 6) {
+                            return 'Access Code needs to be 6 digits';
+                          }
+                        }
 
-                    return null;
-                  },
-                  onSaved: (String? val) {
-                    if (val != null) {
-                      if (_formData is LoginForm) {
-                        (_formData as LoginForm).email = val;
-                      } else if (_formData is ConfirmLoginForm) {
-                        (_formData as ConfirmLoginForm).accessCode = val;
-                      }
-                    }
-                  },
+                        return null;
+                      },
+                      onSaved: (String? val) {
+                        if (val != null) {
+                          if (_formData is LoginForm) {
+                            (_formData as LoginForm).email = val;
+                          } else if (_formData is ConfirmLoginForm) {
+                            (_formData as ConfirmLoginForm).accessCode = val;
+                          }
+                        }
+                      },
+                    ),
+                  ],
                 ),
               ),
               actions: [
@@ -171,6 +180,7 @@ class _LoginModalViewModel {
   final bool loading;
   final bool authenticated;
   final String? email;
+  final AppNotification? notification;
   final void Function(LoginForm form) signIn;
   final VoidCallback cancelSignIn;
   final void Function(ConfirmLoginForm form) confirmSignIn;
@@ -179,6 +189,7 @@ class _LoginModalViewModel {
     required this.loading,
     required this.authenticated,
     required this.email,
+    required this.notification,
     required this.signIn,
     required this.cancelSignIn,
     required this.confirmSignIn,
@@ -191,6 +202,7 @@ class _LoginModalViewModel {
       loading: authState.loading,
       authenticated: authState.authenticated,
       email: authState.email,
+      notification: authState.notification,
       signIn: (form) => store.dispatch(loginUser(form)),
       cancelSignIn: () => store.dispatch(RemoveAuthEmail()),
       confirmSignIn: (form) => store.dispatch(confirmUserLogin(form)),
@@ -199,7 +211,10 @@ class _LoginModalViewModel {
 
   @override
   int get hashCode =>
-      (loading ? 1 : 0) + email.hashCode + (authenticated ? 1 : 0);
+      (loading ? 1 : 0) +
+      email.hashCode +
+      (authenticated ? 1 : 0) +
+      notification.hashCode;
 
   @override
   bool operator ==(Object other) {

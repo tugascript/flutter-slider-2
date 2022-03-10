@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:v1/widgets/game_layout/game_images/image_numbers.dart';
 
 import '../../../models/enums/theme_enum.dart';
 import '../../../redux/actions/single_player_actions.dart';
@@ -11,6 +12,8 @@ import '../../../utilities/sizes/break_point.dart';
 import '../../../utilities/sizes/carousel_size.dart';
 import '../../../widgets/game_layout/game_images/image_adder.dart';
 import '../../../widgets/game_layout/game_images/slider_button.dart';
+import '../../../redux/actions/server_images_actions.dart';
+import '../../../redux/states/server_images_state.dart';
 import 'image_container.dart';
 
 class ImageSlider extends StatefulWidget {
@@ -33,6 +36,7 @@ class _ImageSliderState extends State<ImageSlider> {
       children: [
         StoreConnector<AppState, _ImageSliderViewModel>(
             distinct: true,
+            onInit: (store) => store.dispatch(loadImagesAction()),
             converter: (store) => _ImageSliderViewModel.fromStore(store),
             builder: (_, viewModel) {
               final _theme =
@@ -42,15 +46,24 @@ class _ImageSliderState extends State<ImageSlider> {
                 carouselController: _carouselController,
                 items: [
                   const ImageAdder(),
+                  const ImageNumbers(),
                   ...['_theme_dart', '_theme_flutter', '_theme_icon'].map(
                     (picture) {
                       final image = 'images/' + _theme + picture + '.jpg';
                       return ImageContainer(
                         image: image,
-                        onPressed: () => viewModel.changePaint(image),
+                        network: false,
+                        onPressed: () => viewModel.changePaint(image, false),
                       );
                     },
                   ),
+                  ...viewModel.images.images.map((img) {
+                    return ImageContainer(
+                      image: img.url,
+                      network: true,
+                      onPressed: () => viewModel.changePaint(img.url, true),
+                    );
+                  })
                 ],
                 options: CarouselOptions(
                   autoPlay: false,
@@ -58,36 +71,53 @@ class _ImageSliderState extends State<ImageSlider> {
                   enlargeCenterPage: true,
                   viewportFraction: 0.7,
                   aspectRatio: 1.0,
-                  initialPage: 2,
+                  initialPage: 3,
                   scrollDirection: breakPoint ? Axis.vertical : Axis.horizontal,
                 ),
               );
-              return SizedBox(
-                width: sizes.carouselSize,
-                child: Column(
-                  children: [
-                    SliderButton(
-                      icon: Icons.arrow_upward,
-                      buttonSize: sizes.carouselSize / 2,
-                      iconSize: sizes.iconSize,
-                      onPressed: () => _carouselController.previousPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.linear,
-                      ),
-                    ),
-                    _carouselSlider,
-                    SliderButton(
-                      icon: Icons.arrow_downward,
-                      iconSize: sizes.iconSize,
-                      buttonSize: sizes.carouselSize / 2,
-                      onPressed: () => _carouselController.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.linear,
-                      ),
-                    ),
-                  ],
+
+              final _children = [
+                SliderButton(
+                  icon: breakPoint
+                      ? Icons.keyboard_arrow_up
+                      : Icons.keyboard_arrow_left,
+                  breakPoint: breakPoint,
+                  buttonSize: sizes.carouselSize / 2,
+                  iconSize: sizes.iconSize,
+                  onPressed: () => _carouselController.previousPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.linear,
+                  ),
                 ),
-              );
+                SizedBox(
+                  width: sizes.carouselSize,
+                  child: _carouselSlider,
+                ),
+                SliderButton(
+                  icon: breakPoint
+                      ? Icons.keyboard_arrow_down
+                      : Icons.keyboard_arrow_right,
+                  breakPoint: breakPoint,
+                  iconSize: sizes.iconSize,
+                  buttonSize: sizes.carouselSize / 2,
+                  onPressed: () => _carouselController.nextPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.linear,
+                  ),
+                ),
+              ];
+
+              return breakPoint
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: _children,
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: _children,
+                    );
             }),
       ],
     );
@@ -96,24 +126,27 @@ class _ImageSliderState extends State<ImageSlider> {
 
 class _ImageSliderViewModel {
   final ThemeEnum theme;
-  final void Function(String) changePaint;
+  final ServerImagesState images;
+  final void Function(String, bool) changePaint;
 
   _ImageSliderViewModel({
     required this.theme,
+    required this.images,
     required this.changePaint,
   });
 
   factory _ImageSliderViewModel.fromStore(Store<AppState> store) {
     return _ImageSliderViewModel(
       theme: selectThemeState(store),
-      changePaint: (String name) {
-        store.dispatch(addPaintersToPieces(name));
+      images: selectServerImagesState(store),
+      changePaint: (String name, bool network) {
+        store.dispatch(addPaintersToPieces(name, network));
       },
     );
   }
 
   @override
-  int get hashCode => theme.index;
+  int get hashCode => theme.index + (images.loading ? 1 : 0);
 
   @override
   bool operator ==(Object other) {

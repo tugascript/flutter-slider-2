@@ -6,8 +6,6 @@ ImageEditorState imageEditorReducer(ImageEditorState state, dynamic action) {
     return state.copyWith(open: true);
   } else if (action is CloseEditor) {
     return state.copyWith(open: false, loading: false);
-  } else if (action is ChangeEditorState) {
-    return state.copyWith(state: action.state);
   } else if (action is EditorLoading) {
     return state.copyWith(loading: true);
   } else if (action is EditorStopLoading) {

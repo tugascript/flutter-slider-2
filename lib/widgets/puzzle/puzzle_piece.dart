@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 import '../../models/enums/game_status_enum.dart';
+import '../../models/enums/theme_enum.dart';
 import '../../models/game/piece.dart';
 import '../../models/game/position.dart';
 import '../../redux/actions/single_player_actions.dart';
@@ -45,14 +46,46 @@ class _PuzzlePieceState extends State<PuzzlePiece> {
         piece: widget.piece,
       ),
       builder: (_, viewModel) {
-        final isHover = _entered && viewModel.status == GameStatusEnum.ongoing;
-        final margin = isHover ? widget.margin * 2.5 : widget.margin;
-        final bgColor = isHover
-            ? primaryColor.withOpacity(0.7)
-            : viewModel.piece.painter != null &&
-                    viewModel.status != GameStatusEnum.paused
-                ? Colors.transparent
-                : primaryColor;
+        final _isHover = _entered && viewModel.status == GameStatusEnum.ongoing;
+        late final Color _bgColor;
+        late final Widget _child;
+
+        if (viewModel.loading) {
+          _bgColor = viewModel.theme == ThemeEnum.dark
+              ? Colors.grey.shade300
+              : Colors.grey.shade700;
+        } else if (_isHover) {
+          _bgColor = primaryColor.withOpacity(0.7);
+        } else if (viewModel.piece.painter != null &&
+            viewModel.status != GameStatusEnum.paused &&
+            viewModel.showPaint) {
+          _bgColor = Colors.transparent;
+        } else {
+          _bgColor = primaryColor;
+        }
+
+        if (viewModel.loading) {
+          _child = const SizedBox.expand();
+        } else if (viewModel.piece.painter != null && viewModel.showPaint) {
+          _child = ClipRRect(
+            borderRadius: BorderRadius.circular(widget.radius),
+            child: CustomPaint(
+              painter: viewModel.piece.painter,
+              child: Container(),
+            ),
+          );
+        } else {
+          _child = Center(
+            child: Text(
+              viewModel.number.toString(),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: widget.fontSize,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          );
+        }
 
         return SizedBox(
           height: widget.size,
@@ -88,7 +121,7 @@ class _PuzzlePieceState extends State<PuzzlePiece> {
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 225),
                         decoration: BoxDecoration(
-                          color: bgColor,
+                          color: _bgColor,
                           borderRadius: BorderRadius.all(
                             Radius.circular(widget.radius),
                           ),
@@ -103,31 +136,13 @@ class _PuzzlePieceState extends State<PuzzlePiece> {
                           ],
                         ),
                         margin: EdgeInsets.all(
-                          margin,
+                          _isHover ? widget.margin * 2.5 : widget.margin,
                         ),
                         child: AnimatedOpacity(
                           duration: const Duration(milliseconds: 250),
                           opacity:
                               viewModel.status == GameStatusEnum.paused ? 0 : 1,
-                          child: viewModel.piece.painter != null
-                              ? ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.circular(widget.radius),
-                                  child: CustomPaint(
-                                    painter: viewModel.piece.painter,
-                                    child: Container(),
-                                  ),
-                                )
-                              : Center(
-                                  child: Text(
-                                    viewModel.hashCode.toString(),
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: widget.fontSize,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
+                          child: _child,
                         ),
                       ),
                     ),
@@ -142,18 +157,24 @@ class _PuzzlePieceState extends State<PuzzlePiece> {
 
 class _PuzzlePieceViewModel {
   final GameStatusEnum status;
+  final ThemeEnum theme;
   final int length;
   final Piece piece;
   final Position next;
   final bool loading;
+  final bool showPaint;
+  final int number;
   final Function(Position pos) handleTap;
 
   _PuzzlePieceViewModel({
     required this.status,
+    required this.theme,
     required this.length,
     required this.piece,
     required this.next,
     required this.loading,
+    required this.showPaint,
+    required this.number,
     required this.handleTap,
   });
 
@@ -163,19 +184,23 @@ class _PuzzlePieceViewModel {
   }) {
     final singlePlayerState = selectSinglePlayerState(store);
     final game = singlePlayerState.game;
+    final len = game.puzzle.length;
 
     return _PuzzlePieceViewModel(
+      theme: selectThemeState(store),
       status: game.status,
       next: game.next,
-      length: game.puzzle.length,
+      length: len,
       piece: piece,
       loading: singlePlayerState.loading,
+      showPaint: singlePlayerState.showPaint,
+      number: piece.position.column + 1 + len * piece.position.row,
       handleTap: (pos) => store.dispatch(MovePiece(pos)),
     );
   }
 
   @override
-  int get hashCode => piece.position.column + 1 + length * piece.position.row;
+  int get hashCode => number + (loading ? 1 : 0) + (showPaint ? 1 : 0);
 
   @override
   bool operator ==(Object other) {
