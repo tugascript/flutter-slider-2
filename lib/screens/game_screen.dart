@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-import '../models/enums/difficulty_enum.dart';
-import '../redux/actions/single_player_actions.dart';
-import '../redux/app_selectors.dart';
-import '../redux/app_state.dart';
-import '../utilities/sizes/screen_sizes.dart';
-import '../widgets/game_layout/game_images/image_slider.dart';
-import '../widgets/game_layout/game_timer.dart';
-import '../widgets/layout/grid/grid_container.dart';
-import '../widgets/layout/responsive_scaffold.dart';
-import '../widgets/puzzle/puzzle.dart';
+import '../src/components/models/enums/difficulty_enum.dart';
+import '../src/components/sizes/screen_sizes.dart';
+import '../src/redux/actions/game_actions.dart';
+import '../src/redux/app_selectors.dart';
+import '../src/redux/app_state.dart';
+import '../src/widgets/game/game_images/image_slider.dart';
+import '../src/widgets/game/game_timer.dart';
+import '../src/widgets/game/puzzle/puzzle_widget.dart';
+import '../src/widgets/layout/grid/grid_container.dart';
+import '../src/widgets/layout/responsive_scaffold.dart';
 
 class GameScreen extends StatelessWidget {
   static const routeName = '/game';
@@ -52,7 +52,7 @@ class GameScreen extends StatelessWidget {
                   ScreenSizesEnum.lg: 6,
                 },
                 alignment: Alignment.center,
-                child: const Puzzle(),
+                child: const PuzzleWidget(),
               ),
               GridItemInput(
                 breakPoints: {
@@ -83,11 +83,11 @@ class _GameScreenViewModel {
   });
 
   factory _GameScreenViewModel.fromStore(Store<AppState> store) {
-    final singlePlayerState = selectSinglePlayerState(store);
+    final gameState = selectGameState(store);
 
     return _GameScreenViewModel(
-      level: singlePlayerState.level,
-      difficulty: singlePlayerState.difficulty.difficultyEnum,
+      level: gameState.level,
+      difficulty: gameState.difficulty.difficultyEnum,
       newGame: (int level, DifficultyEnum difficulty) {
         store.dispatch(
           NewGame(level, difficulty),

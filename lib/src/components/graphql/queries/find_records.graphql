@@ -1,0 +1,16 @@
+query FindRecords($userId: Int!, $level: Int!, $after: String) {
+  getRecords(userId: $userId, level: $level, after: $after) {
+    edges {
+      node {
+        id
+        time
+        moves
+      }
+    }
+    totalCount
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

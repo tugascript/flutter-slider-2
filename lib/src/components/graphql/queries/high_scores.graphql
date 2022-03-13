@@ -1,0 +1,29 @@
+query HighScores($level: Int!, $first: Int = 10, $after: String) {
+  getHighScores(level: $level, first: $first, after: $after) {
+    records {
+      edges {
+        node {
+          id
+          time
+          moves
+          owner {
+            id
+            picture
+            username
+          }
+        }
+      }
+      totalCount
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+    currentRank
+    currentRecord {
+      id
+      time
+      moves
+    }
+  }
+}

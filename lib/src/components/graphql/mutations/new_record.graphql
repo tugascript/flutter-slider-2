@@ -1,0 +1,8 @@
+mutation NewRecord($input: RecordInput!) {
+  addRecord(input: $input) {
+    id
+    moves
+    time
+    level
+  }
+}

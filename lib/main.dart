@@ -3,13 +3,13 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
-import '../models/enums/theme_enum.dart';
-import '../redux/app_reducer.dart';
-import '../redux/app_selectors.dart';
-import '../redux/app_state.dart';
-import '../utilities/router_generator.dart';
-import '../utilities/theme_generator.dart';
-import 'redux/actions/auth_actions.dart';
+import 'src/components/models/enums/theme_enum.dart';
+import 'src/redux/actions/auth_actions.dart';
+import 'src/redux/app_reducer.dart';
+import 'src/redux/app_selectors.dart';
+import 'src/redux/app_state.dart';
+import 'src/utilities/router_generator.dart';
+import 'src/utilities/theme_generator.dart';
 
 void main() {
   final store = Store<AppState>(

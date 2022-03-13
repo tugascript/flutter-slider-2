@@ -1,0 +1,5 @@
+mutation DeleteImage($imageId: Int!) {
+  deleteImage(imageId: $imageId) {
+    message
+  }
+}

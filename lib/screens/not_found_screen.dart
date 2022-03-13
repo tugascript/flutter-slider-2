@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:v1/widgets/layout/responsive_scaffold.dart';
+
+import '../src/widgets/layout/responsive_scaffold.dart';
 
 class NotFoundScreen extends StatelessWidget {
   const NotFoundScreen({Key? key}) : super(key: key);

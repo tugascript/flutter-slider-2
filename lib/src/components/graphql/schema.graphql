@@ -1,0 +1,120 @@
+"""Exposes a URL that specifies the behavior of this scalar."""
+directive @specifiedBy(
+  """The URL that specifies the behavior of this scalar."""
+  url: String!
+) on SCALAR
+
+type HighScores {
+  records: PaginatedRecords!
+  currentRecord: Record
+  currentRank: Int
+}
+
+type Image {
+  id: Int!
+  createdAt: String!
+  updatedAt: String!
+  url: String!
+}
+
+type ImageEntityPageEdge {
+  cursor: String!
+  node: Image!
+}
+
+type Message {
+  id: ID!
+  message: String!
+}
+
+type Mutation {
+  updateProfilePicture(picture: Upload!): User!
+  addRecord(input: RecordInput!): Record!
+  addImage(image: Upload!): Image!
+  deleteImage(imageId: Int!): Message!
+}
+
+type PageInfo {
+  endCursor: String!
+  hasNextPage: Boolean!
+}
+
+type PaginatedImages {
+  totalCount: Int!
+  edges: [ImageEntityPageEdge!]!
+  pageInfo: PageInfo!
+}
+
+type PaginatedRecords {
+  totalCount: Int!
+  edges: [RecordEntityPageEdge!]!
+  pageInfo: PageInfo!
+}
+
+type PaginatedUsers {
+  totalCount: Int!
+  edges: [UserEntityPageEdge!]!
+  pageInfo: PageInfo!
+}
+
+type Query {
+  me: User!
+  getUser(username: String!): User!
+  getUsers(after: String, first: Int = 10, search: String, cursor: UsersCursor = DATE, order: QueryOrder = DESC): PaginatedUsers!
+  getRecords(after: String, first: Int = 10, userId: Int!, level: Int!, order: QueryOrder = ASC): PaginatedRecords!
+  getHighScores(after: String, first: Int = 10, level: Int!): HighScores!
+  getImages(after: String, first: Int = 10): PaginatedImages!
+}
+
+enum QueryOrder {
+  ASC
+  DESC
+}
+
+type Record {
+  id: Int!
+  createdAt: String!
+  updatedAt: String!
+  level: Int!
+  moves: Int!
+  time: Int!
+  owner: User!
+}
+
+type RecordEntityPageEdge {
+  cursor: String!
+  node: Record!
+}
+
+input RecordInput {
+  level: Int!
+  moves: Int!
+  time: Int!
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+type User {
+  id: Int!
+  createdAt: String!
+  updatedAt: String!
+  username: String!
+  email: String
+  picture: String
+  maxLevel: Int!
+  lastLogin: String!
+  lastOnline: String!
+  records(level: Int!, first: Int = 10, order: QueryOrder = ASC): PaginatedRecords!
+}
+
+type UserEntityPageEdge {
+  cursor: String!
+  node: User!
+}
+
+enum UsersCursor {
+  DATE
+  ALPHABET
+}
+

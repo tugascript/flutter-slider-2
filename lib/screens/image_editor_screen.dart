@@ -1,4 +1,3 @@
-import 'dart:html' show Worker;
 import 'dart:typed_data';
 
 import 'package:extended_image/extended_image.dart';
@@ -7,14 +6,14 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:image/image.dart' as img;
 import 'package:redux/redux.dart';
 
-import '../redux/actions/image_editor_actions.dart';
-import '../redux/actions/server_images_actions.dart';
-import '../redux/app_selectors.dart';
-import '../redux/app_state.dart';
-import '../utilities/sizes/image_editor_sizes.dart';
-import '../widgets/image_editor/close_editor_button.dart';
-import '../widgets/image_editor/done_editor_button.dart';
-import '../widgets/layout/basic_scaffold.dart';
+import '../src/components/sizes/image_editor/image_editor_sizes.dart';
+import '../src/redux/actions/image_editor_actions.dart';
+import '../src/redux/actions/server_images_actions.dart';
+import '../src/redux/app_selectors.dart';
+import '../src/redux/app_state.dart';
+import '../src/widgets/image_editor/close_editor_button.dart';
+import '../src/widgets/image_editor/done_editor_button.dart';
+import '../src/widgets/layout/basic_scaffold.dart';
 
 class ImageEditorScreen extends StatefulWidget {
   static const routeName = '/editor';

@@ -1,0 +1,22 @@
+query FindUsers(
+  $search: String
+  $first: Int = 20
+  $after: String
+  $cursor: UsersCursor = ALPHABET
+) {
+  getUsers(search: $search, first: $first, after: $after, cursor: $cursor) {
+    edges {
+      node {
+        id
+        username
+        picture
+        maxLevel
+      }
+    }
+    totalCount
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}

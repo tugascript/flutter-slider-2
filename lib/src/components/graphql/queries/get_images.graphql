@@ -1,0 +1,15 @@
+query GetImages($first: Int!, $after: String) {
+  getImages(first: $first, after: $after) {
+    edges {
+      node {
+        id
+        url
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    totalCount
+  }
+}

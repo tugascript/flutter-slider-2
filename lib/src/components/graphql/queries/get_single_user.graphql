@@ -1,0 +1,22 @@
+query GetSingleUser($username: String!, $level: Int!) {
+  getUser(username: $username) {
+    id
+    username
+    picture
+    maxLevel
+    records(level: $level, first: 10) {
+      edges {
+        node {
+          id
+          time
+          moves
+        }
+      }
+      totalCount
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+  }
+}
