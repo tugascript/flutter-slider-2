@@ -1,8 +1,8 @@
 import '../screen_sizes.dart';
 
 class NavBtnSizes {
-  static _Sizes get xs => _Sizes.multiply(0.8);
-  static _Sizes get sm => _Sizes.multiply(0.9);
+  static _Sizes get xs => _Sizes.multiply(0.65);
+  static _Sizes get sm => _Sizes.multiply(0.85);
   static _Sizes get md => _Sizes.multiply(1.0);
   static _Sizes get lg => _Sizes.multiply(1.15);
   static _Sizes get xl => _Sizes.multiply(1.3);
@@ -39,7 +39,7 @@ class _Sizes {
 
   factory _Sizes.multiply(double x) {
     return _Sizes(
-      width: 100.0 * x,
+      width: 75.0 * x,
       borderRadius: 7.5 * x,
       padding: 10.0 * x,
       fontSize: 20.0 * x,

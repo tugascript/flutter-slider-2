@@ -6,6 +6,7 @@ import '../components/models/game/game.dart';
 import 'app_state.dart';
 import 'states/auth_state.dart';
 import 'states/game_state.dart';
+import 'states/high_scores_state.dart';
 import 'states/image_editor_state.dart';
 import 'states/server_images_state.dart';
 
@@ -16,6 +17,8 @@ AuthState selectAuthState(Store<AppState> store) => store.state.authState;
 ImageEditorState selectImageEditorState(Store<AppState> store) =>
     store.state.imageEditorState;
 ServerImagesState selectServerImagesState(Store<AppState> store) =>
-    store.state.serverImages;
+    store.state.serverImagesState;
+HighScoresState selectHighScoresState(Store<AppState> store) =>
+    store.state.highScoresState;
 List<AppNotification> selectNotificationsState(Store<AppState> store) =>
-    store.state.notifications;
+    store.state.notificationsState;

@@ -36,7 +36,10 @@ class _ImageSliderState extends State<ImageSlider> {
       children: [
         StoreConnector<AppState, _ImageSliderViewModel>(
             distinct: true,
-            onInit: (store) => store.dispatch(loadImagesAction(null)),
+            onInit: (store) {
+              final auth = selectAuthState(store).authenticated;
+              if (auth) store.dispatch(loadImagesAction(null));
+            },
             converter: (store) => _ImageSliderViewModel.fromStore(store),
             builder: (_, viewModel) {
               final _theme =

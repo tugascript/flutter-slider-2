@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:v1/src/widgets/home_screen/high_scores_button.dart';
+import 'package:v1/src/widgets/layout/drawer/auth_list_view.dart';
 
 import '../src/components/models/enums/difficulty_enum.dart';
 import '../src/components/sizes/break_point.dart';
@@ -48,13 +50,14 @@ class _HomeScreenState extends State<HomeScreen> {
       StartGame(
         difficulty: _kDifficulties[_difficultyIndex],
       ),
+      const HighScoresButton(),
     ];
 
     Widget _buildHomeScreen() {
       final children = <Widget>[];
       final initial = breakPoint.greatLG ? 1 : 0;
 
-      for (int i = initial; i < 3; i++) {
+      for (int i = initial; i < 4; i++) {
         children.addAll([
           widgets[i],
           SizedBox(
@@ -123,6 +126,9 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: appbarSizes.btnPadding,
           ),
         ],
+      ),
+      endDrawer: const Drawer(
+        child: AuthListView(),
       ),
       body: Center(
         child: SingleChildScrollView(

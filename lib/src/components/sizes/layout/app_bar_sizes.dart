@@ -1,8 +1,8 @@
 import '../screen_sizes.dart';
 
 class AppBarSizes {
-  static _Sizes get xs => _Sizes.multiply(0.8);
-  static _Sizes get sm => _Sizes.multiply(0.9);
+  static _Sizes get xs => _Sizes.multiply(0.65);
+  static _Sizes get sm => _Sizes.multiply(0.85);
   static _Sizes get md => _Sizes.multiply(1.0);
   static _Sizes get lg => _Sizes.multiply(1.15);
   static _Sizes get xl => _Sizes.multiply(1.3);

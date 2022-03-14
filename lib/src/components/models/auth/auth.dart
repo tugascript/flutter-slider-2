@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/browser_client.dart';
+import 'package:v1/src/components/graphql/gql_client.dart';
 
 import '../../../utilities/constants.dart';
 import '../app_notification.dart';
@@ -69,8 +70,13 @@ class Auth {
   }
 
   static Future<AppNotification> logout() async {
-    final response = await _client.post(Uri.parse(_endPoint + 'logout'));
-
+    final token = GqlClient.token;
+    final response = await _client.post(
+      Uri.parse(_endPoint + 'logout'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       return AppNotification(

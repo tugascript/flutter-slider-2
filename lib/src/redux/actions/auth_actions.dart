@@ -101,7 +101,7 @@ ThunkAction<AppState> confirmUserLogin(ConfirmLoginForm form) {
     try {
       final authRes = await Auth.confirmLogin(form);
       GqlClient.updateToken(authRes.accessToken);
-      final client = GqlClient().client;
+      final client = GqlClient.client;
       final currentUserRequest = GCurrentUserReq();
       client.request(currentUserRequest).listen(
         (event) {
@@ -176,7 +176,7 @@ ThunkAction<AppState> refreshSession() {
       final authRes = await Auth.refreshAccess();
 
       GqlClient.updateToken(authRes.accessToken);
-      final client = GqlClient().client;
+      final client = GqlClient.client;
       final currentUserRequest = GCurrentUserReq();
       client.request(currentUserRequest).listen(
         (event) {

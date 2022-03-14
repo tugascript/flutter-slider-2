@@ -40,13 +40,15 @@ class UserButton extends StatelessWidget {
                   ),
                 );
 
-          return Padding(
+          return Container(
             padding: EdgeInsets.symmetric(
               vertical: sizes.padding,
               horizontal: halfPadding,
             ),
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
               child: Row(
                 children: [
                   _avatar,
@@ -60,6 +62,7 @@ class UserButton extends StatelessWidget {
                       color: color,
                     ),
                     overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                     softWrap: false,
                   )
                 ],

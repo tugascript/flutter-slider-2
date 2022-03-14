@@ -48,7 +48,7 @@ class RemoveImage {
 ThunkAction<AppState> loadImagesAction(String? after) {
   return (Store<AppState> store) async {
     store.dispatch(ImagesLoading());
-    final client = GqlClient().client;
+    final client = GqlClient.client;
     final getImageRequest = GGetImagesReq((b) {
       b.vars.first = 20;
 
@@ -102,7 +102,7 @@ ThunkAction<AppState> loadImagesAction(String? after) {
 ThunkAction<AppState> uploadImageAction(Uint8List image) {
   return (Store<AppState> store) async {
     store.dispatch(ImagesLoading());
-    final client = GqlClient().client;
+    final client = GqlClient.client;
     final mime = lookupMimeType('', headerBytes: image)?.split('/');
     final uploadRequest = GUploadImageReq(
       (b) => b
@@ -111,8 +111,7 @@ ThunkAction<AppState> uploadImageAction(Uint8List image) {
           image,
           filename: 'edited_image',
           contentType: mime != null ? MediaType(mime[0], mime[1]) : null,
-        )
-        ..fetchPolicy = FetchPolicy.NoCache,
+        ),
     );
     client.request(uploadRequest).listen(
       (event) {
@@ -148,7 +147,7 @@ ThunkAction<AppState> uploadImageAction(Uint8List image) {
 ThunkAction<AppState> removeImageAction(int imageId) {
   return (Store<AppState> store) async {
     store.dispatch(ImagesLoading());
-    final client = GqlClient().client;
+    final client = GqlClient.client;
     final removeImageRequest = GDeleteImageReq(
       (b) => b..vars.imageId = imageId,
     );

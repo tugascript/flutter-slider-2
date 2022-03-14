@@ -1,12 +1,16 @@
+import '../../components/models/base/paginated_state.dart';
 import '../../components/models/server_image.dart';
 
-class ServerImagesState {
+class ServerImagesState implements PaginatedState {
   final List<ServerImage> images;
+  @override
   final bool hasNextPage;
-  final String? cursor;
+  @override
   final bool loading;
+  @override
+  final String? cursor;
 
-  ServerImagesState({
+  const ServerImagesState({
     required this.images,
     required this.hasNextPage,
     required this.loading,
@@ -14,13 +18,14 @@ class ServerImagesState {
   });
 
   factory ServerImagesState.initialState() {
-    return ServerImagesState(
-      images: const [],
+    return const ServerImagesState(
+      images: [],
       hasNextPage: false,
       loading: false,
     );
   }
 
+  @override
   ServerImagesState copyWith({
     List<ServerImage>? images,
     bool? hasNextPage,
