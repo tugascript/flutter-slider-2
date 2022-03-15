@@ -108,7 +108,7 @@ class GameState {
       level: level,
       time: time,
       loading: loading,
-      showPaint: true,
+      showPaint: showPaint,
     );
   }
 

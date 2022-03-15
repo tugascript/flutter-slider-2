@@ -70,9 +70,14 @@ class AuthSnackbar extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    viewModel.notification!.message,
-                    style: style,
+                  Flexible(
+                    child: Text(
+                      viewModel.notification!.message,
+                      style: style,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                      maxLines: 1,
+                    ),
                   ),
                   TextButton(
                     onPressed: viewModel.dismissNotification,

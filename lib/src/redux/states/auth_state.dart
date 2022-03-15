@@ -39,6 +39,16 @@ class AuthState {
     );
   }
 
+  AuthState setEmailNull() {
+    return AuthState(
+      authenticated: authenticated,
+      loading: loading,
+      user: user,
+      email: null,
+      notification: notification,
+    );
+  }
+
   AuthState dismissNotification() {
     return AuthState(
       authenticated: authenticated,

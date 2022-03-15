@@ -1,18 +1,15 @@
-import '../../components/models/base/paginated_state.dart';
 import '../../components/models/game_record.dart';
 import '../../components/models/records_list.dart';
 
-class HighScoresState extends RecordsList implements PaginatedState {
+class HighScoresState extends RecordsList {
   final GameRecord? currentRecord;
   final int? currentRank;
-  @override
-  final bool loading;
 
   const HighScoresState({
     required int level,
     required List<GameRecord> records,
     required bool hasNextPage,
-    required this.loading,
+    required bool loading,
     String? cursor,
     this.currentRecord,
     this.currentRank,
@@ -20,6 +17,7 @@ class HighScoresState extends RecordsList implements PaginatedState {
           level: level,
           records: records,
           hasNextPage: hasNextPage,
+          loading: loading,
           cursor: cursor,
         );
 

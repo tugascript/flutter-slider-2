@@ -11,12 +11,23 @@ import '../../components/models/game_record.dart';
 import '../../components/models/records_list.dart';
 import '../../components/models/user.dart';
 import '../../components/models/user_profile.dart';
+import '../app_selectors.dart';
 import '../app_state.dart';
 import 'notifications_actions.dart';
 
 class UsersLoading {}
 
 class UsersStopLoading {}
+
+class ProfileLoading {}
+
+class ProfileStopLoading {}
+
+class ProfileAddPicture {
+  final String url;
+
+  ProfileAddPicture(this.url);
+}
 
 class LoadUsers {
   final List<User> users;
@@ -43,12 +54,14 @@ class LoadProfileRecords extends RecordsList {
     required int level,
     required List<GameRecord> records,
     required bool hasNextPage,
+    required bool loading,
     String? cursor,
   }) : super(
           level: level,
           records: records,
           hasNextPage: hasNextPage,
           cursor: cursor,
+          loading: loading,
         );
 }
 
@@ -172,6 +185,7 @@ ThunkAction<AppState> loadProfile(String username, int level) {
                 level: level,
                 hasNextPage: pageInfo.hasNextPage,
                 cursor: pageInfo.endCursor,
+                loading: false,
               ),
             ),
           ),
@@ -181,14 +195,27 @@ ThunkAction<AppState> loadProfile(String username, int level) {
   };
 }
 
-ThunkAction<AppState> loadProfileRecords(int level, String after) {
+ThunkAction<AppState> loadProfileRecords(int level, {String? after}) {
   return (Store<AppState> store) {
-    store.dispatch(UsersLoading());
+    store.dispatch(ProfileLoading());
+    final profile = selectUserProfile(store);
+
+    if (profile == null) {
+      store.dispatch(ProfileStopLoading());
+      return;
+    }
+
     final client = GqlClient.client;
     final findRecordsRequest = GFindRecordsReq(
-      (b) => b
-        ..vars.level = level
-        ..vars.after = after,
+      (b) {
+        b
+          ..vars.level = level
+          ..vars.userId = profile.user.id;
+
+        if (after != null) b.vars.after = after;
+
+        return b;
+      },
     );
     client.request(findRecordsRequest).listen((event) {
       if (!event.loading) {
@@ -201,7 +228,7 @@ ThunkAction<AppState> loadProfileRecords(int level, String after) {
               ),
             ),
           );
-          store.dispatch(UsersStopLoading());
+          store.dispatch(ProfileStopLoading());
           return;
         }
 
@@ -230,6 +257,7 @@ ThunkAction<AppState> loadProfileRecords(int level, String after) {
             level: level,
             hasNextPage: pageInfo.hasNextPage,
             cursor: pageInfo.endCursor,
+            loading: false,
           ),
         );
       }

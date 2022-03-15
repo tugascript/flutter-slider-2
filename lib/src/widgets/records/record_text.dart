@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class HighScoreText extends StatelessWidget {
+class RecordText extends StatelessWidget {
   final String param;
   final String value;
   final double fontSize;
   final bool breakPoint;
 
-  const HighScoreText({
+  const RecordText({
     Key? key,
     required this.param,
     required this.value,

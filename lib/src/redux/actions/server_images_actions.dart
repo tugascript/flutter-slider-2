@@ -1,6 +1,5 @@
 import 'dart:typed_data' show Uint8List;
 
-import 'package:ferry/typed_links.dart' show FetchPolicy;
 import 'package:http/http.dart' show MultipartFile;
 import 'package:http_parser/http_parser.dart' show MediaType;
 import 'package:mime/mime.dart' show lookupMimeType;
@@ -14,8 +13,8 @@ import '../../components/graphql/queries/get_images.req.gql.dart';
 import '../../components/models/app_notification.dart';
 import '../../components/models/enums/notification_type_enum.dart';
 import '../../components/models/server_image.dart';
-import '../../redux/actions/notifications_actions.dart';
 import '../app_state.dart';
+import 'notifications_actions.dart';
 
 class ImagesLoading {}
 

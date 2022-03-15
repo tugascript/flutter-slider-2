@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:get/get.dart';
 import 'package:redux/redux.dart';
-import 'package:v1/src/redux/actions/auth_actions.dart';
-import 'package:v1/src/widgets/layout/drawer/draw_tile.dart';
 
+import '../../../../screens/profile_screen.dart';
 import '../../../components/models/user.dart';
+import '../../../redux/actions/auth_actions.dart';
 import '../../../redux/app_selectors.dart';
 import '../../../redux/app_state.dart';
+import '../../../utilities/arguments/profile_screen_arguments.dart';
+import '../../../utilities/router/app_router_delegate.dart';
+import '../../users/user_avatar.dart';
+import 'draw_tile.dart';
 
 class AuthListView extends StatelessWidget {
-  const AuthListView({Key? key}) : super(key: key);
+  final AppRouterDelegate delegate = Get.find();
+  AuthListView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,24 +29,7 @@ class AuthListView extends StatelessWidget {
       converter: (store) => _AuthListViewModel.fromStore(store),
       builder: (_, viewModel) {
         final user = viewModel.user;
-        final _avatar = user == null || user.picture == null
-            ? CircleAvatar(
-                backgroundColor: colorScheme.onPrimary,
-                child: Text(
-                  viewModel.user?.username.substring(0, 2).toUpperCase() ??
-                      'US',
-                  style: TextStyle(
-                    color: colorScheme.primary,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              )
-            : CircleAvatar(
-                backgroundColor: colorScheme.onPrimary,
-                backgroundImage: NetworkImage(
-                  viewModel.user!.picture!,
-                ),
-              );
+        final username = user?.username ?? 'username';
 
         return ListView(
           padding: EdgeInsets.zero,
@@ -53,16 +42,16 @@ class AuthListView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    width: 65,
-                    height: 65,
-                    child: _avatar,
+                  UserAvatar(
+                    size: 65,
+                    username: username,
+                    picture: user?.picture,
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   Text(
-                    user?.username ?? 'username',
+                    username,
                     style: TextStyle(
                       color: colorScheme.onPrimary,
                       fontSize: 25,
@@ -75,13 +64,23 @@ class AuthListView extends StatelessWidget {
             DrawerTile(
               icon: Icons.person_rounded,
               title: 'PROFILE',
-              onTap: () => Navigator.pushNamed(context, 'profile'),
+              onTap: () {
+                if (user != null) {
+                  delegate.pushPage(
+                    name: ProfileScreen.routeName,
+                    arguments: ProfileScreenArguments(username),
+                  );
+                }
+              },
             ),
             _spacer,
             DrawerTile(
               icon: Icons.logout_rounded,
               title: 'LOGOUT',
-              onTap: viewModel.logout,
+              onTap: () {
+                viewModel.logout();
+                delegate.popRoute();
+              },
             ),
           ],
         );
@@ -93,10 +92,12 @@ class AuthListView extends StatelessWidget {
 class _AuthListViewModel {
   final User? user;
   final bool authenticated;
+  final bool loading;
   final VoidCallback logout;
 
   _AuthListViewModel({
     required this.user,
+    required this.loading,
     required this.authenticated,
     required this.logout,
   });
@@ -107,12 +108,14 @@ class _AuthListViewModel {
     return _AuthListViewModel(
       user: authState.user,
       authenticated: authState.authenticated,
+      loading: authState.loading,
       logout: () => store.dispatch(logoutUser()),
     );
   }
 
   @override
-  int get hashCode => authenticated ? 1 : 0;
+  int get hashCode =>
+      (authenticated ? 1 : 0) + (user != null ? 1 : 0) + (loading ? 0 : 1);
 
   @override
   bool operator ==(Object other) {

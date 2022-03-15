@@ -6,6 +6,7 @@ import '../../../components/models/user.dart';
 import '../../../components/sizes/layout/nav_btn_sizes.dart';
 import '../../../redux/app_selectors.dart';
 import '../../../redux/app_state.dart';
+import '../../users/user_avatar.dart';
 
 class UserButton extends StatelessWidget {
   const UserButton({Key? key}) : super(key: key);
@@ -25,20 +26,7 @@ class UserButton extends StatelessWidget {
         converter: (store) => _UserButtonViewModel.fromStore(store),
         builder: (_, viewModel) {
           final user = viewModel.user;
-          final _avatar = user == null || user.picture == null
-              ? CircleAvatar(
-                  backgroundColor: color,
-                  child: Text(
-                    viewModel.user?.username.substring(0, 2).toUpperCase() ??
-                        'US',
-                  ),
-                )
-              : CircleAvatar(
-                  backgroundColor: color,
-                  backgroundImage: NetworkImage(
-                    viewModel.user!.picture!,
-                  ),
-                );
+          final username = user?.username ?? 'username';
 
           return Container(
             padding: EdgeInsets.symmetric(
@@ -51,7 +39,11 @@ class UserButton extends StatelessWidget {
               },
               child: Row(
                 children: [
-                  _avatar,
+                  UserAvatar(
+                    size: sizes.fontSize * 1.5,
+                    username: username,
+                    picture: user?.picture,
+                  ),
                   SizedBox(
                     width: halfPadding,
                   ),
@@ -83,7 +75,7 @@ class _UserButtonViewModel {
   }
 
   @override
-  int get hashCode => user?.id ?? 0;
+  int get hashCode => (user?.id ?? 0) + (user?.picture?.hashCode ?? 0);
 
   @override
   bool operator ==(Object other) {

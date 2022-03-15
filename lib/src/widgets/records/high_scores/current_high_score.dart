@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../components/models/game_record.dart';
 import '../../../components/sizes/records/record_list_item_sizes.dart';
 import '../../../utilities/helpers/time_stringify.dart';
-import 'high_score_text.dart';
+import '../record_text.dart';
 
 class CurrentHighScore extends StatelessWidget {
   final int rank;
@@ -52,14 +52,14 @@ class CurrentHighScore extends StatelessWidget {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    HighScoreText(
+                    RecordText(
                       param: 'Time',
                       value: TimeStringify.getTimeString(record.time),
                       fontSize: sizes.fontSize,
                       breakPoint: true,
                     ),
                     SizedBox(height: sizes.spacing),
-                    HighScoreText(
+                    RecordText(
                       param: 'Moves',
                       value: record.moves.toString(),
                       fontSize: sizes.fontSize,

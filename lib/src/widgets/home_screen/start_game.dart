@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../screens/game_screen.dart';
 import '../../components/models/enums/difficulty_enum.dart';
 import '../../components/sizes/layout/home_screen_sizes.dart';
 import '../../utilities/arguments/game_screen_arguments.dart';
+import '../../utilities/router/app_router_delegate.dart';
 
 class StartGame extends StatelessWidget {
+  final AppRouterDelegate delegate = Get.find();
   final DifficultyEnum difficulty;
 
-  const StartGame({
+  StartGame({
     Key? key,
     required this.difficulty,
   }) : super(key: key);
@@ -22,9 +25,8 @@ class StartGame extends StatelessWidget {
       width: sizes.buttonWidth,
       height: sizes.buttonHeight,
       child: ElevatedButton(
-        onPressed: () => Navigator.pushNamed(
-          context,
-          GameScreen.routeName,
+        onPressed: () => delegate.pushPage(
+          name: GameScreen.routeName,
           arguments: GameScreenArguments(
             true,
             1,

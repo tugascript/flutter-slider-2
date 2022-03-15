@@ -40,7 +40,7 @@ class _Sizes {
   factory _Sizes.multiply(double x) {
     return _Sizes(
       avatar: 45.0 * x,
-      spacing: 5 * x,
+      spacing: 5.0 * x,
       fontSize: 17.5 * x,
       borderWidth: 1.5 * x,
       borderRadius: 7.5 * x,

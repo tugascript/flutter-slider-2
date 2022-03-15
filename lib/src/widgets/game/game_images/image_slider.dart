@@ -144,6 +144,7 @@ class _ImageSliderViewModel {
       images: selectServerImagesState(store),
       changePaint: (String name, bool network) {
         store.dispatch(addPaintersToPieces(name, network));
+        store.dispatch(ShowPaint());
       },
     );
   }

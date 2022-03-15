@@ -9,6 +9,7 @@ import '../../../redux/actions/game_actions.dart';
 import '../../../redux/actions/image_editor_actions.dart';
 import '../../../redux/app_selectors.dart';
 import '../../../redux/app_state.dart';
+import '../../../utilities/arguments/image_editor_screen_arguments.dart';
 import '../../auth/login_modal_form.dart';
 import 'image_container.dart';
 
@@ -29,7 +30,11 @@ class _ImageAdderState extends State<ImageAdder> {
       converter: (store) => _ImageAdderViewModel.fromStore(store),
       onWillChange: (_, viewModel) {
         if (viewModel.editorOpen) {
-          Navigator.pushNamed(context, ImageEditorScreen.routeName);
+          Navigator.pushNamed(
+            context,
+            ImageEditorScreen.routeName,
+            arguments: const ImageEditorScreenArguments(false),
+          );
         }
       },
       builder: (_, viewModel) => ImageContainer(

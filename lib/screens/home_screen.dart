@@ -120,14 +120,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        actions: [
-          const AuthButtons(),
-          ThemeButton(
-            padding: appbarSizes.btnPadding,
-          ),
+        actions: const [
+          AuthButtons(),
+          ThemeButton(),
         ],
       ),
-      endDrawer: const Drawer(
+      endDrawer: Drawer(
         child: AuthListView(),
       ),
       body: Center(

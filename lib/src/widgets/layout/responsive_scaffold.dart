@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../components/sizes/layout/app_bar_sizes.dart';
 import 'auth_buttons/auth_buttons.dart';
+import 'drawer/auth_list_view.dart';
 import 'normal_icon.dart';
 import 'theme_button.dart';
 
@@ -29,29 +30,32 @@ class ResponsiveScaffold extends StatelessWidget {
             SizedBox(
               width: sizes.title,
             ),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: sizes.title,
-                fontWeight: FontWeight.w600,
+            Flexible(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: sizes.title,
+                  fontWeight: FontWeight.w600,
+                ),
+                overflow: TextOverflow.ellipsis,
+                softWrap: false,
+                maxLines: 1,
               ),
             ),
           ],
         ),
-        actions: [
-          const AuthButtons(),
-          ThemeButton(
-            padding: sizes.btnPadding,
-          ),
-          SizedBox(
-            width: sizes.title * 0.8,
-          ),
+        actions: const [
+          AuthButtons(),
+          ThemeButton(),
         ],
       ),
       body: Center(
         child: SingleChildScrollView(
           child: child,
         ),
+      ),
+      endDrawer: Drawer(
+        child: AuthListView(),
       ),
     );
   }

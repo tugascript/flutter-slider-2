@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:v1/screens/profile_screen.dart';
+import 'package:v1/src/utilities/arguments/profile_screen_arguments.dart';
 
 import '../../../components/models/user.dart';
+import '../../users/user_avatar.dart';
 
 class HighScoreUserButton extends StatelessWidget {
   final double avatarSize;
@@ -22,23 +25,15 @@ class HighScoreUserButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _avatar = user.picture == null
-        ? CircleAvatar(
-            backgroundColor: color,
-            child: Text(
-              user.username.substring(0, 2).toUpperCase(),
-            ),
-          )
-        : CircleAvatar(
-            backgroundColor: color,
-            backgroundImage: NetworkImage(user.picture!),
-          );
-
     return SizedBox(
       height: avatarSize * 1.5,
       width: avatarSize * 5,
       child: OutlinedButton(
-        onPressed: () {},
+        onPressed: () => Navigator.pushNamed(
+          context,
+          ProfileScreen.routeName,
+          arguments: ProfileScreenArguments(user.username),
+        ),
         style: OutlinedButton.styleFrom(
           elevation: 0,
           side: BorderSide(
@@ -59,10 +54,10 @@ class HighScoreUserButton extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
-                height: avatarSize,
-                width: avatarSize,
-                child: _avatar,
+              UserAvatar(
+                size: avatarSize,
+                username: user.username,
+                picture: user.picture,
               ),
               Flexible(
                 child: Text(

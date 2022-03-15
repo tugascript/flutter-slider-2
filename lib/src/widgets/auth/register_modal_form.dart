@@ -24,7 +24,8 @@ class RegisterModalForm extends StatefulWidget {
 }
 
 class _RegisterModalFormState extends State<RegisterModalForm> {
-  static const route = '/register-modal';
+  static const _route = '/register-modal';
+  static const _loading = 'Loading...';
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   dynamic _formData = RegisterForm();
 
@@ -46,11 +47,12 @@ class _RegisterModalFormState extends State<RegisterModalForm> {
           }
 
           if (viewModel.authenticated) {
-            Navigator.pop(context, route);
+            Navigator.pop(context, _route);
           }
         },
         builder: (_, viewModel) {
           final nullEmail = viewModel.email == null;
+          final hasNotification = viewModel.notification != null;
           final inputDecoration = nullEmail
               ? const InputDecoration(
                   hintText: 'Your@Email.com',
@@ -66,17 +68,21 @@ class _RegisterModalFormState extends State<RegisterModalForm> {
             key: _formKey,
             child: AlertDialog(
               title: Text(
-                nullEmail ? 'Sign In' : 'Confirm Sign in',
+                viewModel.loading
+                    ? _loading
+                    : nullEmail
+                        ? 'Sign In'
+                        : 'Confirm Sign in',
                 style: TextStyle(
                   fontSize: sizes.fontSize * 1.2,
                 ),
               ),
               content: SizedBox(
                 width: sizes.width,
-                height: nullEmail ? height : height / 2,
+                height: nullEmail || hasNotification ? height : height / 2,
                 child: Column(
                   children: [
-                    if (viewModel.notification != null) const AuthSnackbar(),
+                    if (hasNotification) const AuthSnackbar(),
                     TextFormField(
                       style: TextStyle(
                         fontSize: sizes.fontSize,
@@ -152,12 +158,14 @@ class _RegisterModalFormState extends State<RegisterModalForm> {
               ),
               actions: [
                 TextButton(
-                  onPressed: () {
-                    viewModel.cancelSignUp();
-                    Navigator.pop(context, route);
-                  },
+                  onPressed: viewModel.loading
+                      ? () {}
+                      : () {
+                          viewModel.cancelSignUp();
+                          Navigator.pop(context, _route);
+                        },
                   child: Text(
-                    'Cancel',
+                    viewModel.loading ? _loading : 'Cancel',
                     style: TextStyle(
                       fontSize: sizes.fontSize,
                     ),
@@ -167,33 +175,39 @@ class _RegisterModalFormState extends State<RegisterModalForm> {
                   width: sizes.fontSize / 2,
                 ),
                 TextButton(
-                  onPressed: nullEmail
-                      ? () {
-                          if (_formKey.currentState == null) return;
+                  onPressed: viewModel.loading
+                      ? () {}
+                      : nullEmail
+                          ? () {
+                              if (_formKey.currentState == null) return;
 
-                          if (!_formKey.currentState!.validate()) {
-                            return;
-                          }
+                              if (!_formKey.currentState!.validate()) {
+                                return;
+                              }
 
-                          _formKey.currentState!.save();
-                          if (_formData is RegisterForm) {
-                            viewModel.signUp(_formData);
-                          }
-                        }
-                      : () {
-                          if (_formKey.currentState == null) return;
+                              _formKey.currentState!.save();
+                              if (_formData is RegisterForm) {
+                                viewModel.signUp(_formData);
+                              }
+                            }
+                          : () {
+                              if (_formKey.currentState == null) return;
 
-                          if (!_formKey.currentState!.validate()) {
-                            return;
-                          }
+                              if (!_formKey.currentState!.validate()) {
+                                return;
+                              }
 
-                          _formKey.currentState!.save();
-                          if (_formData is ConfirmLoginForm) {
-                            viewModel.confirmSignUp(_formData);
-                          }
-                        },
+                              _formKey.currentState!.save();
+                              if (_formData is ConfirmLoginForm) {
+                                viewModel.confirmSignUp(_formData);
+                              }
+                            },
                   child: Text(
-                    nullEmail ? 'Next' : 'Confirm',
+                    viewModel.loading
+                        ? _loading
+                        : nullEmail
+                            ? 'Next'
+                            : 'Confirm',
                     style: TextStyle(
                       fontSize: sizes.fontSize,
                     ),

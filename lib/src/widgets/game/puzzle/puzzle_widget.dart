@@ -23,6 +23,14 @@ class PuzzleWidget extends StatelessWidget {
     return StoreConnector<AppState, _PuzzleViewModel>(
       distinct: true,
       converter: (store) => _PuzzleViewModel.fromStore(store),
+      onWillChange: (vm, viewModel) {
+        if (vm != null) {
+          if (viewModel.status == GameStatusEnum.completed &&
+              vm.status != viewModel.status) {
+            return;
+          }
+        }
+      },
       builder: (_, viewModel) {
         final len = viewModel.table.length;
         final pieceSize = puzzleSizes.puzzleSize / len;
@@ -55,29 +63,32 @@ class _PuzzleViewModel {
   final List<List<Piece>> table;
   final Position next;
   final GameStatusEnum status;
-  final int imageHash;
+  final bool showPaint;
 
   _PuzzleViewModel({
     required this.table,
     required this.next,
     required this.status,
-    required this.imageHash,
+    required this.showPaint,
   });
 
   factory _PuzzleViewModel.fromStore(Store<AppState> store) {
-    final puzzle = selectPuzzleState(store);
+    final gameState = selectGameState(store);
+    final puzzle = gameState.puzzle;
 
     return _PuzzleViewModel(
       table: puzzle.table,
       next: puzzle.next,
       status: puzzle.status,
-      imageHash: puzzle.image?.hashCode ?? 0,
+      showPaint: gameState.showPaint,
     );
   }
 
   @override
   int get hashCode =>
-      (next.column + next.row) * table.length + status.index + imageHash;
+      (next.column + next.row) * table.length +
+      status.index +
+      (showPaint ? 1 : 0);
 
   @override
   bool operator ==(Object other) {

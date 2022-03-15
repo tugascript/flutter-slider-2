@@ -32,26 +32,37 @@ class _LevelSelectFieldState extends State<LevelSelectField> {
 
   @override
   Widget build(BuildContext context) {
+    final _max = widget.maxLevel + (widget.maxLevel == 0 ? 2 : 1);
+
     return DropdownButton<int>(
+      isExpanded: true,
       value: _level,
       iconSize: widget.fontSize * 1.5,
       items: widget.loading
           ? [
               DropdownMenuItem<int>(
+                alignment: AlignmentDirectional.center,
                 value: _level,
-                child: Text(
-                  'Loading...',
-                  style: TextStyle(fontSize: widget.fontSize),
+                child: Center(
+                  child: Text(
+                    'Loading...',
+                    style: TextStyle(fontSize: widget.fontSize),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
             ]
           : [
-              for (int i = 1; i < widget.maxLevel + 2; i++)
+              for (int i = 1; i < _max; i++)
                 DropdownMenuItem<int>(
+                  alignment: AlignmentDirectional.center,
                   value: i,
-                  child: Text(
-                    i.toString(),
-                    style: TextStyle(fontSize: widget.fontSize),
+                  child: Center(
+                    child: Text(
+                      i.toString(),
+                      style: TextStyle(fontSize: widget.fontSize),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
             ],

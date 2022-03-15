@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:v1/src/components/sizes/layout/theme_button_sizes.dart';
 
 import '../../components/models/enums/theme_enum.dart';
 import '../../redux/actions/theme_actions.dart';
@@ -8,26 +9,34 @@ import '../../redux/app_selectors.dart';
 import '../../redux/app_state.dart';
 
 class ThemeButton extends StatelessWidget {
-  final double padding;
-
-  const ThemeButton({Key? key, required this.padding}) : super(key: key);
+  const ThemeButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final sizes = ThemeButtonSizes.getThemeButtonSizes(width);
+
     return StoreConnector<AppState, _ThemeButtonViewModel>(
       distinct: true,
       converter: (store) => _ThemeButtonViewModel.fromStore(store),
       builder: (_, viewModel) => Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: padding,
-          horizontal: padding / 2,
+        padding: EdgeInsets.fromLTRB(
+          sizes.spacing,
+          sizes.spacing / 2,
+          sizes.spacing * 2,
+          sizes.spacing / 2,
         ),
-        child: IconButton(
-          onPressed: viewModel.changeTheme,
-          icon: Icon(
-            viewModel.theme == ThemeEnum.light
-                ? Icons.dark_mode
-                : Icons.light_mode,
+        child: SizedBox(
+          height: sizes.size,
+          width: sizes.size,
+          child: IconButton(
+            onPressed: viewModel.changeTheme,
+            icon: Icon(
+              viewModel.theme == ThemeEnum.light
+                  ? Icons.dark_mode
+                  : Icons.light_mode,
+              size: sizes.icon,
+            ),
           ),
         ),
       ),

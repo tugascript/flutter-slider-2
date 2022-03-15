@@ -24,7 +24,8 @@ class LoginModalForm extends StatefulWidget {
 }
 
 class _LoginModalFormState extends State<LoginModalForm> {
-  static const route = '/login-modal';
+  static const _route = '/login-modal';
+  static const _loading = 'Loading...';
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   dynamic _formData = LoginForm();
 
@@ -45,7 +46,7 @@ class _LoginModalFormState extends State<LoginModalForm> {
           }
 
           if (viewModel.authenticated) {
-            Navigator.pop(context, route);
+            Navigator.pop(context, _route);
           }
         },
         builder: (_, viewModel) {
@@ -66,7 +67,11 @@ class _LoginModalFormState extends State<LoginModalForm> {
             key: _formKey,
             child: AlertDialog(
               title: Text(
-                nullEmail ? 'Sign In' : 'Confirm Sign in',
+                viewModel.loading
+                    ? _loading
+                    : nullEmail
+                        ? 'Sign In'
+                        : 'Confirm Sign in',
                 style: TextStyle(
                   fontSize: sizes.fontSize * 1.2,
                 ),
@@ -122,12 +127,14 @@ class _LoginModalFormState extends State<LoginModalForm> {
               ),
               actions: [
                 TextButton(
-                  onPressed: () {
-                    viewModel.cancelSignIn();
-                    Navigator.pop(context, route);
-                  },
+                  onPressed: viewModel.loading
+                      ? () {}
+                      : () {
+                          viewModel.cancelSignIn();
+                          Navigator.pop(context, _route);
+                        },
                   child: Text(
-                    'Cancel',
+                    viewModel.loading ? _loading : 'Cancel',
                     style: TextStyle(
                       fontSize: sizes.fontSize,
                     ),
@@ -137,33 +144,39 @@ class _LoginModalFormState extends State<LoginModalForm> {
                   width: sizes.fontSize / 2,
                 ),
                 TextButton(
-                  onPressed: nullEmail
-                      ? () {
-                          if (_formKey.currentState == null) return;
+                  onPressed: viewModel.loading
+                      ? () {}
+                      : nullEmail
+                          ? () {
+                              if (_formKey.currentState == null) return;
 
-                          if (!_formKey.currentState!.validate()) {
-                            return;
-                          }
+                              if (!_formKey.currentState!.validate()) {
+                                return;
+                              }
 
-                          _formKey.currentState!.save();
-                          if (_formData is LoginForm) {
-                            viewModel.signIn(_formData);
-                          }
-                        }
-                      : () {
-                          if (_formKey.currentState == null) return;
+                              _formKey.currentState!.save();
+                              if (_formData is LoginForm) {
+                                viewModel.signIn(_formData);
+                              }
+                            }
+                          : () {
+                              if (_formKey.currentState == null) return;
 
-                          if (!_formKey.currentState!.validate()) {
-                            return;
-                          }
+                              if (!_formKey.currentState!.validate()) {
+                                return;
+                              }
 
-                          _formKey.currentState!.save();
-                          if (_formData is ConfirmLoginForm) {
-                            viewModel.confirmSignIn(_formData);
-                          }
-                        },
+                              _formKey.currentState!.save();
+                              if (_formData is ConfirmLoginForm) {
+                                viewModel.confirmSignIn(_formData);
+                              }
+                            },
                   child: Text(
-                    nullEmail ? 'Next' : 'Confirm',
+                    viewModel.loading
+                        ? _loading
+                        : nullEmail
+                            ? 'Next'
+                            : 'Confirm',
                     style: TextStyle(
                       fontSize: sizes.fontSize,
                     ),

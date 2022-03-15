@@ -6,14 +6,13 @@ import '../../../components/sizes/break_point.dart';
 import '../../../components/sizes/records/record_list_item_sizes.dart';
 import '../../../utilities/helpers/time_stringify.dart';
 import '../record_text.dart';
-import 'high_score_user_button.dart';
 
-class HighScoreItem extends StatelessWidget {
+class UserRecordItem extends StatelessWidget {
   final int rank;
   final GameRecord record;
   final BuildContext ctx;
 
-  const HighScoreItem({
+  const UserRecordItem({
     Key? key,
     required this.rank,
     required this.record,
@@ -22,28 +21,14 @@ class HighScoreItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(ctx).colorScheme;
     final width = MediaQuery.of(ctx).size.width;
     final breakPoint = BreakPoint(width).greatMD;
     final sizes = RecordListItemSizes.getRecordListItemSizes(width);
-    final user = record.user!;
 
-    final _rowChildren = <Widget>[
-      RankText(
-        rank: rank,
-        fontSize: sizes.fontSize,
-      ),
-      HighScoreUserButton(
-        avatarSize: sizes.avatar,
-        fontSize: sizes.fontSize,
-        borderWidth: sizes.borderWidth,
-        spacing: sizes.spacing / 2,
-        color: colorScheme.primary.value == 0xFF02569B
-            ? colorScheme.primary
-            : colorScheme.onPrimary,
-        user: user,
-      )
-    ];
+    final _rankText = RankText(
+      rank: rank,
+      fontSize: sizes.fontSize,
+    );
 
     final _colChildren = <Widget>[
       RecordText(
@@ -70,7 +55,7 @@ class HighScoreItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                ..._rowChildren,
+                _rankText,
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: _colChildren,
@@ -80,10 +65,8 @@ class HighScoreItem extends StatelessWidget {
           : Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                for (int i = 0; i < _rowChildren.length; i++) ...[
-                  _rowChildren[i],
-                  SizedBox(height: sizes.spacing),
-                ],
+                _rankText,
+                SizedBox(height: sizes.spacing),
                 ..._colChildren,
               ],
             ),

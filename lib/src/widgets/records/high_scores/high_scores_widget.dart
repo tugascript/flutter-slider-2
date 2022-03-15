@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-import 'package:v1/src/components/models/enums/theme_enum.dart';
 
 import '../../../components/models/game_record.dart';
 import '../../../components/models/user.dart';
@@ -25,14 +24,31 @@ class HighScoresWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _HighScoresWidgetViewModel _viewModel;
+    _HighScoresWidgetViewModel? _viewModel;
     final _scrollController = ScrollController();
+    void _addListener() {
+      _scrollController.addListener(() {
+        final currentPos = _scrollController.position.pixels;
+        final maxExtent = _scrollController.position.maxScrollExtent;
+
+        if (currentPos >= maxExtent && _viewModel != null) {
+          if (_viewModel!.hasNextPage &&
+              _viewModel!.cursor != null &&
+              !_viewModel!.loading) {
+            _viewModel!.changeLevel(
+              _viewModel!.level,
+              after: _viewModel!.cursor,
+            );
+          }
+        }
+      });
+    }
 
     final size = MediaQuery.of(ctx).size;
     final sizes = HighScoresSizes.getHighScoresSizes(size.width);
     final itemSizes = RecordListItemSizes.getRecordListItemSizes(size.width);
+    final mainSize = size.height * 0.8;
     final colorScheme = Theme.of(ctx).colorScheme;
-    final isLightTheme = colorScheme.primary.value == 0xFF02569B;
 
     return StoreConnector<AppState, _HighScoresWidgetViewModel>(
       distinct: true,
@@ -45,21 +61,7 @@ class HighScoresWidget extends StatelessWidget {
           store.dispatch(loadHighScores(highScoreState.level));
         }
 
-        _scrollController.addListener(() {
-          final currentPos = _scrollController.position.pixels;
-          final maxExtent = _scrollController.position.maxScrollExtent;
-
-          if (currentPos >= maxExtent) {
-            if (_viewModel.hasNextPage &&
-                _viewModel.cursor != null &&
-                !_viewModel.loading) {
-              _viewModel.changeLevel(
-                _viewModel.level,
-                after: _viewModel.cursor,
-              );
-            }
-          }
-        });
+        _addListener();
       },
       onDispose: (_) {
         _scrollController.dispose();
@@ -71,8 +73,6 @@ class HighScoresWidget extends StatelessWidget {
         final _rank = viewModel.currentRank;
         final _record = viewModel.currentRecord;
         final _hasRank = _rank != null && _record != null;
-        final _mainSize = size.height * 0.8;
-        final _size = _mainSize - itemSizes.avatar * 3.5;
 
         return AlertDialog(
           title: Column(
@@ -116,41 +116,50 @@ class HighScoresWidget extends StatelessWidget {
               )
             ],
           ),
-          content: SizedBox(
-            width: sizes.width,
-            height: _mainSize,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: itemSizes.borderWidth,
-                        color: isLightTheme
-                            ? colorScheme.onSurface
-                            : colorScheme.onPrimary,
+          content: NotificationListener<SizeChangedLayoutNotification>(
+            onNotification: (_) {
+              _viewModel = viewModel;
+              _addListener();
+              return false;
+            },
+            child: SizeChangedLayoutNotifier(
+              child: SizedBox(
+                width: sizes.width,
+                height: mainSize,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: itemSizes.borderWidth,
+                            color: colorScheme.primary.value == 0xFF02569B
+                                ? colorScheme.onSurface
+                                : colorScheme.onPrimary,
+                          ),
+                          borderRadius:
+                              BorderRadius.circular(itemSizes.borderRadius),
+                        ),
+                        height: mainSize - itemSizes.avatar * 3.5,
+                        child: ListView.builder(
+                          controller: _scrollController,
+                          itemBuilder: (_, i) => HighScoreItem(
+                            rank: i + 1,
+                            record: viewModel.records[i],
+                            ctx: ctx,
+                          ),
+                          itemCount: viewModel.records.length,
+                        ),
                       ),
-                      borderRadius:
-                          BorderRadius.circular(itemSizes.borderRadius),
-                    ),
-                    height: _size,
-                    child: ListView.builder(
-                      controller: _scrollController,
-                      itemBuilder: (_, i) => HighScoreItem(
-                        rank: i + 1,
-                        record: viewModel.records[i],
-                        ctx: ctx,
-                      ),
-                      itemCount: viewModel.records.length,
-                    ),
+                      if (_hasRank)
+                        CurrentHighScore(
+                          rank: viewModel.currentRank!,
+                          record: viewModel.currentRecord!,
+                          ctx: ctx,
+                        ),
+                    ],
                   ),
-                  if (_hasRank)
-                    CurrentHighScore(
-                      rank: viewModel.currentRank!,
-                      record: viewModel.currentRecord!,
-                      ctx: ctx,
-                    ),
-                ],
+                ),
               ),
             ),
           ),
