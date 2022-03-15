@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:v1/screens/profile_screen.dart';
-import 'package:v1/src/utilities/arguments/profile_screen_arguments.dart';
+import 'package:get/get.dart';
 
+import '../../../../screens/profile_screen.dart';
 import '../../../components/models/user.dart';
+import '../../../utilities/arguments/profile_screen_arguments.dart';
+import '../../../utilities/router/app_router_delegate.dart';
 import '../../users/user_avatar.dart';
 
 class HighScoreUserButton extends StatelessWidget {
+  final AppRouterDelegate delegate = Get.find();
   final double avatarSize;
   final double fontSize;
   final double borderWidth;
@@ -13,7 +16,7 @@ class HighScoreUserButton extends StatelessWidget {
   final Color color;
   final User user;
 
-  const HighScoreUserButton({
+  HighScoreUserButton({
     Key? key,
     required this.avatarSize,
     required this.fontSize,
@@ -29,9 +32,8 @@ class HighScoreUserButton extends StatelessWidget {
       height: avatarSize * 1.5,
       width: avatarSize * 5,
       child: OutlinedButton(
-        onPressed: () => Navigator.pushNamed(
-          context,
-          ProfileScreen.routeName,
+        onPressed: () => delegate.pushPage(
+          name: ProfileScreen.routeName,
           arguments: ProfileScreenArguments(user.username),
         ),
         style: OutlinedButton.styleFrom(
