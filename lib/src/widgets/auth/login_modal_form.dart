@@ -55,6 +55,7 @@ class _LoginModalFormState extends State<LoginModalForm> {
               ? const InputDecoration(
                   hintText: 'Your@Email.com',
                   labelText: 'Email',
+                  helperText: '',
                 )
               : const InputDecoration(
                   hintText: 'XXXXXX',
@@ -62,6 +63,31 @@ class _LoginModalFormState extends State<LoginModalForm> {
                   helperText: 'An access code has been sent to your email.',
                 );
           final height = sizes.fontSize * 4;
+
+          void _submitForm() {
+            if (nullEmail) {
+              if (_formKey.currentState == null) return;
+
+              if (!_formKey.currentState!.validate()) return;
+
+              _formKey.currentState!.save();
+
+              if (_formData is LoginForm) {
+                viewModel.signIn(_formData);
+              }
+            } else {
+              if (_formKey.currentState == null) return;
+
+              if (!_formKey.currentState!.validate()) {
+                return;
+              }
+
+              _formKey.currentState!.save();
+              if (_formData is ConfirmLoginForm) {
+                viewModel.confirmSignIn(_formData);
+              }
+            }
+          }
 
           return Form(
             key: _formKey,
@@ -121,6 +147,8 @@ class _LoginModalFormState extends State<LoginModalForm> {
                           }
                         }
                       },
+                      onFieldSubmitted: (_) => _submitForm(),
+                      maxLength: nullEmail ? null : 6,
                     ),
                   ],
                 ),
@@ -144,33 +172,7 @@ class _LoginModalFormState extends State<LoginModalForm> {
                   width: sizes.fontSize / 2,
                 ),
                 TextButton(
-                  onPressed: viewModel.loading
-                      ? () {}
-                      : nullEmail
-                          ? () {
-                              if (_formKey.currentState == null) return;
-
-                              if (!_formKey.currentState!.validate()) {
-                                return;
-                              }
-
-                              _formKey.currentState!.save();
-                              if (_formData is LoginForm) {
-                                viewModel.signIn(_formData);
-                              }
-                            }
-                          : () {
-                              if (_formKey.currentState == null) return;
-
-                              if (!_formKey.currentState!.validate()) {
-                                return;
-                              }
-
-                              _formKey.currentState!.save();
-                              if (_formData is ConfirmLoginForm) {
-                                viewModel.confirmSignIn(_formData);
-                              }
-                            },
+                  onPressed: viewModel.loading ? () {} : _submitForm,
                   child: Text(
                     viewModel.loading
                         ? _loading
@@ -194,9 +196,9 @@ class _LoginModalViewModel {
   final bool authenticated;
   final String? email;
   final AppNotification? notification;
-  final void Function(LoginForm form) signIn;
+  final void Function(LoginForm) signIn;
   final VoidCallback cancelSignIn;
-  final void Function(ConfirmLoginForm form) confirmSignIn;
+  final void Function(ConfirmLoginForm) confirmSignIn;
 
   _LoginModalViewModel({
     required this.loading,
@@ -224,10 +226,7 @@ class _LoginModalViewModel {
 
   @override
   int get hashCode =>
-      (loading ? 1 : 0) +
-      email.hashCode +
-      (authenticated ? 1 : 0) +
-      notification.hashCode;
+      (loading ? 1 : 0) + email.hashCode + (authenticated ? 2 : 0);
 
   @override
   bool operator ==(Object other) {

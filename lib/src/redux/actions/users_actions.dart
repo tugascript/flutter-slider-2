@@ -72,12 +72,12 @@ ThunkAction<AppState> loadUsers({String? search, String? after}) {
     final findUsersRequest = GFindUsersReq((b) {
       b.vars.first = 20;
 
-      if (search != null) {
+      if (search != null && search.isNotEmpty) {
         b.vars.search = search;
       }
 
       if (after != null) {
-        b.vars.search = after;
+        b.vars.after = after;
       }
 
       return b;
@@ -121,6 +121,7 @@ ThunkAction<AppState> loadUsers({String? search, String? after}) {
             users: users,
             hasNextPage: pageInfo.hasNextPage,
             endCursor: pageInfo.endCursor,
+            search: search,
           ),
         );
       }

@@ -4,40 +4,32 @@ import 'package:redux/redux.dart';
 
 import '../../../components/models/game_record.dart';
 import '../../../components/models/user.dart';
+import '../../../components/sizes/break_point.dart';
 import '../../../components/sizes/records/user_records_sizes.dart';
+import '../../../components/sizes/screen_sizes.dart';
 import '../../../redux/actions/users_actions.dart';
 import '../../../redux/app_selectors.dart';
 import '../../../redux/app_state.dart';
 import '../level_select_field.dart';
 import 'user_record_item.dart';
 
-class UserRecords extends StatelessWidget {
+class UserRecords extends StatefulWidget {
   const UserRecords({Key? key}) : super(key: key);
 
   @override
+  State<UserRecords> createState() => _UserRecordsState();
+}
+
+class _UserRecordsState extends State<UserRecords> {
+  _UserRecordsViewModel? _viewModel;
+  final _scrollController = ScrollController();
+
+  @override
   Widget build(BuildContext context) {
-    _UserRecordsViewModel? _viewModel;
-    final _scrollController = ScrollController();
-    void _addListener() {
-      _scrollController.addListener(() {
-        final currentPos = _scrollController.position.pixels;
-        final maxExtent = _scrollController.position.maxScrollExtent;
-
-        if (currentPos >= maxExtent && _viewModel != null) {
-          if (_viewModel!.hasNextPage &&
-              _viewModel!.cursor != null &&
-              !_viewModel!.loading) {
-            _viewModel!.changeLevel(
-              _viewModel!.level,
-              after: _viewModel!.cursor,
-            );
-          }
-        }
-      });
-    }
-
     final size = MediaQuery.of(context).size;
     final sizes = UserRecordSizes.getUserRecordSizes(size.width);
+    final spacing = sizes.fontSize / 2;
+    final breakPoint = BreakPoint(size.width);
     final mainSize = size.height * 0.8 - sizes.headerSize;
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -47,7 +39,21 @@ class UserRecords extends StatelessWidget {
       onInit: (store) {
         _viewModel = _UserRecordsViewModel.fromStore(store);
 
-        _addListener();
+        _scrollController.addListener(() {
+          final currentPos = _scrollController.position.pixels;
+          final maxExtent = _scrollController.position.maxScrollExtent;
+
+          if (currentPos >= maxExtent && _viewModel != null) {
+            if (_viewModel!.hasNextPage &&
+                _viewModel!.cursor != null &&
+                !_viewModel!.loading) {
+              _viewModel!.changeLevel(
+                _viewModel!.level,
+                after: _viewModel!.cursor,
+              );
+            }
+          }
+        });
       },
       onDispose: (_) {
         _scrollController.dispose();
@@ -56,64 +62,70 @@ class UserRecords extends StatelessWidget {
         _viewModel = viewModel;
       },
       builder: (_, viewModel) {
-        return NotificationListener<SizeChangedLayoutNotification>(
-          onNotification: (_) {
-            _viewModel = viewModel;
-            _addListener();
-            return false;
-          },
-          child: SizeChangedLayoutNotifier(
-            child: SizedBox(
-              width: sizes.width,
-              height: mainSize,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+        return SizedBox(
+          width: sizes.width,
+          height: mainSize,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (breakPoint.greatMD)
+                SizedBox(
+                  height: spacing,
+                ),
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        'Level: ',
-                        style: TextStyle(
-                          fontSize: sizes.fontSize,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Expanded(
-                        child: LevelSelectField(
-                          maxLevel: viewModel.user.maxLevel ?? 0,
-                          loading: viewModel.loading,
-                          changeLevel: viewModel.changeLevel,
-                          fontSize: sizes.fontSize,
-                        ),
-                      )
-                    ],
-                  ),
-                  SingleChildScrollView(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          width: sizes.borderWidth,
-                          color: colorScheme.primary.value == 0xFF02569B
-                              ? colorScheme.onSurface
-                              : colorScheme.onPrimary,
-                        ),
-                        borderRadius: BorderRadius.circular(sizes.borderRadius),
-                      ),
-                      height: mainSize - sizes.fontSize * 2.5,
-                      child: ListView.builder(
-                        controller: _scrollController,
-                        itemBuilder: (_, i) => UserRecordItem(
-                          rank: i + 1,
-                          record: viewModel.records[i],
-                          ctx: context,
-                        ),
-                        itemCount: viewModel.records.length,
-                      ),
+                  Text(
+                    'Level: ',
+                    style: TextStyle(
+                      fontSize: sizes.fontSize,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
+                  Expanded(
+                    child: LevelSelectField(
+                      maxLevel: viewModel.user.maxLevel ?? 0,
+                      loading: viewModel.loading,
+                      changeLevel: viewModel.changeLevel,
+                      fontSize: sizes.fontSize,
+                    ),
+                  )
                 ],
               ),
-            ),
+              SingleChildScrollView(
+                child: Container(
+                  margin: breakPoint.screenSize == ScreenSizesEnum.xs
+                      ? EdgeInsets.fromLTRB(0, 0, 0, spacing)
+                      : null,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: sizes.borderWidth,
+                      color: colorScheme.primary.value == 0xFF02569B
+                          ? colorScheme.onSurface
+                          : colorScheme.onPrimary,
+                    ),
+                    borderRadius: BorderRadius.circular(sizes.borderRadius),
+                  ),
+                  height: mainSize - sizes.fontSize * 3,
+                  alignment: Alignment.center,
+                  child: viewModel.records.isNotEmpty
+                      ? ListView.builder(
+                          controller: _scrollController,
+                          itemBuilder: (_, i) => UserRecordItem(
+                            rank: i + 1,
+                            record: viewModel.records[i],
+                            ctx: context,
+                          ),
+                          itemCount: viewModel.records.length,
+                        )
+                      : Text(
+                          'No Records',
+                          style: TextStyle(
+                            fontSize: sizes.fontSize * 0.9,
+                          ),
+                        ),
+                ),
+              ),
+            ],
           ),
         );
       },
@@ -158,7 +170,7 @@ class _UserRecordsViewModel {
   }
 
   @override
-  int get hashCode => (loading ? 1 : 0);
+  int get hashCode => (loading ? 1 : 0) + user.id;
 
   @override
   bool operator ==(Object other) {

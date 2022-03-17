@@ -4,7 +4,7 @@ import 'package:redux/redux.dart';
 import 'package:v1/src/widgets/users/loading_avatar.dart';
 
 import '../../components/models/user.dart';
-import '../../components/sizes/users/user_profile_sizes.dart';
+import '../../components/sizes/users/user_hearder_sizes.dart';
 import '../../redux/app_selectors.dart';
 import '../../redux/app_state.dart';
 import '../../widgets/users/add_user_picture.dart';
@@ -21,17 +21,30 @@ class UserProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final sizes = UserProfileSizes.getUserProfileSizes(width);
+    final sizes = UserHeaderSizes.getUserHeaderSizes(width);
+    final colorScheme = Theme.of(context).colorScheme;
+    final isLightTheme = colorScheme.primary.value == 0xFF02569B;
+    final textColor =
+        isLightTheme ? colorScheme.onPrimary : colorScheme.primary;
+    final radius = Radius.circular(sizes.borderRadius);
     final _spacing = SizedBox(
       height: sizes.spacing,
     );
 
-    return SizedBox(
+    return Container(
       height: sizes.height,
+      decoration: BoxDecoration(
+        color: isLightTheme ? colorScheme.primary : colorScheme.onPrimary,
+        borderRadius: BorderRadius.only(
+          topRight: radius,
+          topLeft: radius,
+        ),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          _spacing,
           StoreConnector<AppState, _UserProfileHeaderViewModel>(
             distinct: true,
             converter: (store) => _UserProfileHeaderViewModel.fromStore(store),
@@ -46,6 +59,7 @@ class UserProfileHeader extends StatelessWidget {
                   size: sizes.avatar,
                   username: user.username,
                   picture: user.picture,
+                  invert: true,
                 );
               }
 
@@ -53,6 +67,7 @@ class UserProfileHeader extends StatelessWidget {
                 size: sizes.avatar,
                 username: user.username,
                 picture: user.picture,
+                invert: true,
               );
             },
           ),
@@ -63,29 +78,31 @@ class UserProfileHeader extends StatelessWidget {
             style: TextStyle(
               fontSize: sizes.fontSize,
               fontWeight: FontWeight.bold,
+              color: textColor,
             ),
           ),
-          if (user.maxLevel != null) ...[
-            _spacing,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Max Level: ',
-                  style: TextStyle(
-                    fontSize: sizes.fontSize * 0.8,
-                    fontWeight: FontWeight.w600,
-                  ),
+          _spacing,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Max Level: ',
+                style: TextStyle(
+                  fontSize: sizes.fontSize * 0.8,
+                  fontWeight: FontWeight.w600,
+                  color: textColor,
                 ),
-                Text(
-                  user.maxLevel!.toString(),
-                  style: TextStyle(
-                    fontSize: sizes.fontSize * 0.8,
-                  ),
+              ),
+              Text(
+                user.maxLevel?.toString() ?? '1',
+                style: TextStyle(
+                  fontSize: sizes.fontSize * 0.8,
+                  color: textColor,
                 ),
-              ],
-            ),
-          ]
+              ),
+            ],
+          ),
+          _spacing,
         ],
       ),
     );
@@ -114,7 +131,7 @@ class _UserProfileHeaderViewModel {
   }
 
   @override
-  int get hashCode => (loading ? 1 : 0) + (authenticated ? 1 : 0);
+  int get hashCode => (loading ? 1 : 0) + (authenticated ? 2 : 0);
 
   @override
   bool operator ==(Object other) {

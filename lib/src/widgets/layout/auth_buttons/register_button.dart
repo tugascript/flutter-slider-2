@@ -13,15 +13,16 @@ class RegisterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isLightTheme = colorScheme.primary.value == 0xFF02569B;
+    final color = colorScheme.primary.value == 0xFF02569B
+        ? colorScheme.primary
+        : colorScheme.onPrimary;
     final width = MediaQuery.of(context).size.width;
     final sizes = NavBtnSizes.getNavBtnSizes(width);
-    final halfPadding = sizes.padding / 2;
 
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: sizes.padding,
-        horizontal: halfPadding,
+        horizontal: sizes.padding / 2,
       ),
       child: OutlinedButton(
         onPressed: onPressed,
@@ -34,7 +35,7 @@ class RegisterButton extends StatelessWidget {
             ),
           ),
           side: BorderSide(
-            color: isLightTheme ? colorScheme.primary : colorScheme.onPrimary,
+            color: color,
             width: sizes.borderWidth,
           ),
         ),
@@ -42,7 +43,7 @@ class RegisterButton extends StatelessWidget {
           'Sign Up',
           style: TextStyle(
             fontSize: sizes.fontSize,
-            color: isLightTheme ? colorScheme.primary : colorScheme.onPrimary,
+            color: color,
           ),
         ),
       ),

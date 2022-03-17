@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:v1/src/widgets/home_screen/high_scores_button.dart';
-import 'package:v1/src/widgets/layout/drawer/auth_list_view.dart';
 
 import '../src/components/models/enums/difficulty_enum.dart';
 import '../src/components/sizes/break_point.dart';
@@ -8,8 +6,10 @@ import '../src/components/sizes/layout/app_bar_sizes.dart';
 import '../src/components/sizes/layout/home_screen_sizes.dart';
 import '../src/widgets/home_screen/animated_icon.dart';
 import '../src/widgets/home_screen/difficulty_input/difficulty_input.dart';
+import '../src/widgets/home_screen/high_scores_button.dart';
 import '../src/widgets/home_screen/start_game.dart';
 import '../src/widgets/layout/auth_buttons/auth_buttons.dart';
+import '../src/widgets/layout/drawer/auth_list_view.dart';
 import '../src/widgets/layout/normal_icon.dart';
 import '../src/widgets/layout/notifications.dart';
 import '../src/widgets/layout/theme_button.dart';
@@ -125,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ThemeButton(),
         ],
       ),
-      endDrawer: Drawer(
+      endDrawer: const Drawer(
         child: AuthListView(),
       ),
       body: Center(

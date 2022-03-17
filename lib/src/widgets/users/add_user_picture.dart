@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:redux/redux.dart';
 
@@ -13,12 +14,14 @@ import 'user_avatar.dart';
 class AddUserPicture extends StatefulWidget {
   final double size;
   final String username;
+  final bool invert;
   final String? picture;
 
   const AddUserPicture({
     Key? key,
     required this.size,
     required this.username,
+    this.invert = false,
     this.picture,
   }) : super(key: key);
 
@@ -37,10 +40,9 @@ class _AddUserPictureState extends State<AddUserPicture> {
       converter: (store) => _AddUserPictureViewModel.fromStore(store),
       onWillChange: (_, viewModel) {
         if (viewModel.editorOpen) {
-          Navigator.pushNamed(
-            context,
+          GoRouter.of(context).push(
             ImageEditorScreen.routeName,
-            arguments: const ImageEditorScreenArguments(true),
+            extra: const ImageEditorScreenArguments(true),
           );
         }
       },
@@ -72,6 +74,7 @@ class _AddUserPictureState extends State<AddUserPicture> {
                 size: widget.size,
                 username: widget.username,
                 picture: widget.picture,
+                invert: widget.invert,
               ),
               SizedBox(
                 height: widget.size,

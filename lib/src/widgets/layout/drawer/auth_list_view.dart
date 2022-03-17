@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:redux/redux.dart';
+import 'package:v1/screens/home_screen.dart';
 
 import '../../../../screens/profile_screen.dart';
 import '../../../components/models/user.dart';
 import '../../../redux/actions/auth_actions.dart';
 import '../../../redux/app_selectors.dart';
 import '../../../redux/app_state.dart';
-import '../../../utilities/arguments/profile_screen_arguments.dart';
-import '../../../utilities/router/app_router_delegate.dart';
 import '../../users/user_avatar.dart';
 import 'draw_tile.dart';
 
 class AuthListView extends StatelessWidget {
-  final AppRouterDelegate delegate = Get.find();
-  AuthListView({Key? key}) : super(key: key);
+  const AuthListView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +44,7 @@ class AuthListView extends StatelessWidget {
                     size: 65,
                     username: username,
                     picture: user?.picture,
+                    invert: colorScheme.primary.value == 0xFF02569B,
                   ),
                   const SizedBox(
                     height: 10,
@@ -63,14 +62,19 @@ class AuthListView extends StatelessWidget {
             _spacer,
             DrawerTile(
               icon: Icons.person_rounded,
-              title: 'PROFILE',
+              title: 'ME',
               onTap: () {
                 if (user != null) {
-                  delegate.pushPage(
-                    name: ProfileScreen.routeName,
-                    arguments: ProfileScreenArguments(username),
-                  );
+                  GoRouter.of(context).push('/${ProfileScreen.name}/$username');
                 }
+              },
+            ),
+            _spacer,
+            DrawerTile(
+              icon: Icons.person_search_rounded,
+              title: 'PROFILES',
+              onTap: () {
+                GoRouter.of(context).push('/${ProfileScreen.name}');
               },
             ),
             _spacer,
@@ -79,7 +83,7 @@ class AuthListView extends StatelessWidget {
               title: 'LOGOUT',
               onTap: () {
                 viewModel.logout();
-                delegate.popRoute();
+                GoRouter.of(context).push(HomeScreen.routeName);
               },
             ),
           ],

@@ -57,12 +57,39 @@ class _RegisterModalFormState extends State<RegisterModalForm> {
               ? const InputDecoration(
                   hintText: 'Your@Email.com',
                   labelText: 'Email',
+                  helperText: '',
                 )
               : const InputDecoration(
                   hintText: 'XXXXXX',
                   labelText: 'Access Code',
                   helperText: 'An access code has been sent to your email.',
                 );
+
+          void _submitForm() {
+            if (nullEmail) {
+              if (_formKey.currentState == null) return;
+
+              if (!_formKey.currentState!.validate()) {
+                return;
+              }
+
+              _formKey.currentState!.save();
+              if (_formData is RegisterForm) {
+                viewModel.signUp(_formData);
+              }
+            } else {
+              if (_formKey.currentState == null) return;
+
+              if (!_formKey.currentState!.validate()) {
+                return;
+              }
+
+              _formKey.currentState!.save();
+              if (_formData is ConfirmLoginForm) {
+                viewModel.confirmSignUp(_formData);
+              }
+            }
+          }
 
           return Form(
             key: _formKey,
@@ -122,6 +149,11 @@ class _RegisterModalFormState extends State<RegisterModalForm> {
                           }
                         }
                       },
+                      textInputAction: nullEmail
+                          ? TextInputAction.next
+                          : TextInputAction.done,
+                      onFieldSubmitted:
+                          nullEmail ? (_) {} : (_) => _submitForm(),
                     ),
                     if (nullEmail)
                       TextFormField(
@@ -131,6 +163,7 @@ class _RegisterModalFormState extends State<RegisterModalForm> {
                         decoration: const InputDecoration(
                           hintText: 'some-username',
                           labelText: 'Username',
+                          helperText: '',
                         ),
                         validator: (String? val) {
                           if (_formData is RegisterForm) {
@@ -152,6 +185,7 @@ class _RegisterModalFormState extends State<RegisterModalForm> {
                             }
                           }
                         },
+                        onFieldSubmitted: (_) => _submitForm(),
                       ),
                   ],
                 ),
@@ -175,33 +209,7 @@ class _RegisterModalFormState extends State<RegisterModalForm> {
                   width: sizes.fontSize / 2,
                 ),
                 TextButton(
-                  onPressed: viewModel.loading
-                      ? () {}
-                      : nullEmail
-                          ? () {
-                              if (_formKey.currentState == null) return;
-
-                              if (!_formKey.currentState!.validate()) {
-                                return;
-                              }
-
-                              _formKey.currentState!.save();
-                              if (_formData is RegisterForm) {
-                                viewModel.signUp(_formData);
-                              }
-                            }
-                          : () {
-                              if (_formKey.currentState == null) return;
-
-                              if (!_formKey.currentState!.validate()) {
-                                return;
-                              }
-
-                              _formKey.currentState!.save();
-                              if (_formData is ConfirmLoginForm) {
-                                viewModel.confirmSignUp(_formData);
-                              }
-                            },
+                  onPressed: viewModel.loading ? () {} : _submitForm,
                   child: Text(
                     viewModel.loading
                         ? _loading
@@ -255,7 +263,7 @@ class _RegisterModalViewModel {
 
   @override
   int get hashCode =>
-      (loading ? 1 : 0) + email.hashCode + (authenticated ? 1 : 0);
+      (loading ? 1 : 0) + email.hashCode + (authenticated ? 2 : 0);
 
   @override
   bool operator ==(Object other) {

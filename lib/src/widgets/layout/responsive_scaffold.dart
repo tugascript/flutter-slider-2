@@ -54,7 +54,7 @@ class ResponsiveScaffold extends StatelessWidget {
           child: child,
         ),
       ),
-      endDrawer: Drawer(
+      endDrawer: const Drawer(
         child: AuthListView(),
       ),
     );

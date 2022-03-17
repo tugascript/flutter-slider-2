@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:redux/redux.dart';
 
@@ -30,10 +31,9 @@ class _ImageAdderState extends State<ImageAdder> {
       converter: (store) => _ImageAdderViewModel.fromStore(store),
       onWillChange: (_, viewModel) {
         if (viewModel.editorOpen) {
-          Navigator.pushNamed(
-            context,
+          GoRouter.of(context).push(
             ImageEditorScreen.routeName,
-            arguments: const ImageEditorScreenArguments(false),
+            extra: const ImageEditorScreenArguments(false),
           );
         }
       },

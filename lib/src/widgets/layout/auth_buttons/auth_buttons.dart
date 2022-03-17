@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:v1/src/widgets/layout/auth_buttons/loading_button.dart';
 
 import '../../../redux/app_selectors.dart';
 import '../../../redux/app_state.dart';
@@ -19,12 +20,14 @@ class AuthButtons extends StatelessWidget {
       distinct: true,
       converter: (store) => _AuthButtonsViewModel.fromStore(store),
       builder: (_, viewModel) {
-        if (viewModel.authenticated) {
-          return const UserButton();
-        }
+        late final Widget _child;
 
-        return SizedBox(
-          child: Row(
+        if (viewModel.authenticated) {
+          _child = const UserButton();
+        } else if (viewModel.loading) {
+          _child = const LoadingButton();
+        } else {
+          _child = Row(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -43,7 +46,12 @@ class AuthButtons extends StatelessWidget {
                 ),
               ),
             ],
-          ),
+          );
+        }
+
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 250),
+          child: _child,
         );
       },
     );
@@ -52,15 +60,23 @@ class AuthButtons extends StatelessWidget {
 
 class _AuthButtonsViewModel {
   final bool authenticated;
+  final bool loading;
 
-  _AuthButtonsViewModel(this.authenticated);
+  _AuthButtonsViewModel({
+    required this.authenticated,
+    required this.loading,
+  });
 
   factory _AuthButtonsViewModel.fromStore(Store<AppState> store) {
-    return _AuthButtonsViewModel(selectAuthState(store).authenticated);
+    final authState = selectAuthState(store);
+    return _AuthButtonsViewModel(
+      authenticated: authState.authenticated,
+      loading: authState.loading,
+    );
   }
 
   @override
-  int get hashCode => authenticated ? 1 : 0;
+  int get hashCode => (authenticated ? 2 : 0) + (loading ? 1 : 0);
 
   @override
   bool operator ==(Object other) {

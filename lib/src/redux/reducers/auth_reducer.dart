@@ -6,17 +6,14 @@ AuthState authReducer(AuthState state, dynamic action) {
     return state.copyWith(
       authenticated: true,
       user: action.user,
+      loading: false,
     );
   } else if (action is SetAuthLoading) {
     return state.copyWith(loading: true);
   } else if (action is AuthStopLoading) {
     return state.copyWith(loading: false);
   } else if (action is Logout) {
-    return state.copyWith(
-      user: null,
-      loading: false,
-      authenticated: false,
-    );
+    return AuthState.initialState();
   } else if (action is SetAuthEmail) {
     return state.copyWith(
       email: action.email,
@@ -25,7 +22,10 @@ AuthState authReducer(AuthState state, dynamic action) {
   } else if (action is RemoveAuthEmail) {
     return state.setEmailNull();
   } else if (action is AddAuthNotification) {
-    return state.copyWith(notification: action.notification);
+    return state.copyWith(
+      notification: action.notification,
+      loading: false,
+    );
   } else if (action is DismissAuthNotification) {
     return state.dismissNotification();
   } else if (action is UploadProfilePicture) {

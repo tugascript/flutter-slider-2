@@ -13,7 +13,7 @@ import '../level_select_field.dart';
 import 'current_high_score.dart';
 import 'high_score_item.dart';
 
-class HighScoresWidget extends StatelessWidget {
+class HighScoresWidget extends StatefulWidget {
   static const route = '/high-scores-modal';
   final BuildContext ctx;
 
@@ -23,32 +23,20 @@ class HighScoresWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<HighScoresWidget> createState() => _HighScoresWidgetState();
+}
+
+class _HighScoresWidgetState extends State<HighScoresWidget> {
+  _HighScoresWidgetViewModel? _viewModel;
+  final _scrollController = ScrollController();
+
+  @override
   Widget build(BuildContext context) {
-    _HighScoresWidgetViewModel? _viewModel;
-    final _scrollController = ScrollController();
-    void _addListener() {
-      _scrollController.addListener(() {
-        final currentPos = _scrollController.position.pixels;
-        final maxExtent = _scrollController.position.maxScrollExtent;
-
-        if (currentPos >= maxExtent && _viewModel != null) {
-          if (_viewModel!.hasNextPage &&
-              _viewModel!.cursor != null &&
-              !_viewModel!.loading) {
-            _viewModel!.changeLevel(
-              _viewModel!.level,
-              after: _viewModel!.cursor,
-            );
-          }
-        }
-      });
-    }
-
-    final size = MediaQuery.of(ctx).size;
+    final size = MediaQuery.of(widget.ctx).size;
     final sizes = HighScoresSizes.getHighScoresSizes(size.width);
     final itemSizes = RecordListItemSizes.getRecordListItemSizes(size.width);
     final mainSize = size.height * 0.8;
-    final colorScheme = Theme.of(ctx).colorScheme;
+    final colorScheme = Theme.of(widget.ctx).colorScheme;
 
     return StoreConnector<AppState, _HighScoresWidgetViewModel>(
       distinct: true,
@@ -61,7 +49,21 @@ class HighScoresWidget extends StatelessWidget {
           store.dispatch(loadHighScores(highScoreState.level));
         }
 
-        _addListener();
+        _scrollController.addListener(() {
+          final currentPos = _scrollController.position.pixels;
+          final maxExtent = _scrollController.position.maxScrollExtent;
+
+          if (currentPos >= maxExtent && _viewModel != null) {
+            if (_viewModel!.hasNextPage &&
+                _viewModel!.cursor != null &&
+                !_viewModel!.loading) {
+              _viewModel!.changeLevel(
+                _viewModel!.level,
+                after: _viewModel!.cursor,
+              );
+            }
+          }
+        });
       },
       onDispose: (_) {
         _scrollController.dispose();
@@ -116,50 +118,41 @@ class HighScoresWidget extends StatelessWidget {
               )
             ],
           ),
-          content: NotificationListener<SizeChangedLayoutNotification>(
-            onNotification: (_) {
-              _viewModel = viewModel;
-              _addListener();
-              return false;
-            },
-            child: SizeChangedLayoutNotifier(
-              child: SizedBox(
-                width: sizes.width,
-                height: mainSize,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: itemSizes.borderWidth,
-                            color: colorScheme.primary.value == 0xFF02569B
-                                ? colorScheme.onSurface
-                                : colorScheme.onPrimary,
-                          ),
-                          borderRadius:
-                              BorderRadius.circular(itemSizes.borderRadius),
-                        ),
-                        height: mainSize - itemSizes.avatar * 3.5,
-                        child: ListView.builder(
-                          controller: _scrollController,
-                          itemBuilder: (_, i) => HighScoreItem(
-                            rank: i + 1,
-                            record: viewModel.records[i],
-                            ctx: ctx,
-                          ),
-                          itemCount: viewModel.records.length,
-                        ),
+          content: SizedBox(
+            width: sizes.width,
+            height: mainSize,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: itemSizes.borderWidth,
+                        color: colorScheme.primary.value == 0xFF02569B
+                            ? colorScheme.onSurface
+                            : colorScheme.onPrimary,
                       ),
-                      if (_hasRank)
-                        CurrentHighScore(
-                          rank: viewModel.currentRank!,
-                          record: viewModel.currentRecord!,
-                          ctx: ctx,
-                        ),
-                    ],
+                      borderRadius:
+                          BorderRadius.circular(itemSizes.borderRadius),
+                    ),
+                    height: mainSize - itemSizes.avatar * 3.5,
+                    child: ListView.builder(
+                      controller: _scrollController,
+                      itemBuilder: (_, i) => HighScoreItem(
+                        rank: i + 1,
+                        record: viewModel.records[i],
+                        ctx: widget.ctx,
+                      ),
+                      itemCount: viewModel.records.length,
+                    ),
                   ),
-                ),
+                  if (_hasRank)
+                    CurrentHighScore(
+                      rank: viewModel.currentRank!,
+                      record: viewModel.currentRecord!,
+                      ctx: widget.ctx,
+                    ),
+                ],
               ),
             ),
           ),
@@ -168,11 +161,15 @@ class HighScoresWidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.end,
-                children: const [CircularProgressIndicator()],
+                children: [
+                  CircularProgressIndicator(
+                    color: colorScheme.onSurface,
+                  ),
+                ],
               ),
             TextButton(
               onPressed: () {
-                Navigator.pop(context, route);
+                Navigator.pop(context, HighScoresWidget.route);
               },
               child: Text(
                 'Close',

@@ -1,3 +1,5 @@
+import 'package:v1/src/components/models/user.dart';
+
 import '../actions/users_actions.dart';
 import '../states/users_state.dart';
 
@@ -7,16 +9,20 @@ UsersState usersReducer(UsersState state, dynamic action) {
   } else if (action is UsersStopLoading) {
     return state.copyWith(loading: false);
   } else if (action is LoadUsers) {
+    late final List<User> users;
+
+    if (action.search == null || state.search == action.search) {
+      users = [...state.users, ...action.users];
+    } else {
+      users = action.users;
+    }
+
     return state.copyWith(
-      users: state.search == null ||
-              (action.search != null &&
-                  state.search != null &&
-                  state.search == action.search)
-          ? [...state.users, ...action.users]
-          : action.users,
+      users: users,
       hasNextPage: action.hasNextPage,
       cursor: action.endCursor,
       loading: false,
+      search: action.search,
     );
   } else if (action is LoadProfile) {
     return state.copyWith(

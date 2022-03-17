@@ -4,11 +4,13 @@ class UserAvatar extends StatelessWidget {
   final double size;
   final String username;
   final String? picture;
+  final bool invert;
 
   const UserAvatar({
     Key? key,
     required this.size,
     required this.username,
+    this.invert = false,
     this.picture,
   }) : super(key: key);
 
@@ -24,18 +26,18 @@ class UserAvatar extends StatelessWidget {
       height: size,
       child: picture == null
           ? CircleAvatar(
-              backgroundColor: bgColor,
+              backgroundColor: invert ? tColor : bgColor,
               child: Text(
                 username.substring(0, 2).toUpperCase(),
                 style: TextStyle(
                   fontSize: size / 3,
                   fontWeight: FontWeight.w700,
-                  color: tColor,
+                  color: invert ? bgColor : tColor,
                 ),
               ),
             )
           : CircleAvatar(
-              backgroundColor: bgColor,
+              backgroundColor: invert ? tColor : bgColor,
               backgroundImage: NetworkImage(picture!),
             ),
     );

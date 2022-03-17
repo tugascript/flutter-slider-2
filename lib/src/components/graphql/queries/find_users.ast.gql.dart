@@ -50,7 +50,10 @@ const FindUsers = _i1.OperationDefinitionNode(
                 value: _i1.VariableNode(name: _i1.NameNode(value: 'after'))),
             _i1.ArgumentNode(
                 name: _i1.NameNode(value: 'cursor'),
-                value: _i1.VariableNode(name: _i1.NameNode(value: 'cursor')))
+                value: _i1.VariableNode(name: _i1.NameNode(value: 'cursor'))),
+            _i1.ArgumentNode(
+                name: _i1.NameNode(value: 'order'),
+                value: _i1.EnumValueNode(name: _i1.NameNode(value: 'ASC')))
           ],
           directives: [],
           selectionSet: _i1.SelectionSetNode(selections: [

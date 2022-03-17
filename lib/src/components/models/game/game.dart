@@ -1,7 +1,5 @@
 import 'dart:math';
 
-import 'package:v1/src/redux/actions/game_actions.dart';
-
 import '../../../utilities/helpers/image_divider.dart';
 import '../enums/game_status_enum.dart';
 import 'piece.dart';

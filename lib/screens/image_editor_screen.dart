@@ -3,7 +3,9 @@ import 'dart:typed_data';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:go_router/go_router.dart';
 import 'package:redux/redux.dart';
+import 'package:v1/screens/home_screen.dart';
 import 'package:worker_manager/worker_manager.dart';
 
 import '../src/components/sizes/image_editor/image_editor_sizes.dart';
@@ -47,8 +49,11 @@ class _ImageEditorScreenState extends State<ImageEditorScreen> {
       converter: (store) => _ImageEditorViewModel.fromStore(store),
       onWillChange: (_, viewModel) {
         if (!viewModel.open) {
-          Navigator.pop(context);
+          GoRouter.of(context).pop();
         }
+      },
+      onInitialBuild: (viewModel) {
+        if (!viewModel.open) GoRouter.of(context).push(HomeScreen.routeName);
       },
       builder: (_, viewModel) {
         late final Widget _editor;

@@ -1,0 +1,3 @@
+class SearchUserForm {
+  String search = '';
+}

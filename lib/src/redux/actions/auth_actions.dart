@@ -186,6 +186,8 @@ ThunkAction<AppState> refreshSession() {
 
     if (authState.authenticated) return;
 
+    store.dispatch(SetAuthLoading());
+
     try {
       final authRes = await Auth.refreshAccess();
 
@@ -215,6 +217,7 @@ ThunkAction<AppState> refreshSession() {
         },
       );
     } catch (e) {
+      store.dispatch(AuthStopLoading());
       return;
     }
   };

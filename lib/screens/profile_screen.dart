@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 import '../src/components/models/user_profile.dart';
+import '../src/components/sizes/users/user_profile_sizes.dart';
 import '../src/redux/actions/users_actions.dart';
 import '../src/redux/app_selectors.dart';
 import '../src/redux/app_state.dart';
@@ -12,7 +13,8 @@ import '../src/widgets/records/user_records/user_records.dart';
 import '../src/widgets/users/user_profile_header.dart';
 
 class ProfileScreen extends StatelessWidget {
-  static const routeName = '/profile';
+  static const routeName = '/profiles/:username';
+  static const name = 'profiles';
 
   final String username;
 
@@ -23,6 +25,9 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final sizes = UserProfileSizes.getUserProfileSizes(width);
+
     return ResponsiveScaffold(
       title: username.toUpperCase(),
       child: StoreConnector<AppState, _ProfileScreenViewModel>(
@@ -36,17 +41,44 @@ class ProfileScreen extends StatelessWidget {
           }
         },
         builder: (_, viewModel) {
-          if (viewModel.loading || viewModel.profile == null) {
-            return const LoadingWidget();
+          if (viewModel.profile == null) {
+            if (viewModel.loading) return const LoadingWidget();
+
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'USER NOT FOUND',
+                  style: TextStyle(
+                    fontSize: sizes.fontSize,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Icon(
+                  Icons.person_off_rounded,
+                  size: sizes.fontSize * 5,
+                ),
+              ],
+            );
           }
 
-          return Column(
-            children: [
-              UserProfileHeader(
-                user: viewModel.profile!.user,
+          return SizedBox(
+            width: sizes.width,
+            child: Card(
+              elevation: 1,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(sizes.borderRadius),
               ),
-              const UserRecords(),
-            ],
+              child: Column(
+                children: [
+                  UserProfileHeader(
+                    user: viewModel.profile!.user,
+                  ),
+                  const UserRecords(),
+                ],
+              ),
+            ),
           );
         },
       ),
@@ -73,14 +105,21 @@ class _ProfileScreenViewModel {
   }
 
   @override
-  int get hashCode =>
-      (loading ? 0 : 1) +
-      (profile != null
-          ? profile!.user.id +
-              (profile!.user.picture != null
-                  ? profile!.user.picture.hashCode
-                  : 0)
-          : 0);
+  int get hashCode {
+    int total = 0;
+
+    if (loading) total++;
+
+    if (profile != null) {
+      total += profile!.user.id;
+
+      if (profile!.user.picture != null) {
+        total += profile!.user.picture.hashCode;
+      }
+    }
+
+    return total;
+  }
 
   @override
   bool operator ==(Object other) {

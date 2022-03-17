@@ -54,7 +54,7 @@ class BasicScaffold extends StatelessWidget {
       body: Center(
         child: child,
       ),
-      endDrawer: Drawer(
+      endDrawer: const Drawer(
         child: AuthListView(),
       ),
       bottomNavigationBar: bottomNavigation,

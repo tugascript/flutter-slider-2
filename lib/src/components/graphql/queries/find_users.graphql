@@ -4,7 +4,13 @@ query FindUsers(
   $after: String
   $cursor: UsersCursor = ALPHABET
 ) {
-  getUsers(search: $search, first: $first, after: $after, cursor: $cursor) {
+  getUsers(
+    search: $search
+    first: $first
+    after: $after
+    cursor: $cursor
+    order: ASC
+  ) {
     edges {
       node {
         id

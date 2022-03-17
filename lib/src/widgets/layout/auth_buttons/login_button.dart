@@ -16,12 +16,11 @@ class LoginButton extends StatelessWidget {
     final isLightTheme = colorScheme.primary.value == 0xFF02569B;
     final width = MediaQuery.of(context).size.width;
     final sizes = NavBtnSizes.getNavBtnSizes(width);
-    final halfPadding = sizes.padding / 2;
 
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: sizes.padding,
-        horizontal: halfPadding,
+        horizontal: sizes.padding / 2,
       ),
       child: ElevatedButton(
         onPressed: onPressed,
